@@ -1,0 +1,122 @@
+Script started on Wed 23 Jan 2019 06:01:38 PM CST
+[4makka[24m:[1m~/cs1521/labs/lab1[0m% pwd
+/home/csugrads/schno059/cs1521/labs/lab1
+[4makka[24m:[1m~/cs1521/labs/lab1[0m% ls -lR ~/
+/home/csugrads/schno059/:
+total 31348
+-rwx------ 1 schno059 student    24760 Dec  6 08:56 a.out
+-rw------- 1 schno059 student     4683 Nov 13 14:41 bagAdt.cpp
+-rw------- 1 schno059 student     3221 Nov 13 14:37 bagAdt.cpp.save
+-rw------- 1 schno059 student     7218 Nov 13 15:05 bagAdt.cpp.save.1
+-rw------- 1 schno059 student     5622 Nov 27 09:58 bagAdt.cpp.save.2
+-rw------- 1 schno059 student     3390 Nov 29 09:34 bag.h
+-rw------- 1 schno059 student 18757168 Nov 27 10:11 bag.h.gch
+-rw------- 1 schno059 student     4078 Oct  7 15:33 calorieCounter.cpp
+-rw------- 1 schno059 student      369 Oct  4 09:47 cell.cpp
+-rw------- 1 schno059 student        0 Jan 21 15:18 #CMakeLists.txt#
+-rw------- 1 schno059 student        0 Jan 21 15:17 CMakeLists.txt
+-rw------- 1 schno059 student      404 Sep 13 09:15 codeChallenge.cpp
+drwx------ 4 schno059 student     4096 Jan 21 16:31 cs1521
+-rw------- 1 schno059 student      338 Nov 29 09:17 item.h
+-rw------- 1 schno059 student 13013776 Nov 27 10:07 item.h.gch
+-rw------- 1 schno059 student    17767 Oct 28 16:35 names2008.txt
+-rw------- 1 schno059 student    17740 Oct 28 16:36 names2009.txt
+-rw------- 1 schno059 student    17740 Oct 28 16:36 names2010.txt
+-rw------- 1 schno059 student    17742 Oct 28 16:36 names2011.txt
+-rw------- 1 schno059 student    17751 Oct 28 16:40 names2012.txt
+-rw------- 1 schno059 student    17734 Oct 28 16:40 names2013.txt
+-rw------- 1 schno059 student    17729 Oct 28 16:40 names2014.txt
+-rw------- 1 schno059 student    17711 Oct 28 16:41 names2015.txt
+-rw------- 1 schno059 student    17694 Oct 28 16:41 names2016.txt
+-rw------- 1 schno059 student    17658 Oct 28 16:42 names2017.txt
+-rw------- 1 schno059 student     2591 Oct 29 13:07 nameSearch.cpp
+-rw------- 1 schno059 student     1182 Sep  5 10:02 project1.cpp
+-rw------- 1 schno059 student     1234 Oct  4 09:30 project3.cpp
+-rw------- 1 schno059 student     1236 Oct  1 11:40 project3.cpp.save
+-rw------- 1 schno059 student     2116 Nov 27 10:19 project7.cpp
+-rw------- 1 schno059 student     2686 Oct 18 09:15 sentenceMaker.cpp
+-rw------- 1 schno059 student      485 Nov  8 09:15 structuralCollapse.cpp
+-rw------- 1 schno059 student     2184 Sep 10 11:17 wageSlave.cpp
+-rw------- 1 schno059 student        6 Oct 18 09:04 words.dat
+
+/home/csugrads/schno059/cs1521:
+total 8
+drwx------ 3 schno059 student 4096 Jan 21 14:33 labs
+drwx------ 3 schno059 student 4096 Jan 21 16:32 projects
+
+/home/csugrads/schno059/cs1521/labs:
+total 4
+drwx------ 3 schno059 student 4096 Jan 23 18:01 lab1
+
+/home/csugrads/schno059/cs1521/labs/lab1:
+total 44
+-rw------- 1 schno059 student 2100 Jan 21 14:38 board.cpp
+-rw------- 1 schno059 student 2394 Jan 21 14:38 board.h
+drwx------ 2 schno059 student 4096 Jan 23 18:00 build
+-rw------- 1 schno059 student  154 Jan 21 15:29 CMakeLists.txt
+-rw------- 1 schno059 student   65 Jan 21 15:22 CMakeLists.txt~
+-rw------- 1 schno059 student 2283 Jan 21 15:05 #game.cpp#
+-rw------- 1 schno059 student 2280 Jan 21 14:39 game.cpp
+-rw------- 1 schno059 student 1787 Jan 21 14:39 game.h
+-rw------- 1 schno059 student  461 Jan 21 14:39 main.cpp
+-rw------- 1 schno059 student  789 Jan 21 14:39 player.cpp
+-rw------- 1 schno059 student 1197 Jan 21 14:39 player.h
+-rw------- 1 schno059 student    0 Jan 23 18:01 typescript
+
+/home/csugrads/schno059/cs1521/labs/lab1/build:
+total 0
+
+/home/csugrads/schno059/cs1521/projects:
+total 4
+drwx------ 2 schno059 student 4096 Jan 22 14:51 project1
+
+/home/csugrads/schno059/cs1521/projects/project1:
+total 32
+-rwx------ 1 schno059 student 14072 Jan 22 14:48 a.out
+-rw------- 1 schno059 student  1155 Jan 22 14:48 stat.cpp
+-rw------- 1 schno059 student  1147 Jan 22 14:47 stat.cpp~
+-rw------- 1 schno059 student   920 Jan 22 14:13 stat.h
+-rw------- 1 schno059 student   920 Jan 21 17:05 stat.h~
+[4makka[24m:[1m~/cs1521/labs/lab1[0m% cat -n CMakeList
+CMakeLists.txt~  CMakeLists.txt   
+[4makka[24m:[1m~/cs1521/labs/lab1[0m% cat -n CMakeLists.txt
+     1	project(TicTacToe)
+     2	
+     3	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14") 
+     4	
+     5	add_executable(tictactoe
+     6	  main.cpp
+     7	  board.cpp
+     8	  game.cpp
+     9	  player.cpp)
+[4makka[24m:[1m~/cs1521/labs/lab1[0m% cd build
+[4makka[24m:[1m~/cs1521/labs/lab1/build[0m% cmake ..
+-- The C compiler identification is GNU 5.4.0
+-- The CXX compiler identification is GNU 5.4.0
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/csugrads/schno059/cs1521/labs/lab1/build
+[4makka[24m:[1m~/cs1521/labs/lab1/build[0m% make
+[35m[1mScanning dependencies of target tictactoe[0m
+[ 20%] [32mBuilding CXX object CMakeFiles/tictactoe.dir/main.cpp.o[0m
+[ 40%] [32mBuilding CXX object CMakeFiles/tictactoe.dir/board.cpp.o[0m
+[ 60%] [32mBuilding CXX object CMakeFiles/tictactoe.dir/game.cpp.o[0m
+[ 80%] [32mBuilding CXX object CMakeFiles/tictactoe.dir/player.cpp.o[0m
+[100%] [32m[1mLinking CXX executable tictactoe[0m
+[100%] Built target tictactoe
+[4makka[24m:[1m~/cs1521/labs/lab1/build[0m% exit
+exit
+
+Script done on Wed 23 Jan 2019 06:03:35 PM CST

@@ -1,0 +1,465 @@
+Script started on Thu 07 Mar 2019 12:09:10 PM CST
+[4makka[24m:[1m~/cs1521/labs/lab4/src[0m% pwd
+/home/csugrads/schno059/cs1521/labs/lab4/src
+[4makka[24m:[1m~/cs1521/labs/lab4/src[0m% ls -l
+total 48
+-rw------- 1 schno059 student 2698 Mar  7 11:35 ArrayList.cpp
+-rw------- 1 schno059 student 1198 Mar  7 11:35 ArrayList.h
+drwx------ 3 schno059 student 4096 Mar  7 12:08 build
+-rw------- 1 schno059 student  134 Mar  7 11:47 CMakeLists.txt
+-rw------- 1 schno059 student  107 Mar  7 11:39 CMakeLists.txt~
+-rw------- 1 schno059 student  220 Mar  7 12:01 getPosition.h
+-rw------- 1 schno059 student  220 Mar  7 12:00 getPosition.h~
+-rw------- 1 schno059 student 3161 Mar  7 11:36 ListInterface.h
+-rw------- 1 schno059 student  988 Mar  7 11:42 main.cpp
+-rw------- 1 schno059 student  989 Mar  7 11:30 main.cpp~
+-rw------- 1 schno059 student  507 Mar  7 11:46 PrecondViolatedExcep.cpp
+-rw------- 1 schno059 student  781 Mar  7 11:46 PrecondViolatedExcep.h
+-rw------- 1 schno059 student    0 Mar  7 12:09 typescript
+[4makka[24m:[1m~/cs1521/labs/lab4/src[0m% cat -n CMakeLists.txt
+     1	project(Lab4)
+     2	
+     3	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14")
+     4	
+     5	add_executable(lab4
+     6	  PrecondViolatedExcep.cpp
+     7	  main.cpp)
+[4makka[24m:[1m~/cs1521/labs/lab4/src[0m% cat -n main.cpp
+     1	#include <iostream>
+     2	#include <cstdlib>
+     3	
+     4	// Uncomment the line appropriate to the type of list you have
+     5	// decided to use (note that it makes no difference):
+     6	#include "ArrayList.h"
+     7	// #include "LinkedList.h"
+     8	
+     9	#include "getPosition.h"
+    10	
+    11	int main() {
+    12	
+    13	   // Uncomment the corresponding list declaration below:
+    14	   ArrayList<int> list;
+    15	   // LinkedList<int> list;
+    16	
+    17	   list.insert(1, 9);
+    18	   list.insert(2, 5);
+    19	   list.insert(1, 0);
+    20	   list.insert(2, 3);
+    21	   list.insert(4, 2);
+    22	
+    23	   int position(0);
+    24	   int value(0);
+    25	
+    26	   while (std::cin >> value) {
+    27	
+    28	      if ((position = getPosition(list, value)) <= list.getLength() ) {
+    29	         std::cout << "list["
+    30	                   << position
+    31	                   << "] = "
+    32	                   << value
+    33	                   << "."
+    34	                   << std::endl;
+    35	      }
+    36	      else {
+    37	         std::cout << "The list does NOT contain "
+    38	                   << value
+    39	                   << "."
+    40	                   << std::endl;
+    41	      }
+    42	   }
+    43	
+    44	   return EXIT_SUCCESS;
+    45	}
+[4makka[24m:[1m~/cs1521/labs/lab4/src[0m% caT[Kt -n ListInterface.h 
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  ListInterface class template definition.
+     8	 *
+     9	 *  Adapted from pages 261-2 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *
+    15	 *  @date 06 Mar 2019
+    16	 *
+    17	 *  @version 7.0 */
+    18	
+    19	#ifndef LIST_INTERFACE_
+    20	#define LIST_INTERFACE_
+    21	
+    22	/** @class ListInterface ListInterface.h "ListInterface.h"
+    23	 *
+    24	 *  Definition of ListInterface class template. */
+    25	template <typename ItemType>
+    26	class ListInterface {
+    27	public:
+    28	   /** Destructor. */
+    29	   virtual ~ListInterface() = default;
+    30	
+    31	   /** Sees whether this list is empty.
+    32	    *
+    33	    *  @return True if this list is empty, or false if not. */
+    34	   virtual bool isEmpty() const = 0;
+    35	
+    36	   /** Gets the current number of entries in this list.
+    37	    *
+    38	    *  @return The integer number of entries in this list. */
+    39	   virtual int getLength() const = 0;
+    40	
+    41	   /** Inserts a new entry into this list at a given position.
+    42	    *
+    43	    *  @pre None.
+    44	    *
+    45	    *  @post If 1 <= newPosition <= getLength() + 1 and the insertion
+    46	    *        is successful, newEntry is stored at the given position
+    47	    *        in this list, other entries are renumbered accordingly.
+    48	    *
+    49	    *  @param newPosition The list position at which to insert
+    50	    *         newEntry.
+    51	    *
+    52	    *  @param newEntry The object to be added as a new entry.
+    53	    *
+    54	    *  @return True if insertion was successful, or false if not. */
+    55	   virtual bool insert(int newPosition,
+    56	                       const ItemType& newEntry) = 0;
+    57	
+    58	   /** Removes the entry at the given position from this list.
+    59	    *
+    60	    *  @pre None.
+    61	    *
+    62	    *  @post If 1 <= position <= getLength() and the removal is
+    63	    *        successful, the entry at the given position in this list
+    64	    *        is removed, other entries are renumbered accordingly.
+    65	    *
+    66	    *  @param position The list position of the entry to remove.
+    67	    *
+    68	    *  @return True if removal was successful, or false if not. */
+    69	   virtual bool remove(int position) = 0;
+    70	
+    71	   /** Removes all entries from this list.
+    72	    *
+    73	    *  @post List conntains no entries; getLength() == 0. */
+    74	   virtual void clear() = 0;
+    75	
+    76	   /** Retrieves the entry at the given position in this list.
+    77	    *
+    78	    *  @pre 1 <= position <= getLength().
+    79	    *
+    80	    *  @post None.
+    81	    *
+    82	    *  @param position The position of the desired entry to
+    83	    *         retrieve.
+    84	    *
+    85	    *  @return The entry at the desired position in this list.
+    86	    *
+    87	    *  @throws PrecondViolatedExcep If position < 1 or position >
+    88	    *          getLength(). */
+    89	   virtual ItemType getEntry(int position) const = 0;
+    90	
+    91	   /** Replaces the entry at the given position in this list.
+    92	    *
+    93	    *  @pre 1 <= position <= getLength().
+    94	    *
+    95	    *  @post The entry at the given position is newEntry.
+    96	    *
+    97	    *  @param position The list position of the entry to replace.
+    98	    *
+    99	    *  @param newEntry The replacement entry.
+   100	    *
+   101	    *  @return The entry that has been replaced.
+   102	    *
+   103	    *  @throws PrecondViolatedExcep If position < 1 or position >
+   104	    *          getLength(). */
+   105	   virtual ItemType replace(int position,
+   106	                            const ItemType& newEntry) = 0;
+   107	};
+   108	
+   109	#endif[4makka[24m:[1m~/cs1521/labs/lab4/src[0m% cat -n ArrayList.h
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Header file for an array-based implementation of the ADT list.
+     8	 *
+     9	 *  Adapted from pages 267-268 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *
+    15	 *  @date 06 Mar 2019
+    16	 *
+    17	 *  @version 7.0 */
+    18	
+    19	#ifndef ARRAY_LIST_
+    20	#define ARRAY_LIST_
+    21	
+    22	#include "ListInterface.h"
+    23	
+    24	/** @class ArrayList ArrayList.h "ArrayList.h"
+    25	 *
+    26	 *  Specification of an array-based ADT list. */
+    27	template <typename ItemType>
+    28	class ArrayList : public ListInterface<ItemType> {
+    29	private:
+    30	   static const int DEFAULT_CAPACITY = 10;
+    31	
+    32	   ItemType items[DEFAULT_CAPACITY];
+    33	
+    34	   int itemCount = 0;
+    35	
+    36	   int maxItems = DEFAULT_CAPACITY;
+    37	
+    38	public:
+    39	   ArrayList() = default;
+    40	
+    41	   virtual ~ArrayList() = default;
+    42	
+    43	   virtual bool isEmpty() const;
+    44	
+    45	   virtual int getLength() const;
+    46	
+    47	   virtual bool insert(int newPosition,
+    48	                       const ItemType& newEntry);
+    49	
+    50	   virtual bool remove(int position);
+    51	
+    52	   virtual void clear();
+    53	
+    54	   virtual ItemType getEntry(int position) const;
+    55	
+    56	   virtual ItemType replace(int position,
+    57	                            const ItemType& newEntry);
+    58	};
+    59	
+    60	#include "ArrayList.cpp"
+    61	
+    62	#endif[4makka[24m:[1m~/cs1521/labs/lab4/src[0m% cat -n ArrayList.cpp
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Implementation file for an array-based implementation of the ADT
+     8	 *  list.
+     9	 *
+    10	 *  Adapted from pages 268-272 in Carrano 7e.
+    11	 *
+    12	 *  @author Frank M. Carrano
+    13	 *  @author Timothy Henry
+    14	 *  @author Steve Holtz
+    15	 *
+    16	 *  @date 06 Mar 2019
+    17	 *
+    18	 *  @version 7.0 */
+    19	
+    20	#include <string>
+    21	
+    22	#include "PrecondViolatedExcep.h"
+    23	
+    24	template <typename ItemType>
+    25	bool ArrayList<ItemType>::isEmpty() const {
+    26	
+    27	   return !itemCount;
+    28	}
+    29	
+    30	template <typename ItemType>
+    31	int ArrayList<ItemType>::getLength() const {
+    32	
+    33	   return itemCount;
+    34	}
+    35	
+    36	template <typename ItemType>
+    37	bool ArrayList<ItemType>::insert(int newPosition,
+    38	                                 const ItemType& newEntry) {
+    39	
+    40	   bool ableToInsert(newPosition >= 1 &&
+    41	                     newPosition <= itemCount + 1 &&
+    42	                     itemCount < maxItems);
+    43	
+    44	   if (ableToInsert) {
+    45	      // Make room for newEntry by shifting all entries at positions
+    46	      // >= newPosition toward the end of the array:
+    47	      for (int pos(itemCount); pos >= newPosition; --pos) {
+    48	         items[pos] = items[pos - 1];
+    49	      }
+    50	
+    51	      // Insert new entry:
+    52	      items[newPosition - 1] = newEntry;
+    53	
+    54	      ++itemCount;
+    55	   }
+    56	
+    57	   return ableToInsert;
+    58	}
+    59	
+    60	template <typename ItemType>
+    61	bool ArrayList<ItemType>::remove(int position) {
+    62	
+    63	   bool ableToRemove(position >= 1 &&
+    64	                     position <= itemCount);
+    65	
+    66	   if (ableToRemove) {
+    67	      // Remove entry by shifting all entries after the one at
+    68	      // position toward the beginning of the array:
+    69	      for (int pos(position); pos < itemCount; ++pos) {
+    70	         items[pos - 1] = items[pos];
+    71	      }
+    72	      --itemCount;
+    73	   }
+    74	
+    75	   return ableToRemove;
+    76	}
+    77	
+    78	template <typename ItemType>
+    79	void ArrayList<ItemType>::clear() {
+    80	
+    81	   itemCount = 0;
+    82	}
+    83	
+    84	template <typename ItemType>
+    85	ItemType ArrayList<ItemType>::getEntry(int position) const {
+    86	
+    87	   bool ableToGet(position >= 1 &&
+    88	                  position <= itemCount);
+    89	
+    90	   if (!ableToGet) {
+    91	      std::string message("ArrayList::getEntry() called with an empty ");
+    92	      message += "list or an invalid position.";
+    93	
+    94	      throw PrecondViolatedExcep(message);
+    95	   }
+    96	
+    97	   return items[position - 1];
+    98	}
+    99	
+   100	template <typename ItemType>
+   101	ItemType ArrayList<ItemType>::replace(int position,
+   102	                                      const ItemType& newEntry) {
+   103	
+   104	   bool ableToSet(position >= 1 &&
+   105	                  position <= itemCount);
+   106	
+   107	   if (!ableToSet) {
+   108	      std::string message("ArrayList::setEntry() called with an empty ");
+   109	      message += "list or an invalid position.";
+   110	
+   111	      throw PrecondViolatedExcep(message);
+   112	   }
+   113	
+   114	   ItemType oldEntry(items[position - 1]);
+   115	
+   116	   items[position - 1] = newEntry;
+   117	
+   118	   return oldEntry;
+   119	}
+[4makka[24m:[1m~/cs1521/labs/lab4/src[0m% cat -n get
+getPosition.h~  getPosition.h   
+[4makka[24m:[1m~/cs1521/labs/lab4/src[0m% cat -n getPosition.h
+     1	int getPosition(const ArrayList<int>& list, int element){
+     2	   int returnPosition(9999);
+     3	   for(int i(1); i<list.getLength(); ++i)
+     4	      if(list.getEntry(i)==element)
+     5	         returnPosition=i;
+     6	   return returnPosition;
+     7	}
+[4makka[24m:[1m~/cs1521/labs/lab4/src[0m% cat -n Pre
+PrecondViolatedExcep.cpp  PrecondViolatedExcep.h    
+[4makka[24m:[1m~/cs1521/labs/lab4/src[0m% cat -n PrecondViolatedExcep.h
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Header file for an object thrown on violation of precondition.
+     8	 *
+     9	 *  Adapted from page 250 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *
+    15	 *  @date 06 Mar 2019
+    16	 *
+    17	 *  @version 7.0 */
+    18	
+    19	#ifndef PRECOND_VIOLATED_EXCEP_
+    20	#define PRECOND_VIOLATED_EXCEP_
+    21	
+    22	#include <stdexcept>
+    23	#include <string>
+    24	
+    25	/** @class PrecondViolatedExcep PrecondViolatedExcep.h "PrecondViolatedExcep.h"
+    26	 *
+    27	 *  Specification for an object thrown on violation of precondition. */
+    28	class PrecondViolatedExcep : public std::logic_error {
+    29	public:
+    30	   explicit PrecondViolatedExcep(const std::string& message = "");
+    31	
+    32	   virtual ~PrecondViolatedExcep() noexcept = default; //throw();
+    33	};
+    34	
+    35	#endif[4makka[24m:[1m~/cs1521/labs/lab4/src[0m% cat -n Prec[K
+PrecondViolatedExcep.cpp  PrecondViolatedExcep.h    
+[4makka[24m:[1m~/cs1521/labs/lab4/src[0m% cat -n PrecondViolatedExcep.cpp
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Implementation file for an object thrown on violation of
+     8	 *  precondition.
+     9	 *
+    10	 *  Adapted from page 250 in Carrano 7e.
+    11	 *
+    12	 *  @author Frank M. Carrano
+    13	 *  @author Timothy Henry
+    14	 *  @author Steve Holtz
+    15	 *
+    16	 *  @date 06 Mar 2019
+    17	 *
+    18	 *  @version 7.0 */
+    19	
+    20	#include <stdexcept>
+    21	#include <string>
+    22	
+    23	#include "PrecondViolatedExcep.h"
+    24	
+    25	PrecondViolatedExcep::PrecondViolatedExcep(const std::string& message)
+    26	   : std::logic_error(message) {
+    27	}
+[4makka[24m:[1m~/cs1521/labs/lab4/src[0m% git --no-pager log --no-color
+commit 2b3c53efcf242adb6450aab0a3677a57624a3412
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Thu Mar 7 12:04:23 2019 -0600
+
+    All initial files. Output matches website requirement
+[4makka[24m:[1m~/cs1521/labs/lab4/src[0m% cd build/
+[4makka[24m:[1m~/cs1521/labs/lab4/src/build[0m% make
+[ 33%] [32mBuilding CXX object CMakeFiles/lab4.dir/PrecondViolatedExcep.cpp.o[0m
+[ 66%] [32mBuilding CXX object CMakeFiles/lab4.dir/main.cpp.o[0m
+[100%] [32m[1mLinking CXX executable lab4[0m
+[100%] Built target lab4
+[4makka[24m:[1m~/cs1521/labs/lab4/src/build[0m% ./lab4<values.dat
+The list does NOT contain 1.
+The list does NOT contain 4.
+The list does NOT contain 8.
+list[3] = 9.
+The list does NOT contain 6.
+list[2] = 3.
+list[1] = 0.
+list[4] = 2.
+[4makka[24m:[1m~/cs1521/labs/lab4/src/build[0m% exit
+exit
+
+Script done on Thu 07 Mar 2019 12:12:57 PM CST

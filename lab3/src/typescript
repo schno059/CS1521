@@ -1,0 +1,664 @@
+Script started on Fri 22 Feb 2019 04:53:26 PM CST
+[4makka[24m:[1m~/cs1521/labs/lab3/src[0m% pwd
+/home/csugrads/schno059/cs1521/labs/lab3/src
+[4makka[24m:[1m~/cs1521/labs/lab3/src[0m% ls -l
+total 40
+-rw------- 1 schno059 student 3082 Feb 22 16:46 ArraySet.cpp
+-rw------- 1 schno059 student 3163 Feb 21 12:13 ArraySet.cpp~
+-rw------- 1 schno059 student 2266 Feb 22 16:49 ArraySet.h
+-rw------- 1 schno059 student 1965 Feb 21 12:30 ArraySet.h~
+drwx------ 3 schno059 student 4096 Feb 22 16:50 build
+-rw------- 1 schno059 student  115 Feb 21 12:21 CMakeLists.txt
+-rw------- 1 schno059 student 2861 Feb 22 16:41 lab3.cpp
+-rw------- 1 schno059 student 2577 Feb 21 12:09 #SetInterface.h#
+-rw------- 1 schno059 student 2571 Feb 21 11:54 SetInterface.h
+-rw------- 1 schno059 student 2570 Feb 21 11:48 SetInterface.h~
+-rw------- 1 schno059 student    0 Feb 22 16:53 typescript
+[4makka[24m:[1m~/cs1521/labs/lab3/src[0m% cat -n CMakeLists.txt 
+     1	project(ArraySet)
+     2	
+     3	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14")
+     4	
+     5	add_executable(arrayset
+     6	  lab3.cpp)
+[4makka[24m:[1m~/cs1521/labs/lab3/src[0m% cat -n lab3.cpp 
+     1	#include "ArraySet.h"
+     2	#include <iostream>
+     3	using namespace std;
+     4	
+     5	ArraySet<int> firstSet, secondSet, thirdSet;
+     6	std::vector<int> displayVector;
+     7	
+     8	void duples();
+     9	void bothEmpty();
+    10	void leftEmpty();
+    11	void rightEmpty();
+    12	void noInter();
+    13	void haveInter();
+    14	void ident();
+    15	
+    16	void allDisplay();
+    17	
+    18	int main()
+    19	{
+    20	   cout<<"\nTesting attributes of ArraySet of type <int>\n";
+    21	   cout<<"----Response to duplicate entries----\n";
+    22	   duples();
+    23	   cout<<"\n\n----Difference of two empty sets----\n";
+    24	   bothEmpty();
+    25	   cout<<"\n\n----Difference when only the left set is empty----";
+    26	   leftEmpty();
+    27	   cout<<"\n\n----Difference when only the right set is empty----";
+    28	   rightEmpty();
+    29	   cout<<"\n\n----Difference when there is no intersection----";
+    30	   noInter();
+    31	   cout<<"\n\n----Difference when there is an intersection between non-identical sets----\n";
+    32	   haveInter();
+    33	   cout<<"\n\n----Difference when both sets are identical----\n";
+    34	   ident();
+    35	}
+    36	void duples()
+    37	{
+    38	   cout<<"\nNote: 0 means false or unsuccessful. 1 means true";
+    39	   for(int i(0); i<4; i++)
+    40	      cout<<"\nfirstSet.add("<<i<<")\t returns "<<firstSet.add(i);
+    41	   for(int i(1); i<13; i+=2)
+    42	      cout<<"\nfirstSet.add("<<i<<")\t returns "<<firstSet.add(i);
+    43	   displayVector=firstSet.toVector();
+    44	   cout<<"\n\nResult\n";
+    45	   for(int i(0); i<firstSet.getCurrentSize(); ++i)
+    46	      cout<<"\n["<<i<<"]: "<<displayVector[i];
+    47	}
+    48	void bothEmpty()
+    49	{
+    50	   firstSet.clear();
+    51	   secondSet.clear();
+    52	   allDisplay();
+    53	}
+    54	void leftEmpty()
+    55	{
+    56	   firstSet.clear();
+    57	   secondSet.clear();
+    58	   for(int i(0); i<6; ++i)
+    59	      secondSet.add(i);
+    60	   allDisplay();
+    61	}
+    62	void rightEmpty()
+    63	{
+    64	   firstSet.clear();
+    65	   secondSet.clear();
+    66	   for(int i(0); i<6; ++i)
+    67	      firstSet.add(i);
+    68	   allDisplay();
+    69	}
+    70	void noInter()
+    71	{
+    72	   firstSet.clear();
+    73	   secondSet.clear();
+    74	   for(int i(0); i<6; ++i)
+    75	      firstSet.add(i);
+    76	   for(int i(0); i<6; ++i)
+    77	      secondSet.add(i+50);
+    78	   allDisplay();
+    79	}
+    80	void haveInter()
+    81	{
+    82	   firstSet.clear();
+    83	   secondSet.clear();
+    84	   for(int i(0); i<6; ++i)
+    85	      firstSet.add(i);
+    86	   for(int i(0); i<6; ++i)
+    87	      secondSet.add(i+3);
+    88	   allDisplay();
+    89	}
+    90	void ident()
+    91	{
+    92	   firstSet.clear();
+    93	   secondSet.clear();
+    94	   for(int i(0); i<6; ++i)
+    95	      firstSet.add(i);
+    96	   for(int i(0); i<6; ++i)
+    97	      secondSet.add(i);
+    98	   allDisplay();
+    99	}
+   100	void allDisplay()
+   101	{
+   102	   cout<<"\nContents of first set:\n\n";
+   103	   displayVector=firstSet.toVector();
+   104	   for(int i(0); i<firstSet.getCurrentSize(); ++i)
+   105	      cout<<"\n["<<i<<"]: "<<displayVector[i];
+   106	   cout<<"\nContents of second set:\n\n";
+   107	   displayVector=secondSet.toVector();
+   108	   for(int i(0); i<secondSet.getCurrentSize(); ++i)
+   109	      cout<<"\n["<<i<<"]: "<<displayVector[i];
+   110	   thirdSet=thirdSet.difference(firstSet,secondSet);
+   111	   cout<<"\nContents of difference:\n\n";
+   112	   displayVector=thirdSet.toVector();
+   113	   for(int i(0); i<thirdSet.getCurrentSize(); ++i)
+   114	      cout<<"\n["<<i<<"]: "<<displayVector[i];
+   115	}
+[4makka[24m:[1m~/cs1521/labs/lab3/src[0m% cat -n Se
+SetInterface.h~  SetInterface.h   
+[4makka[24m:[1m~/cs1521/labs/lab3/src[0m% cat -n SetInterface.h
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  BagInterface class template definition.
+     8	 *
+     9	 *  Adapted from page 24-25 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *
+    15	 *  @date 08 Feb 2019
+    16	 *
+    17	 *  @version 7.0 */
+    18	
+    19	#ifndef SET_INTERFACE_
+    20	#define SET_INTERFACE_
+    21	
+    22	#include <vector>
+    23	
+    24	/** @class SetInterface SetInterface.h "SetInterface.h"
+    25	 *
+    26	 *  SetInterface abstract base class template. */
+    27	template <typename ItemType>
+    28	class SetInterface {
+    29	public:
+    30	   /** Virtual destructor. (See C++ Interlude 2.) */
+    31	   virtual ~SetInterface() {}
+    32	
+    33	   /** Gets the current number of entries in this set.
+    34	    *
+    35	    *  @return The integer number of entries currently in the set. */
+    36	   virtual int getCurrentSize() const = 0;
+    37	
+    38	   /** Sees whether this set is empty.
+    39	    *
+    40	    *  @return True if the set is empty, or false if not. */
+    41	   virtual bool isEmpty() const = 0;
+    42	
+    43	   /** Adds a new entry to this set.
+    44	    *
+    45	    *  @post If successful, newEntry is stored in the set and the
+    46	    *        count of items in the set has increased by 1.
+    47	    *
+    48	    *  @param newEntry The object to be added as a new entry.
+    49	    *
+    50	    *  @return True if addition was successful, or false if not. */
+    51	   virtual bool add(const ItemType& newEntry) = 0;
+    52	
+    53	   /** Removes one occurrence of a given entry from this set, if
+    54	    *  possible.
+    55	    *
+    56	    *  @post If successful, anEntry has been removed from the set and
+    57	    *        the count of items in the set has decreased by 1.
+    58	    *
+    59	    *  @param anEntry The value of the entry to be removed.
+    60	    *
+    61	    *  @return True if removal was successful, or false if not. */
+    62	   virtual bool remove(const ItemType& anEntry) = 0;
+    63	
+    64	   /** Removes all entries from this set.
+    65	    *
+    66	    *  @post This set contains no items (thus the count is 0). */
+    67	   virtual void clear() = 0;
+    68	
+    69	
+    70	   /** Counts the number of times a given entry appears in set.
+    71	    *
+    72	    *  @param anEntry The value of the entry to be counted.
+    73	    *
+    74	    *  @return The number of times anEntry appears in this set. */
+    75	   virtual int getFrequencyOf(const ItemType& anEntry) const = 0;
+    76	
+    77	   /** Tests whether this set contains a given entry.
+    78	    *
+    79	    *  @param anEntry The value of the entry to locate.
+    80	    *
+    81	    *  @return True if this set contains anEntry, or false
+    82	    *          otherwise. */
+    83	   virtual bool contains(const ItemType& anEntry) const = 0;
+    84	
+    85	   /** Converts this set into a vector.
+    86	    *
+    87	    *  @return A vector containing all the entries in this set. */
+    88	   virtual std::vector<ItemType> toVector() const = 0;
+    89	};
+    90	
+    91	#endif
+[4makka[24m:[1m~/cs1521/labs/lab3/src[0m% cat -n Arr
+ArraySet.cpp~  ArraySet.cpp   ArraySet.h~    ArraySet.h     
+[4makka[24m:[1m~/cs1521/labs/lab3/src[0m% cat -n ArraySet.h
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Header file for an array-based implementation of the ADT set.
+     8	 *
+     9	 *  Adapted from page 100 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *
+    15	 *  @date 08 Feb 2019
+    16	 *
+    17	 *  @version 7.0 */
+    18	
+    19	#ifndef ARRAY_SET_
+    20	#define ARRAY_SET_
+    21	
+    22	#include <vector>
+    23	
+    24	#include "SetInterface.h"
+    25	
+    26	/** @class ArraySet ArraySet.h "ArraySet.h"
+    27	 *
+    28	 *  Specification of an array-based ADT set. */
+    29	template <typename ItemType>
+    30	class ArraySet : public SetInterface<ItemType> {
+    31	private:
+    32	   /** Maximum capacity of this set. */
+    33	   static const int DEFAULT_CAPACITY = 6;
+    34	
+    35	   /** Data storage. */
+    36	   ItemType items[DEFAULT_CAPACITY];
+    37	
+    38	   /** Number of items in this set. */
+    39	   int itemCount = 0;
+    40	
+    41	   /** Maximum capacity of this set. */
+    42	   int maxItems = DEFAULT_CAPACITY;
+    43	
+    44	   /** Gets the index of target in the array 'items' in this set.
+    45	    *
+    46	    * @param target The ItemType value to retrieve the index of.
+    47	    *
+    48	    * @return The index of the element in the array 'items' that
+    49	    *         contains 'target' or -1 if the array does not contain
+    50	    *         'target'. */
+    51	   int getIndexOf(const ItemType& target, int searchIndex) const;
+    52	
+    53	   int countFrequency(const ItemType& target, int searchIndex) const;
+    54	
+    55	public:
+    56	   /** Default constructor. */
+    57	   ArraySet() = default;
+    58	
+    59	   /** Virtual destructor. */
+    60	   virtual ~ArraySet() = default;
+    61	
+    62	   virtual int getCurrentSize() const;
+    63	
+    64	   virtual bool isEmpty() const;
+    65	
+    66	   virtual bool add(const ItemType& newEntry);
+    67	
+    68	   virtual bool remove(const ItemType& anEntry);
+    69	
+    70	   virtual void clear();
+    71	
+    72	   virtual int getFrequencyOf(const ItemType& anEntry) const;
+    73	
+    74	   virtual bool contains(const ItemType& anEntry) const;
+    75	
+    76	   virtual std::vector<ItemType> toVector() const;
+    77	
+    78	   /** Gets the difference between set1 and set2
+    79	    *
+    80	    * @param set1 is the original set
+    81	    *
+    82	    * @param set2 is what is subtracted
+    83	    *
+    84	    * @return ArraySet containing all items in set1 that are NOT in
+    85	    *set2
+    86	    */
+    87	   virtual ArraySet<ItemType> difference(const ArraySet<ItemType>&
+    88	                                         set1, const
+    89	                                         ArraySet<ItemType>& set2) const;
+    90	};
+    91	
+    92	#include "ArraySet.cpp"
+    93	
+    94	#endif
+[4makka[24m:[1m~/cs1521/labs/lab3/src[0m% cat -n Arr
+ArraySet.cpp~  ArraySet.cpp   ArraySet.h~    ArraySet.h     
+[4makka[24m:[1m~/cs1521/labs/lab3/src[0m% cat -n ArraySet.cpp
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Implementation file for the recursive class ArraySet.
+     8	 *
+     9	 *  Adapted from pages 112-114 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *  @modified by Jacob Schnoor
+    15	 *
+    16	 *  @date 22 Feb 2019
+    17	 *
+    18	 *  @version 7.0 */
+    19	
+    20	#include <vector>
+    21	
+    22	template <typename ItemType>
+    23	int ArraySet<ItemType>::getCurrentSize() const {
+    24	
+    25	   return itemCount;
+    26	}
+    27	
+    28	template <typename ItemType>
+    29	bool ArraySet<ItemType>::isEmpty() const {
+    30	
+    31	   return !itemCount;
+    32	}
+    33	
+    34	template <typename ItemType>
+    35	bool ArraySet<ItemType>::add(const ItemType& newEntry) {
+    36	
+    37	   bool hasRoomToAdd(itemCount < maxItems);
+    38	   for(int i(0); i<itemCount; ++i)
+    39	      if(items[i]==newEntry)
+    40	         hasRoomToAdd=false;
+    41	
+    42	   if (hasRoomToAdd) {
+    43	      items[itemCount] = newEntry;
+    44	      ++itemCount;
+    45	   }
+    46	
+    47	   return hasRoomToAdd;
+    48	}
+    49	
+    50	template <typename ItemType>
+    51	bool ArraySet<ItemType>::remove(const ItemType& anEntry) {
+    52	
+    53	   int locatedIndex(getIndexOf(anEntry, 0) );
+    54	   bool canRemoveItem(!isEmpty() && locatedIndex > -1);
+    55	
+    56	   if (canRemoveItem) {
+    57	      --itemCount;
+    58	      items[locatedIndex] = items[itemCount];
+    59	   }
+    60	
+    61	   return canRemoveItem;
+    62	}
+    63	
+    64	template <typename ItemType>
+    65	void ArraySet<ItemType>::clear() {
+    66	
+    67	   itemCount = 0;
+    68	}
+    69	
+    70	template <typename ItemType>
+    71	bool ArraySet<ItemType>::contains(const ItemType& anEntry) const {
+    72	
+    73	   bool isFound(false);
+    74	   int curIndex(0);
+    75	
+    76	   while (!isFound && curIndex < itemCount) {
+    77	      isFound = anEntry == items[curIndex];
+    78	      ++curIndex;
+    79	   }
+    80	
+    81	   return isFound;
+    82	}
+    83	
+    84	template <typename ItemType>
+    85	int ArraySet<ItemType>::getFrequencyOf(const ItemType& anEntry) const {
+    86	
+    87	   return countFrequency(anEntry, 0);
+    88	}
+    89	
+    90	template <typename ItemType>
+    91	std::vector<ItemType> ArraySet<ItemType>::toVector() const {
+    92	
+    93	   std::vector<ItemType> setContents;
+    94	
+    95	   for (int i(0); i < itemCount; ++i) {
+    96	      setContents.push_back(items[i]);
+    97	   }
+    98	
+    99	   return setContents;
+   100	}
+   101	
+   102	template <typename ItemType>
+   103	int ArraySet<ItemType>::getIndexOf(const ItemType& target, int searchIndex) const {
+   104	   int targetIndex(-1);
+   105	
+   106	   if (searchIndex < itemCount) {
+   107	      if (items[searchIndex] == target) {
+   108	         targetIndex = searchIndex;
+   109	      }
+   110	      else {
+   111	         targetIndex = getIndexOf(target, searchIndex + 1);
+   112	      }
+   113	   }
+   114	
+   115	   return targetIndex;
+   116	}
+   117	
+   118	template <typename ItemType>
+   119	int ArraySet<ItemType>::countFrequency(const ItemType& target, int searchIndex) const {
+   120	   int frequency(0);
+   121	
+   122	   if (searchIndex < itemCount) {
+   123	      if (items[searchIndex] == target) {
+   124	         frequency = 1 + countFrequency(target, searchIndex + 1);
+   125	      }
+   126	      else {
+   127	         frequency = countFrequency(target, searchIndex + 1);
+   128	      }
+   129	   }
+   130	
+   131	   return frequency;
+   132	}
+   133	
+   134	template <typename ItemType>
+   135	ArraySet<ItemType> ArraySet<ItemType>::difference(const ArraySet<ItemType>& set1, const ArraySet<ItemType>& set2) const{
+   136	   ArraySet<ItemType> returnSet=set1;
+   137	   std::vector<ItemType> removeVect=set2.toVector();
+   138	   for(int i(0); i<set2.getCurrentSize(); ++i)
+   139	      returnSet.remove(removeVect[i]);
+   140	   return returnSet;
+   141	}
+[4makka[24m:[1m~/cs1521/labs/lab3/src[0m% git --no-pager log --no-color
+commit 9aa560f9ac7b74ef9b999dc7a803978f28831f57
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Fri Feb 22 16:53:19 2019 -0600
+
+    Finished tester. Lab 3 complete
+
+commit 3919c947487026a48f46d916dddbf1e96993927e
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Thu Feb 21 13:42:32 2019 -0600
+
+    Tester in progress
+
+commit 0521e9d0189afa8d72779eb3a60cea837cedfb5c
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Thu Feb 21 13:11:08 2019 -0600
+
+    difference method works. Constructing tester
+
+commit 5d8ccd6608a156f2d03092abb8677b241fe13b34
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Thu Feb 21 12:36:09 2019 -0600
+
+    Successful compilation. No functionality
+[4makka[24m:[1m~/cs1521/labs/lab3/src[0m% cd build
+[4makka[24m:[1m~/cs1521/labs/lab3/src/build[0m% make
+[35m[1mScanning dependencies of target arrayset[0m
+[ 50%] [32mBuilding CXX object CMakeFiles/arrayset.dir/lab3.cpp.o[0m
+[100%] [32m[1mLinking CXX executable arrayset[0m
+[100%] Built target arrayset
+[4makka[24m:[1m~/cs1521/labs/lab3/src/build[0m% ./arrayset
+
+Testing attributes of ArraySet of type <int>
+----Response to duplicate entries----
+
+Note: 0 means false or unsuccessful. 1 means true
+firstSet.add(0)	 returns 1
+firstSet.add(1)	 returns 1
+firstSet.add(2)	 returns 1
+firstSet.add(3)	 returns 1
+firstSet.add(1)	 returns 0
+firstSet.add(3)	 returns 0
+firstSet.add(5)	 returns 1
+firstSet.add(7)	 returns 1
+firstSet.add(9)	 returns 0
+firstSet.add(11)	 returns 0
+
+Result
+
+[0]: 0
+[1]: 1
+[2]: 2
+[3]: 3
+[4]: 5
+[5]: 7
+
+----Difference of two empty sets----
+
+Contents of first set:
+
+
+Contents of second set:
+
+
+Contents of difference:
+
+
+
+----Difference when only the left set is empty----
+Contents of first set:
+
+
+Contents of second set:
+
+
+[0]: 0
+[1]: 1
+[2]: 2
+[3]: 3
+[4]: 4
+[5]: 5
+Contents of difference:
+
+
+
+----Difference when only the right set is empty----
+Contents of first set:
+
+
+[0]: 0
+[1]: 1
+[2]: 2
+[3]: 3
+[4]: 4
+[5]: 5
+Contents of second set:
+
+
+Contents of difference:
+
+
+[0]: 0
+[1]: 1
+[2]: 2
+[3]: 3
+[4]: 4
+[5]: 5
+
+----Difference when there is no intersection----
+Contents of first set:
+
+
+[0]: 0
+[1]: 1
+[2]: 2
+[3]: 3
+[4]: 4
+[5]: 5
+Contents of second set:
+
+
+[0]: 50
+[1]: 51
+[2]: 52
+[3]: 53
+[4]: 54
+[5]: 55
+Contents of difference:
+
+
+[0]: 0
+[1]: 1
+[2]: 2
+[3]: 3
+[4]: 4
+[5]: 5
+
+----Difference when there is an intersection between non-identical sets----
+
+Contents of first set:
+
+
+[0]: 0
+[1]: 1
+[2]: 2
+[3]: 3
+[4]: 4
+[5]: 5
+Contents of second set:
+
+
+[0]: 3
+[1]: 4
+[2]: 5
+[3]: 6
+[4]: 7
+[5]: 8
+Contents of difference:
+
+
+[0]: 0
+[1]: 1
+[2]: 2
+
+----Difference when both sets are identical----
+
+Contents of first set:
+
+
+[0]: 0
+[1]: 1
+[2]: 2
+[3]: 3
+[4]: 4
+[5]: 5
+Contents of second set:
+
+
+[0]: 0
+[1]: 1
+[2]: 2
+[3]: 3
+[4]: 4
+[5]: 5
+Contents of difference:
+
+[4makka[24m:[1m~/cs1521/labs/lab3/src/build[0m% exit
+exit
+
+Script done on Fri 22 Feb 2019 04:55:08 PM CST

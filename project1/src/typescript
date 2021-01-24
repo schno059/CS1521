@@ -1,0 +1,794 @@
+Script started on Mon 28 Jan 2019 06:30:25 PM CST
+[4makka[24m:[1m~/cs1521/projects/project1/src[0m% pwd
+/home/csugrads/schno059/cs1521/projects/project1/src
+[4makka[24m:[1m~/cs1521/projects/project1/src[0m% ls -lR ~/
+/home/csugrads/schno059/:
+total 31348
+-rwx------ 1 schno059 student    24760 Dec  6 08:56 a.out
+-rw------- 1 schno059 student     4683 Nov 13 14:41 bagAdt.cpp
+-rw------- 1 schno059 student     3221 Nov 13 14:37 bagAdt.cpp.save
+-rw------- 1 schno059 student     7218 Nov 13 15:05 bagAdt.cpp.save.1
+-rw------- 1 schno059 student     5622 Nov 27 09:58 bagAdt.cpp.save.2
+-rw------- 1 schno059 student     3390 Nov 29 09:34 bag.h
+-rw------- 1 schno059 student 18757168 Nov 27 10:11 bag.h.gch
+-rw------- 1 schno059 student     4078 Oct  7 15:33 calorieCounter.cpp
+-rw------- 1 schno059 student      369 Oct  4 09:47 cell.cpp
+-rw------- 1 schno059 student        0 Jan 21 15:18 #CMakeLists.txt#
+-rw------- 1 schno059 student        0 Jan 21 15:17 CMakeLists.txt
+-rw------- 1 schno059 student      404 Sep 13 09:15 codeChallenge.cpp
+drwx------ 4 schno059 student     4096 Jan 21 16:31 cs1521
+-rw------- 1 schno059 student      338 Nov 29 09:17 item.h
+-rw------- 1 schno059 student 13013776 Nov 27 10:07 item.h.gch
+-rw------- 1 schno059 student    17767 Oct 28 16:35 names2008.txt
+-rw------- 1 schno059 student    17740 Oct 28 16:36 names2009.txt
+-rw------- 1 schno059 student    17740 Oct 28 16:36 names2010.txt
+-rw------- 1 schno059 student    17742 Oct 28 16:36 names2011.txt
+-rw------- 1 schno059 student    17751 Oct 28 16:40 names2012.txt
+-rw------- 1 schno059 student    17734 Oct 28 16:40 names2013.txt
+-rw------- 1 schno059 student    17729 Oct 28 16:40 names2014.txt
+-rw------- 1 schno059 student    17711 Oct 28 16:41 names2015.txt
+-rw------- 1 schno059 student    17694 Oct 28 16:41 names2016.txt
+-rw------- 1 schno059 student    17658 Oct 28 16:42 names2017.txt
+-rw------- 1 schno059 student     2591 Oct 29 13:07 nameSearch.cpp
+-rw------- 1 schno059 student     1182 Sep  5 10:02 project1.cpp
+-rw------- 1 schno059 student     1234 Oct  4 09:30 project3.cpp
+-rw------- 1 schno059 student     1236 Oct  1 11:40 project3.cpp.save
+-rw------- 1 schno059 student     2116 Nov 27 10:19 project7.cpp
+-rw------- 1 schno059 student     2686 Oct 18 09:15 sentenceMaker.cpp
+-rw------- 1 schno059 student      485 Nov  8 09:15 structuralCollapse.cpp
+-rw------- 1 schno059 student     2184 Sep 10 11:17 wageSlave.cpp
+-rw------- 1 schno059 student        6 Oct 18 09:04 words.dat
+
+/home/csugrads/schno059/cs1521:
+total 8
+drwx------ 3 schno059 student 4096 Jan 21 14:33 labs
+drwx------ 3 schno059 student 4096 Jan 21 16:32 projects
+
+/home/csugrads/schno059/cs1521/labs:
+total 4
+drwx------ 3 schno059 student 4096 Jan 23 18:22 lab1
+
+/home/csugrads/schno059/cs1521/labs/lab1:
+total 52
+-rw------- 1 schno059 student 2100 Jan 21 14:38 board.cpp
+-rw------- 1 schno059 student 2394 Jan 21 14:38 board.h
+drwx------ 3 schno059 student 4096 Jan 23 18:03 build
+-rw------- 1 schno059 student  154 Jan 21 15:29 CMakeLists.txt
+-rw------- 1 schno059 student   65 Jan 21 15:22 CMakeLists.txt~
+-rw------- 1 schno059 student 2283 Jan 21 15:05 #game.cpp#
+-rw------- 1 schno059 student 2280 Jan 21 14:39 game.cpp
+-rw------- 1 schno059 student 1787 Jan 21 14:39 game.h
+-rw------- 1 schno059 student  461 Jan 21 14:39 main.cpp
+-rw------- 1 schno059 student  789 Jan 21 14:39 player.cpp
+-rw------- 1 schno059 student 1197 Jan 21 14:39 player.h
+-rw------- 1 schno059 student 5886 Jan 23 18:03 typescript
+
+/home/csugrads/schno059/cs1521/labs/lab1/build:
+total 48
+-rw------- 1 schno059 student 11695 Jan 23 18:03 CMakeCache.txt
+drwx------ 5 schno059 student  4096 Jan 23 18:03 CMakeFiles
+-rw------- 1 schno059 student  1397 Jan 23 18:03 cmake_install.cmake
+-rw------- 1 schno059 student  6801 Jan 23 18:03 Makefile
+-rwx------ 1 schno059 student 20448 Jan 23 18:03 tictactoe
+
+/home/csugrads/schno059/cs1521/labs/lab1/build/CMakeFiles:
+total 120
+drwx------ 4 schno059 student  4096 Jan 23 18:03 3.5.1
+-rw------- 1 schno059 student    85 Jan 23 18:03 cmake.check_cache
+-rw------- 1 schno059 student   661 Jan 23 18:03 CMakeDirectoryInformation.cmake
+-rw------- 1 schno059 student 41585 Jan 23 18:03 CMakeOutput.log
+drwx------ 2 schno059 student  4096 Jan 23 18:03 CMakeTmp
+-rwx------ 1 schno059 student 12696 Jan 23 18:03 feature_tests.bin
+-rw------- 1 schno059 student   688 Jan 23 18:03 feature_tests.c
+-rw------- 1 schno059 student 10011 Jan 23 18:03 feature_tests.cxx
+-rw------- 1 schno059 student  3245 Jan 23 18:03 Makefile2
+-rw------- 1 schno059 student  6295 Jan 23 18:03 Makefile.cmake
+-rw------- 1 schno059 student     2 Jan 23 18:03 progress.marks
+-rw------- 1 schno059 student   221 Jan 23 18:03 TargetDirectories.txt
+drwx------ 2 schno059 student  4096 Jan 23 18:03 tictactoe.dir
+
+/home/csugrads/schno059/cs1521/labs/lab1/build/CMakeFiles/3.5.1:
+total 48
+-rw-r--r-- 1 schno059 student 2002 Jan 23 18:03 CMakeCCompiler.cmake
+-rw-r--r-- 1 schno059 student 4556 Jan 23 18:03 CMakeCXXCompiler.cmake
+-rwx------ 1 schno059 student 8640 Jan 23 18:03 CMakeDetermineCompilerABI_C.bin
+-rwx------ 1 schno059 student 8656 Jan 23 18:03 CMakeDetermineCompilerABI_CXX.bin
+-rw-r--r-- 1 schno059 student  402 Jan 23 18:03 CMakeSystem.cmake
+drwx------ 2 schno059 student 4096 Jan 23 18:03 CompilerIdC
+drwx------ 2 schno059 student 4096 Jan 23 18:03 CompilerIdCXX
+
+/home/csugrads/schno059/cs1521/labs/lab1/build/CMakeFiles/3.5.1/CompilerIdC:
+total 32
+-rwx------ 1 schno059 student  8800 Jan 23 18:03 a.out
+-rw------- 1 schno059 student 16423 Jan 23 18:03 CMakeCCompilerId.c
+
+/home/csugrads/schno059/cs1521/labs/lab1/build/CMakeFiles/3.5.1/CompilerIdCXX:
+total 32
+-rwx------ 1 schno059 student  8808 Jan 23 18:03 a.out
+-rw------- 1 schno059 student 16406 Jan 23 18:03 CMakeCXXCompilerId.cpp
+
+/home/csugrads/schno059/cs1521/labs/lab1/build/CMakeFiles/CMakeTmp:
+total 0
+
+/home/csugrads/schno059/cs1521/labs/lab1/build/CMakeFiles/tictactoe.dir:
+total 76
+-rw------- 1 schno059 student 6888 Jan 23 18:03 board.cpp.o
+-rw------- 1 schno059 student 9993 Jan 23 18:03 build.make
+-rw------- 1 schno059 student  373 Jan 23 18:03 cmake_clean.cmake
+-rw------- 1 schno059 student  960 Jan 23 18:03 CXX.includecache
+-rw------- 1 schno059 student 1023 Jan 23 18:03 DependInfo.cmake
+-rw------- 1 schno059 student  904 Jan 23 18:03 depend.internal
+-rw------- 1 schno059 student  743 Jan 23 18:03 depend.make
+-rw------- 1 schno059 student  197 Jan 23 18:03 flags.make
+-rw------- 1 schno059 student 9128 Jan 23 18:03 game.cpp.o
+-rw------- 1 schno059 student  207 Jan 23 18:03 link.txt
+-rw------- 1 schno059 student 3560 Jan 23 18:03 main.cpp.o
+-rw------- 1 schno059 student 5944 Jan 23 18:03 player.cpp.o
+-rw------- 1 schno059 student  106 Jan 23 18:03 progress.make
+
+/home/csugrads/schno059/cs1521/projects:
+total 4
+drwx------ 3 schno059 student 4096 Jan 28 18:29 project1
+
+/home/csugrads/schno059/cs1521/projects/project1:
+total 4
+drwx------ 3 schno059 student 4096 Jan 28 18:30 src
+
+/home/csugrads/schno059/cs1521/projects/project1/src:
+total 48
+-rwx------ 1 schno059 student 14072 Jan 23 18:34 a.out
+drwx------ 2 schno059 student  4096 Jan 28 18:24 build
+-rw------- 1 schno059 student   145 Jan 28 13:26 CMakeLists.txt
+-rw------- 1 schno059 student  1264 Jan 28 18:16 main.cpp
+-rw------- 1 schno059 student  1196 Jan 28 13:25 main.cpp~
+-rw------- 1 schno059 student   913 Jan 28 18:15 stat.cpp
+-rw------- 1 schno059 student   735 Jan 28 13:26 stat.cpp~
+-rw------- 1 schno059 student  2049 Jan 28 18:12 stat.h
+-rw------- 1 schno059 student   966 Jan 28 13:40 stat.h~
+-rw------- 1 schno059 student     0 Jan 28 18:30 typescript
+
+/home/csugrads/schno059/cs1521/projects/project1/src/build:
+total 0
+[4makka[24m:[1m~/cs1521/projects/project1/src[0m% cat -n CMakeLists.txt
+     1	project(StatisticalAnalysis)
+     2	
+     3	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14")
+     4	
+     5	add_executable(statistic
+     6	  main.cpp
+     7	  stat.cpp)
+[4makka[24m:[1m~/cs1521/projects/project1/src[0m% cat -n mas[K
+main.cpp~  main.cpp   
+[4makka[24m:[1m~/cs1521/projects/project1/src[0m% cat -n main.cpp
+     1	/** @file
+     2	 *
+     3	 *@author Jacob R Schnoor
+     4	 *
+     5	 *@note farewell*/
+     6	
+     7	#include <iostream>
+     8	#include "stat.h"
+     9	using namespace std;
+    10	
+    11	Stat myStat;
+    12	
+    13	void displayStats();
+    14	
+    15	int main()
+    16	{
+    17	   double temp;
+    18	   cout<<"\nWelcome to the statistical analysis program"<<endl;
+    19	   cout<<"Enter as many numbers as you would like"<<endl;
+    20	   cout<<"And view the statistical information of the sequence"<<endl;
+    21	   cout<<"Enter a number (-999 to clear)"<<endl;
+    22	   cin>>temp;
+    23	   while(temp!=-999)
+    24	   {
+    25	      while(temp!=-999)
+    26	      {
+    27	         myStat.add(temp);
+    28	         displayStats();
+    29	         cout<<"Enter another number (or -999)"<<endl;
+    30	         cin>>temp;
+    31	      }
+    32	      myStat.clear();
+    33	      displayStats();
+    34	      cout<<"Enter '-999' again to quit"<<endl;
+    35	      cout<<"Any other number to continue"<<endl;
+    36	      cin>>temp;
+    37	   }
+    38	   cout<<"Thank you for using our service"<<endl<<endl;
+    39	}
+    40	void displayStats()
+    41	{
+    42	   cout<<"\nNumbers Entered so Far: "<<myStat.getNumVals()<<endl;
+    43	   cout<<"Last Number Entered: "<<myStat.getLast()<<endl;
+    44	   cout<<"Sum of All Numbers: "<<myStat.getSum()<<endl;
+    45	   cout<<"Statistical mean: "<<myStat.getMean()<<endl;
+    46	   cout<<"Largest Number: "<<myStat.getMax()<<"\t\tSmallest Number: "<<myStat.getMin()<<endl<<endl;
+    47	}
+[4makka[24m:[1m~/cs1521/projects/project1/src[0m% cat -n stat.h
+     1	/** @file
+     2	 *
+     3	 *@author Jacob R Schnoor*/
+     4	
+     5	#ifndef STAT_
+     6	#define STAT_
+     7	
+     8	/** @class Stat*/
+     9	class Stat
+    10	{
+    11	  private:
+    12	   /** The amount of data entered so far*/
+    13	   int N;
+    14	
+    15	   /** The most recent number entered*/
+    16	   double lastNum;
+    17	
+    18	   /** The total of all numbers entered so far*/
+    19	   double sum;
+    20	
+    21	   /** The mean or average of all numbers entered so far*/
+    22	   double mean;
+    23	
+    24	   /** The lowest value of all numbers entered so far*/
+    25	   double min;
+    26	
+    27	   /** The greatest value of all numbers entered so far*/
+    28	   double max;
+    29	  public:
+    30	   /** Default Constructor*/
+    31	   Stat();
+    32	
+    33	    /*Add a data point to the sequence
+    34	    *
+    35	    *@pre input is a valid double
+    36	    *
+    37	    *@post the double is introduced to the sequence, private variables
+    38	    *change accordingly
+    39	    *
+    40	    *@return if the number was successfully added*/
+    41	   bool add(double input);
+    42	   
+    43	   /*Gets the number of values
+    44	    *
+    45	    *@pre none
+    46	    *
+    47	    *@post none
+    48	    *
+    49	    *@return N, the number of values entered thus far*/   
+    50	   int getNumVals();
+    51	
+    52	   /*Gets the last number entered
+    53	    *
+    54	    *@pre none
+    55	    *
+    56	    *@post none
+    57	    *
+    58	    *@return the last number entered (or 0 if the Stat is empty)*/
+    59	   double getLast();
+    60	
+    61	   /*Adds all data values entered
+    62	    *
+    63	    *@pre none
+    64	    *
+    65	    *@post none
+    66	    *
+    67	    *@return the sum of adding all values*/
+    68	   double getSum();
+    69	
+    70	   /*Gets the mean or average of the numerical sequence
+    71	    *
+    72	    *@pre none
+    73	    *
+    74	    *@post none
+    75	    *
+    76	    *@return the mean*/
+    77	   double getMean();
+    78	
+    79	   /*Gets the smallest value that was inputted to the sequence
+    80	    *
+    81	    *@pre none
+    82	    *
+    83	    *@post none
+    84	    *
+    85	    *@return the smallest value*/
+    86	   double getMin();
+    87	
+    88	   /*Gets the greatest value added to the sequence
+    89	    *
+    90	    *@pre none
+    91	    *
+    92	    *@post none
+    93	    *
+    94	    *@return the greatest value*/
+    95	   double getMax();
+    96	
+    97	   /*Empties the Stat object
+    98	    *
+    99	    *@pre none
+   100	    *
+   101	    *@post everything in Stat is set to zero
+   102	    *
+   103	    *@return none*/
+   104	   void clear();
+   105	};
+   106	
+   107	#endif
+[4makka[24m:[1m~/cs1521/projects/project1/src[0m% cat -n sat[K[Ktat.cpp
+     1	/** @file
+     2	 *
+     3	 *@author Jacob R Schnoor
+     4	 *
+     5	 *@note necromancy may be legal in Cyrodil but few will openly admit
+     6	 *to practicing it ever since the Mage's Guild banned it*/
+     7	
+     8	#include <iostream>
+     9	#include "stat.h"
+    10	using namespace std;
+    11	
+    12	Stat::Stat()
+    13	{
+    14	   clear();
+    15	}
+    16	bool Stat::add(double input)
+    17	{
+    18	   lastNum=input;
+    19	   N++;
+    20	   sum+=input;
+    21	   mean=sum/N;
+    22	   if(N<=1)
+    23	   {
+    24	      min=input;
+    25	      max=input;
+    26	   }
+    27	   else
+    28	   {
+    29	      if(input<min)
+    30	         min=input;
+    31	      else if(input>max)
+    32	         max=input;
+    33	   }
+    34	}
+    35	int Stat::getNumVals()
+    36	{
+    37	   return N;
+    38	}
+    39	double Stat::getLast()
+    40	{
+    41	   return lastNum;
+    42	}
+    43	double Stat::getSum()
+    44	{
+    45	   return sum;
+    46	}
+    47	double Stat::getMean()
+    48	{
+    49	   return mean;
+    50	}
+    51	double Stat::getMin()
+    52	{
+    53	   return min;
+    54	}
+    55	double Stat::getMax()
+    56	{
+    57	   return max;
+    58	}
+    59	void Stat::clear()
+    60	{
+    61	   N=0;
+    62	   lastNum=0;
+    63	   sum=0;
+    64	   mean=0;
+    65	   min=0;
+    66	   max=0;
+    67	}
+[4makka[24m:[1m~/cs1521/projects/project1/src[0m% cd build/
+[4makka[24m:[1m~/cs1521/projects/project1/src/build[0m% cmake ..
+-- The C compiler identification is GNU 5.4.0
+-- The CXX compiler identification is GNU 5.4.0
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/csugrads/schno059/cs1521/projects/project1/src/build
+[4makka[24m:[1m~/cs1521/projects/project1/src/build[0m% make
+[35m[1mScanning dependencies of target statistic[0m
+[ 33%] [32mBuilding CXX object CMakeFiles/statistic.dir/main.cpp.o[0m
+[ 66%] [32mBuilding CXX object CMakeFiles/statistic.dir/stat.cpp.o[0m
+[01m[K/home/csugrads/schno059/cs1521/projects/project1/src/stat.cpp:[m[K In member function ‘[01m[Kbool Stat::add(double)[m[K’:
+[01m[K/home/csugrads/schno059/cs1521/projects/project1/src/stat.cpp:34:1:[m[K [01;35m[Kwarning: [m[Kno return statement in function returning non-void [-Wreturn-type]
+ }
+[01;32m[K ^[m[K
+[100%] [32m[1mLinking CXX executable statistic[0m
+[100%] Built target statistic
+[4makka[24m:[1m~/cs1521/projects/project1/src/build[0m% ./statistic 
+
+Welcome to the statistical analysis program
+Enter as many numbers as you would like
+And view the statistical information of the sequence
+Enter a number (-999 to clear)
+0
+
+Numbers Entered so Far: 1
+Last Number Entered: 0
+Sum of All Numbers: 0
+Statistical mean: 0
+Largest Number: 0		Smallest Number: 0
+
+Enter another number (or -999)
+-999
+
+Numbers Entered so Far: 0
+Last Number Entered: 0
+Sum of All Numbers: 0
+Statistical mean: 0
+Largest Number: 0		Smallest Number: 0
+
+Enter '-999' again to quit
+Any other number to continue
+1
+
+Numbers Entered so Far: 1
+Last Number Entered: 1
+Sum of All Numbers: 1
+Statistical mean: 1
+Largest Number: 1		Smallest Number: 1
+
+Enter another number (or -999)
+-999
+
+Numbers Entered so Far: 0
+Last Number Entered: 0
+Sum of All Numbers: 0
+Statistical mean: 0
+Largest Number: 0		Smallest Number: 0
+
+Enter '-999' again to quit
+Any other number to continue
+2.1
+
+Numbers Entered so Far: 1
+Last Number Entered: 2.1
+Sum of All Numbers: 2.1
+Statistical mean: 2.1
+Largest Number: 2.1		Smallest Number: 2.1
+
+Enter another number (or -999)
+0.8
+
+Numbers Entered so Far: 2
+Last Number Entered: 0.8
+Sum of All Numbers: 2.9
+Statistical mean: 1.45
+Largest Number: 2.1		Smallest Number: 0.8
+
+Enter another number (or -999)
+-0.5
+
+Numbers Entered so Far: 3
+Last Number Entered: -0.5
+Sum of All Numbers: 2.4
+Statistical mean: 0.8
+Largest Number: 2.1		Smallest Number: -0.5
+
+Enter another number (or -999)
+-999
+
+Numbers Entered so Far: 0
+Last Number Entered: 0
+Sum of All Numbers: 0
+Statistical mean: 0
+Largest Number: 0		Smallest Number: 0
+
+Enter '-999' again to quit
+Any other number to continue
+1.2
+
+Numbers Entered so Far: 1
+Last Number Entered: 1.2
+Sum of All Numbers: 1.2
+Statistical mean: 1.2
+Largest Number: 1.2		Smallest Number: 1.2
+
+Enter another number (or -999)
+1.5
+
+Numbers Entered so Far: 2
+Last Number Entered: 1.5
+Sum of All Numbers: 2.7
+Statistical mean: 1.35
+Largest Number: 1.5		Smallest Number: 1.2
+
+Enter another number (or -999)
+2.3
+
+Numbers Entered so Far: 3
+Last Number Entered: 2.3
+Sum of All Numbers: 5
+Statistical mean: 1.66667
+Largest Number: 2.3		Smallest Number: 1.2
+
+Enter another number (or -999)
+4.5
+
+Numbers Entered so Far: 4
+Last Number Entered: 4.5
+Sum of All Numbers: 9.5
+Statistical mean: 2.375
+Largest Number: 4.5		Smallest Number: 1.2
+
+Enter another number (or -999)
+7.6
+
+Numbers Entered so Far: 5
+Last Number Entered: 7.6
+Sum of All Numbers: 17.1
+Statistical mean: 3.42
+Largest Number: 7.6		Smallest Number: 1.2
+
+Enter another number (or -999)
+9.8
+
+Numbers Entered so Far: 6
+Last Number Entered: 9.8
+Sum of All Numbers: 26.9
+Statistical mean: 4.48333
+Largest Number: 9.8		Smallest Number: 1.2
+
+Enter another number (or -999)
+100
+
+Numbers Entered so Far: 7
+Last Number Entered: 100
+Sum of All Numbers: 126.9
+Statistical mean: 18.1286
+Largest Number: 100		Smallest Number: 1.2
+
+Enter another number (or -999)
+-999
+
+Numbers Entered so Far: 0
+Last Number Entered: 0
+Sum of All Numbers: 0
+Statistical mean: 0
+Largest Number: 0		Smallest Number: 0
+
+Enter '-999' again to quit
+Any other number to continue
+100
+
+Numbers Entered so Far: 1
+Last Number Entered: 100
+Sum of All Numbers: 100
+Statistical mean: 100
+Largest Number: 100		Smallest Number: 100
+
+Enter another number (or -999)
+100
+
+Numbers Entered so Far: 2
+Last Number Entered: 100
+Sum of All Numbers: 200
+Statistical mean: 100
+Largest Number: 100		Smallest Number: 100
+
+Enter another number (or -999)
+100
+
+Numbers Entered so Far: 3
+Last Number Entered: 100
+Sum of All Numbers: 300
+Statistical mean: 100
+Largest Number: 100		Smallest Number: 100
+
+Enter another number (or -999)
+100
+
+Numbers Entered so Far: 4
+Last Number Entered: 100
+Sum of All Numbers: 400
+Statistical mean: 100
+Largest Number: 100		Smallest Number: 100
+
+Enter another number (or -999)
+-999
+
+Numbers Entered so Far: 0
+Last Number Entered: 0
+Sum of All Numbers: 0
+Statistical mean: 0
+Largest Number: 0		Smallest Number: 0
+
+Enter '-999' again to quit
+Any other number to continue
+2
+
+Numbers Entered so Far: 1
+Last Number Entered: 2
+Sum of All Numbers: 2
+Statistical mean: 2
+Largest Number: 2		Smallest Number: 2
+
+Enter another number (or -999)
+-2
+
+Numbers Entered so Far: 2
+Last Number Entered: -2
+Sum of All Numbers: 0
+Statistical mean: 0
+Largest Number: 2		Smallest Number: -2
+
+Enter another number (or -999)
+2
+
+Numbers Entered so Far: 3
+Last Number Entered: 2
+Sum of All Numbers: 2
+Statistical mean: 0.666667
+Largest Number: 2		Smallest Number: -2
+
+Enter another number (or -999)
+-2
+
+Numbers Entered so Far: 4
+Last Number Entered: -2
+Sum of All Numbers: 0
+Statistical mean: 0
+Largest Number: 2		Smallest Number: -2
+
+Enter another number (or -999)
+2
+
+Numbers Entered so Far: 5
+Last Number Entered: 2
+Sum of All Numbers: 2
+Statistical mean: 0.4
+Largest Number: 2		Smallest Number: -2
+
+Enter another number (or -999)
+-2
+
+Numbers Entered so Far: 6
+Last Number Entered: -2
+Sum of All Numbers: 0
+Statistical mean: 0
+Largest Number: 2		Smallest Number: -2
+
+Enter another number (or -999)
+2
+
+Numbers Entered so Far: 7
+Last Number Entered: 2
+Sum of All Numbers: 2
+Statistical mean: 0.285714
+Largest Number: 2		Smallest Number: -2
+
+Enter another number (or -999)
+-2
+
+Numbers Entered so Far: 8
+Last Number Entered: -2
+Sum of All Numbers: 0
+Statistical mean: 0
+Largest Number: 2		Smallest Number: -2
+
+Enter another number (or -999)
+0
+
+Numbers Entered so Far: 9
+Last Number Entered: 0
+Sum of All Numbers: 0
+Statistical mean: 0
+Largest Number: 2		Smallest Number: -2
+
+Enter another number (or -999)
+0
+
+Numbers Entered so Far: 10
+Last Number Entered: 0
+Sum of All Numbers: 0
+Statistical mean: 0
+Largest Number: 2		Smallest Number: -2
+
+Enter another number (or -999)
+0
+
+Numbers Entered so Far: 11
+Last Number Entered: 0
+Sum of All Numbers: 0
+Statistical mean: 0
+Largest Number: 2		Smallest Number: -2
+
+Enter another number (or -999)
+-999
+
+Numbers Entered so Far: 0
+Last Number Entered: 0
+Sum of All Numbers: 0
+Statistical mean: 0
+Largest Number: 0		Smallest Number: 0
+
+Enter '-999' again to quit
+Any other number to continue
+1
+
+Numbers Entered so Far: 1
+Last Number Entered: 1
+Sum of All Numbers: 1
+Statistical mean: 1
+Largest Number: 1		Smallest Number: 1
+
+Enter another number (or -999)
+3
+
+Numbers Entered so Far: 2
+Last Number Entered: 3
+Sum of All Numbers: 4
+Statistical mean: 2
+Largest Number: 3		Smallest Number: 1
+
+Enter another number (or -999)
+2
+
+Numbers Entered so Far: 3
+Last Number Entered: 2
+Sum of All Numbers: 6
+Statistical mean: 2
+Largest Number: 3		Smallest Number: 1
+
+Enter another number (or -999)
+1
+
+Numbers Entered so Far: 4
+Last Number Entered: 1
+Sum of All Numbers: 7
+Statistical mean: 1.75
+Largest Number: 3		Smallest Number: 1
+
+Enter another number (or -999)
+7
+
+Numbers Entered so Far: 5
+Last Number Entered: 7
+Sum of All Numbers: 14
+Statistical mean: 2.8
+Largest Number: 7		Smallest Number: 1
+
+Enter another number (or -999)
+4
+
+Numbers Entered so Far: 6
+Last Number Entered: 4
+Sum of All Numbers: 18
+Statistical mean: 3
+Largest Number: 7		Smallest Number: 1
+
+Enter another number (or -999)
+-999
+
+Numbers Entered so Far: 0
+Last Number Entered: 0
+Sum of All Numbers: 0
+Statistical mean: 0
+Largest Number: 0		Smallest Number: 0
+
+Enter '-999' again to quit
+Any other number to continue
+-999
+Thank you for using our service
+
+[4makka[24m:[1m~/cs1521/projects/project1/src/build[0m% exit
+exit
+
+Script done on Mon 28 Jan 2019 06:37:20 PM CST

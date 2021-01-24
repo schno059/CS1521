@@ -1,0 +1,724 @@
+Script started on Sat 16 Feb 2019 03:21:47 PM CST
+[4makka[24m:[1m~/cs1521/projects/project2/src[0m% pwd
+/home/csugrads/schno059/cs1521/projects/project2/src
+[4makka[24m:[1m~/cs1521/projects/project2/src[0m% cat -n CMakeLists.txt
+     1	project(BagReceipt)
+     2	
+     3	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14")
+     4	
+     5	add_executable(bagreceipt
+     6	  ReceiptMain.cpp)
+[4makka[24m:[1m~/cs1521/projects/project2/src[0m% cat -n ReceiptMain.cpp 
+     1	#include <iostream>
+     2	#include "ArrayBagReceipt.h"
+     3	using namespace std;
+     4	
+     5	void addInts();
+     6	void addStrings();
+     7	void showInts();
+     8	void showStrings();
+     9	void intStats();
+    10	void stringStats();
+    11	void intSanity();
+    12	void stringTheory();
+    13	
+    14	ArrayBagReceipt<int> theBag;
+    15	ArrayBagReceipt<std::string> stringBag;
+    16	
+    17	int main()
+    18	{
+    19	   cout<<"\nThe first test is an ArrayBagReceipt of type <int> named\n"
+    20	       <<"'theBag'\n"
+    21	       <<"We'll start by adding some values\n\n";
+    22	   addInts();
+    23	   cout<<"\n\nNow let's see what the bag looks like\n\n";
+    24	   showInts();
+    25	   intStats();
+    26	   cout<<"\nNow we'll get crazy\n";
+    27	   intSanity();
+    28	   cout<<"\n\nBehold the turmoil\n";
+    29	   showInts();
+    30	   intStats();
+    31	   cout<<"\nNow let's try an ArrayBagReceipt of type <std::string>\n";
+    32	   cout<<"named stringBag\n";
+    33	   addStrings();
+    34	   showStrings();
+    35	   stringStats();
+    36	   stringTheory();
+    37	   showStrings();
+    38	   stringStats();
+    39	   cout<<"\nAnd at the end of fear...(clearing the string bag)\n";
+    40	   stringBag.clear();
+    41	   showStrings();
+    42	   stringStats();
+    43	}
+    44	void addInts()
+    45	{
+    46	   cout<<"-----Adding to theBag-----\n";
+    47	   cout<<"theBag.add(996) should return 0; returns "<<theBag.add(996);
+    48	   cout<<"\ntheBag.add(887) should return 1; returns "<<theBag.add(887);
+    49	   cout<<"\ntheBag.add(776) should return 2; returns "<<theBag.add(776);
+    50	   cout<<"\ntheBag.add(2222) should return 3; returns "<<theBag.add(2222);
+    51	   cout<<"\ntheBag.add(7676) should return 4; returns "<<theBag.add(7676);
+    52	   cout<<"\ntheBag.add(-5) should return 5; returns "<<theBag.add(-5);
+    53	   cout<<"\ntheBag.add(7) should return 6; returns "<<theBag.add(7);
+    54	   cout<<"\ntheBag.add(66) should return 7; returns "<<theBag.add(66);
+    55	   cout<<"\ntheBag.add(89) should return 8; returns "<<theBag.add(89);
+    56	}
+    57	void showInts()
+    58	{
+    59	   cout<<"-----Contents of the bag-----\n";
+    60	   std::vector<int> bagVector=theBag.toVector();
+    61	   for(int i(0); i<theBag.getCurrentSize(); ++i)
+    62	      cout<<"At Location "<<i<<": "<<bagVector[i]<<"\n";
+    63	   //for(std::vector<int>::const_iterator i = theBag.toVector().begin();
+    64	   //i!=theBag.toVector().end(); ++i)cout<<*i<<"\n";
+    65	   //cout<<theBag.toVector()<<"\n";
+    66	}
+    67	void intStats()
+    68	{
+    69	   cout<<"\n-----Bag Statistics-----\n";
+    70	   cout<<"theBag.getCurrentSize()\t"<<theBag.getCurrentSize();
+    71	   cout<<"\ntheBag.isEmpty()\t"<<theBag.isEmpty()<<"\n";
+    72	}
+    73	void intSanity()
+    74	{
+    75	   cout<<"\n-----Craziness-----\n";
+    76	   cout<<"theBag.remove(0) should return 996; returns "<<theBag.remove(0);
+    77	   cout<<"\ntheBag.remove(2) should return 776; returns "<<theBag.remove(2);
+    78	   cout<<"\ntheBag.remove(5) should return -5; returns "<<theBag.remove(5);
+    79	   cout<<"\ntheBag.add(1) should return 0; returns "<<theBag.add(1);
+    80	   cout<<"\ntheBag.add(2) should return 2; returns "<<theBag.add(2);
+    81	   cout<<"\ntheBag.add(3) should return 5; returns "<<theBag.add(3);
+    82	   cout<<"\ntheBag.add(4) should return 9; returns "<<theBag.add(4);
+    83	   cout<<"\ntheBag.add(5) should return 10; returns "<<theBag.add(5);
+    84	   cout<<"\ntheBag.add(6) should return 11; returns "<<theBag.add(6);
+    85	   cout<<"\ntheBag.remove(5) should return 3; returns "<<theBag.remove(5);
+    86	   cout<<"\ntheBag.add(3333) should return 5; returns "<<theBag.add(3333);
+    87	}
+    88	void addStrings()
+    89	{
+    90	   cout<<"\n-----Adding Strings (Skullface Speech)-----\n";
+    91	   cout<<"\nstringBag.add('I was born') should return 0;";
+    92	   cout<<"\nreturns "<<stringBag.add("I was born");
+    93	   cout<<"\nstringBag.add('in a') should return 1;";
+    94	   cout<<"\nreturns "<<stringBag.add("in a");
+    95	   cout<<"\nstringBag.add('small village') should return 2;";
+    96	   cout<<"\nreturns "<<stringBag.add("small village");
+    97	   cout<<"\nstringBag.add('I was still') should return 3;";
+    98	   cout<<"\nreturns "<<stringBag.add("I was still");
+    99	   cout<<"\nstringBag.add('a child when') should return 4;";
+   100	   cout<<"\nreturns "<<stringBag.add("a child when");
+   101	   cout<<"\nstringBag.add('we were raided') should return 5;";
+   102	   cout<<"\nreturns "<<stringBag.add("we were raided");
+   103	   cout<<"\nstringBag.add('by soldiers') should return 6;";
+   104	   cout<<"\nreturns "<<stringBag.add("by soldiers");
+   105	}
+   106	void showStrings()
+   107	{
+   108	   cout<<"\n\n-----Contents of the string bag-----\n\n";
+   109	   std::vector<std::string> bagVector=stringBag.toVector();
+   110	   for(int i(0); i<stringBag.getCurrentSize(); ++i)
+   111	      cout<<"At Location "<<i<<": "<<bagVector[i]<<"\n";
+   112	   //for(std::vector<int>::const_iterator i = theBag.toVector().begin();
+   113	   //i!=theBag.toVector().end(); ++i)cout<<*i<<"\n";
+   114	   //cout<<theBag.toVector()<<"\n";
+   115	}
+   116	void stringStats()
+   117	{
+   118	   cout<<"\n-----String Bag Statistics-----\n";
+   119	   cout<<"stringBag.getCurrentSize()\t"<<stringBag.getCurrentSize();
+   120	   cout<<"\nstringBag.getFrequencyOf('I was born')\t"
+   121	       <<stringBag.getFrequencyOf("I was born");
+   122	   cout<<"\nstringBag.getFrequencyOf('words')\t"
+   123	       <<stringBag.getFrequencyOf("words");
+   124	   cout<<"\nstringBag.isEmpty()\t"<<stringBag.isEmpty()<<"\n";
+   125	}
+   126	void stringTheory()
+   127	{
+   128	   cout<<"\n-----String Craziness (Samsara)-----\n";
+   129	   cout<<"\nstringBag.add('words') should return 7;";
+   130	   cout<<"\nreturns "<<stringBag.add("words");
+   131	   cout<<"\nstringBag.add('like samsara') should return 8;";
+   132	   cout<<"\nreturns "<<stringBag.add("like samsara");
+   133	   cout<<"\nstringBag.add('mean death and rebirth') should return 9;";
+   134	   cout<<"\nreturns "<<stringBag.add("mean death and rebirth");
+   135	   cout<<"\nstringBag.remove(3) should return 'I was still';";
+   136	   cout<<"\nreturns "<<stringBag.remove(3);
+   137	   cout<<"\nstringBag.add('I was born') should return 3;";
+   138	   cout<<"\nreturns "<<stringBag.add("I was born");
+   139	}
+[4makka[24m:[1m~/cs1521/projects/project2/src[0m% cat -n BagReceiptInterface.h 
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  BagInterface class template definition.
+     8	 *
+     9	 *  Adapted from page 24-25 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *  @modified by Jacob Schnoor
+    15	 *
+    16	 *  @date 06 Feb 2019
+    17	 *
+    18	 *  @version 7.0 */
+    19	
+    20	#ifndef BAG_INTERFACE_
+    21	#define BAG_INTERFACE_
+    22	
+    23	#include <vector>
+    24	
+    25	/** @class BagInterface BagInterface.h "BagInterface.h"
+    26	 *
+    27	 *  BagInterface abstract base class template. */
+    28	template <typename ItemType>
+    29	class BagReceiptInterface {
+    30	public:
+    31	   /** Virtual destructor. (See C++ Interlude 2.) */
+    32	   virtual ~BagReceiptInterface() {}
+    33	
+    34	   /** Gets the current number of entries in this bag.
+    35	    *
+    36	    *  @return The integer number of entries currently in the bag. */
+    37	   virtual int getCurrentSize() const = 0;
+    38	
+    39	   /** Sees whether this bag is empty.
+    40	    *
+    41	    *  @return True if the bag is empty, or false if not. */
+    42	   virtual bool isEmpty() const = 0;
+    43	
+    44	   /** Adds a new entry to this bag.
+    45	    *
+    46	    *  @post If successful, newEntry is stored in the bag and the
+    47	    *        count of items in the bag has increased by 1.
+    48	    *
+    49	    *  @param newEntry The object to be added as a new entry.
+    50	    *
+    51	    *  @return True if addition was successful, or false if not. */
+    52	   virtual int add(const ItemType& newEntry) = 0;
+    53	
+    54	   /** Removes one occurrence of a given entry from this bag, if
+    55	    *  possible.
+    56	    *
+    57	    *  @post If successful, anEntry has been removed from the bag and
+    58	    *        the count of items in the bag has decreased by 1.
+    59	    *
+    60	    *  @param anEntry The value of the entry to be removed.
+    61	    *
+    62	    *  @return True if removal was successful, or false if not. */
+    63	   virtual ItemType remove(const int& anIndex) = 0;
+    64	
+    65	   /** Removes all entries from this bag.
+    66	    *
+    67	    *  @post This bag contains no items (thus the count is 0). */
+    68	   virtual void clear() = 0;
+    69	
+    70	
+    71	   /** Counts the number of times a given entry appears in bag.
+    72	    *
+    73	    *  @param anEntry The value of the entry to be counted.
+    74	    *
+    75	    *  @return The number of times anEntry appears in this bag. */
+    76	   virtual int getFrequencyOf(const ItemType& anEntry) const = 0;
+    77	
+    78	   /** Tests whether this bag contains a given entry.
+    79	    *
+    80	    *  @param anEntry The value of the entry to locate.
+    81	    *
+    82	    *  @return True if this bag contains anEntry, or false
+    83	    *          otherwise. */
+    84	   virtual bool contains(const ItemType& anEntry) const = 0;
+    85	
+    86	   /** Converts this bag into a vector.
+    87	    *
+    88	    *  @return A vector containing all the entries in this bag. */
+    89	   virtual std::vector<ItemType> toVector() const = 0;
+    90	};
+    91	
+    92	#endif
+    93	
+[4makka[24m:[1m~/cs1521/projects/project2/src[0m% cat -n Arra
+ArrayBagReceipt.cpp  ArrayBagReceipt.h    
+[4makka[24m:[1m~/cs1521/projects/project2/src[0m% cat -n ArrayBagReceipt.h
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Header file for an array-based implementation of the ADT bag.
+     8	 *
+     9	 *  Adapted from page 100 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *  @modified by Jacob Schnoor
+    15	 *
+    16	 *  @date 01 Feb 2019
+    17	 *
+    18	 *  @version 7.0 */
+    19	
+    20	#ifndef ARRAY_BAG_
+    21	#define ARRAY_BAG_
+    22	
+    23	#include <vector>
+    24	
+    25	#include "BagReceiptInterface.h"
+    26	
+    27	/** @class ArrayBag ArrayBag.h "ArrayBag.h"
+    28	 *
+    29	 *  Specification of an array-based ADT bag. */
+    30	template <typename ItemType>
+    31	class ArrayBagReceipt : public BagReceiptInterface<ItemType> {
+    32	private:
+    33	   /** Maximum capacity of this bag. */
+    34	   static const int DEFAULT_CAPACITY = 6;
+    35	
+    36	   /** Data storage. */
+    37	   ItemType* items=new ItemType[DEFAULT_CAPACITY];
+    38	   bool* inUse=new bool[DEFAULT_CAPACITY];
+    39	
+    40	   /** Number of items in this bag. */
+    41	   int itemCount = 0;
+    42	
+    43	   /** Maximum capacity of this bag. */
+    44	   int maxItems = DEFAULT_CAPACITY;
+    45	
+    46	   /** Gets the index of target in the array 'items' in this bag.
+    47	    *
+    48	    * @param target The ItemType value to retrieve the index of.
+    49	    *
+    50	    * @return The index of the element in the array 'items' that
+    51	    *         contains 'target' or -1 if the array does not contain
+    52	    *         'target'. */
+    53	   int getIndexOf(const ItemType& target) const;
+    54	
+    55	public:
+    56	   /** Default constructor. */
+    57	   ArrayBagReceipt() = default;
+    58	
+    59	   /** Virtual destructor. */
+    60	   virtual ~ArrayBagReceipt() = default;
+    61	
+    62	   virtual int getCurrentSize() const;
+    63	
+    64	   virtual bool isEmpty() const;
+    65	
+    66	   virtual int add(const ItemType& newEntry);
+    67	
+    68	   virtual ItemType remove(const int& anIndex);
+    69	
+    70	   virtual void clear();
+    71	
+    72	   virtual int getFrequencyOf(const ItemType& anEntry) const;
+    73	
+    74	   virtual bool contains(const ItemType& anEntry) const;
+    75	
+    76	   virtual std::vector<ItemType> toVector() const;
+    77	};
+    78	
+    79	#include "ArrayBagReceipt.cpp"
+    80	
+    81	#endif
+    82	
+[4makka[24m:[1m~/cs1521/projects/project2/src[0m% cat -n Arr
+ArrayBagReceipt.cpp  ArrayBagReceipt.h    
+[4makka[24m:[1m~/cs1521/projects/project2/src[0m% cat -n ArrayBagReceipt.cpp
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Implementation file for the class ArrayBag.
+     8	 *
+     9	 *  Adapted from pages 101-111 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *  @modified by Jacob Schnoor
+    15	 *
+    16	 *  @date 05 Feb 2019
+    17	 *
+    18	 *  @version 7.0 */
+    19	
+    20	#include <vector>
+    21	
+    22	template <typename ItemType>
+    23	int ArrayBagReceipt<ItemType>::getCurrentSize() const {
+    24	   int returnCount(0);
+    25	   for(int i=0; i<maxItems; ++i)//fix later
+    26	      if(inUse[i])
+    27	         ++returnCount;
+    28	   return returnCount;
+    29	}
+    30	
+    31	template <typename ItemType>
+    32	bool ArrayBagReceipt<ItemType>::isEmpty() const {
+    33	
+    34	   return !getCurrentSize(); // itemCount == 0;
+    35	}
+    36	
+    37	template <typename ItemType>
+    38	int ArrayBagReceipt<ItemType>::add(const ItemType& newEntry) {
+    39	   bool hasRoomToAdd(itemCount < maxItems);
+    40	   bool placed(false);
+    41	   int index(0);
+    42	   if(!hasRoomToAdd)
+    43	   {
+    44	      ItemType* oldArray(items);
+    45	      bool* oldUse(inUse);
+    46	      items=new ItemType[2*maxItems];
+    47	      inUse=new bool[2*maxItems];
+    48	      for(int i(0); i<maxItems; ++i)
+    49	      {
+    50	         items[i]=oldArray[i];
+    51	         inUse[i]=oldUse[i];
+    52	      }
+    53	      for(int i(maxItems); i<2*maxItems; ++i)
+    54	      {
+    55	         inUse[i]=false;
+    56	      }
+    57	      delete [] oldArray;
+    58	      delete [] oldUse;
+    59	      maxItems=2*maxItems;
+    60	   }
+    61	   while(!placed && index<maxItems)
+    62	   {
+    63	      if(!inUse[index])
+    64	      {
+    65	         inUse[index]=true;
+    66	         items[index]=newEntry;
+    67	         placed=true;
+    68	         ++itemCount;
+    69	      }
+    70	      ++index;
+    71	   }
+    72	   return index-1;
+    73	   //return hasRoomToAdd;
+    74	/**
+    75	   int i=0;
+    76	   bool placed=false;
+    77	   while(!placed)
+    78	   {
+    79	   if(!inUse[i])
+    80	   {
+    81	   inUse[i]=true;
+    82	   items[i]=newEntry;
+    83	   placed=true;
+    84	   if(i>maxItems-2)
+    85	   {
+    86	   inUse[maxItems]=false;//possibly faulty
+    87	   ++maxItems;
+    88	   }
+    89	   }
+    90	   ++i;
+    91	   }
+    92	   //inUse[maxItems]=false;
+    93	   //++maxItems;
+    94	   return i-1;
+    95	*/
+    96	}
+    97	
+    98	template <typename ItemType>
+    99	ItemType ArrayBagReceipt<ItemType>::remove(const int& anIndex) {
+   100	/**
+   101	 //int locatedIndex(getIndexOf(anEntry) );
+   102	 int locatedIndex=anIndex;
+   103	 bool canRemoveItem(!isEmpty() && locatedIndex > -1 && inUse[locatedIndex]==true);
+   104	
+   105	 if (canRemoveItem) {//change this later
+   106	 --itemCount;
+   107	 //items[locatedIndex] = items[itemCount];
+   108	 inUse[locatedIndex]=false;
+   109	 }
+   110	
+   111	 return items[locatedIndex];
+   112	*/
+   113	   if(inUse[anIndex])
+   114	      inUse[anIndex]=false;
+   115	   return items[anIndex];
+   116	}
+   117	
+   118	template <typename ItemType>
+   119	void ArrayBagReceipt<ItemType>::clear() {
+   120	   itemCount=0;
+   121	   for(int i=0; i<maxItems; i++)
+   122	   {
+   123	      inUse[i]=false;
+   124	   }
+   125	}
+   126	
+   127	template <typename ItemType>
+   128	bool ArrayBagReceipt<ItemType>::contains(const ItemType& anEntry) const {
+   129	
+   130	   bool isFound(false);
+   131	   int curIndex(0);
+   132	
+   133	   while (!isFound && curIndex < itemCount) {
+   134	      isFound = anEntry == items[curIndex];
+   135	      ++curIndex; // Does not matter if extra increment occurs
+   136	   }
+   137	
+   138	   return isFound;
+   139	}
+   140	
+   141	template <typename ItemType>
+   142	int ArrayBagReceipt<ItemType>::getFrequencyOf(const ItemType& anEntry) const {
+   143	
+   144	   int frequency(0);
+   145	   int curIndex(0);
+   146	
+   147	   while (curIndex < itemCount) {
+   148	      if (items[curIndex] == anEntry) {
+   149	         ++frequency;
+   150	      }
+   151	      ++curIndex;
+   152	   }
+   153	
+   154	   return frequency;
+   155	}
+   156	
+   157	template <typename ItemType>
+   158	std::vector<ItemType> ArrayBagReceipt<ItemType>::toVector() const {
+   159	
+   160	   std::vector<ItemType> bagContents;
+   161	
+   162	   for (int i(0); i < maxItems; ++i) {
+   163	      if(inUse[i])
+   164	         bagContents.push_back(items[i]);
+   165	   }
+   166	
+   167	   return bagContents;
+   168	}
+   169	
+   170	template <typename ItemType>
+   171	int ArrayBagReceipt<ItemType>::getIndexOf(const ItemType& target) const {
+   172	
+   173	   bool isFound(false);
+   174	   int targetIndex(-1);
+   175	   int searchIndex(0);
+   176	
+   177	   while (!isFound && searchIndex < getCurrentSize()) {
+   178	      isFound = items[searchIndex] == target;
+   179	
+   180	      if (isFound) {
+   181	         targetIndex = searchIndex;
+   182	      }
+   183	      ++searchIndex; // Does not matter if extra increment occurs
+   184	   }
+   185	
+   186	   return targetIndex;
+   187	}
+[4makka[24m:[1m~/cs1521/projects/project2/src[0m% git --no-pager log --no-color
+commit ea51dda971a13daee57ec9b68405fdc87d8d813e
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Sat Feb 16 15:20:54 2019 -0600
+
+    ArrayBagReceipt is fully functional
+
+commit f670b008280c10c2d35e2b15122cc4797094540e
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Fri Feb 15 13:42:40 2019 -0600
+
+    Dynamic arrays are being wonky. Figure out add method
+
+commit e2d900fce380a2ac62b02d3a784864737ac7b5c8
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Tue Feb 12 14:32:07 2019 -0600
+
+    Dynamic arrays probably work. Just need to make adequate main function to test it
+
+commit f4636e9ae83338375ff4e4735503d69582a6180c
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Tue Feb 12 14:13:36 2019 -0600
+
+    Fully functional static arrays. Moving onto dynamic
+
+commit b67a09ae8e144420496cb24cac13a7808b880b9b
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Wed Feb 6 12:57:02 2019 -0600
+
+    Intermediate state. Still have to work out a few bugs with the storage
+
+commit a270d1fc1c65e4f13fd8142c7c2f9911554a856f
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Tue Feb 5 14:42:18 2019 -0600
+
+    Changed how adding and removing works
+
+commit 813289c2ce99dd1a314f0a711ef1d465131579d5
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Tue Feb 5 13:28:49 2019 -0600
+
+    Basic functionality for add and remove
+
+commit 118a094cc5d2255e1acf9ecaa82bacb69ebb6aae
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Tue Feb 5 12:04:44 2019 -0600
+
+    Project 2 initial files
+[4makka[24m:[1m~/cs1521/projects/project2/src[0m% cd build/
+[4makka[24m:[1m~/cs1521/projects/project2/src/build[0m% make
+[35m[1mScanning dependencies of target bagreceipt[0m
+[ 50%] [32mBuilding CXX object CMakeFiles/bagreceipt.dir/ReceiptMain.cpp.o[0m
+[100%] [32m[1mLinking CXX executable bagreceipt[0m
+[100%] Built target bagreceipt
+[4makka[24m:[1m~/cs1521/projects/project2/src/build[0m% ./bagreceipt 
+
+The first test is an ArrayBagReceipt of type <int> named
+'theBag'
+We'll start by adding some values
+
+-----Adding to theBag-----
+theBag.add(996) should return 0; returns 0
+theBag.add(887) should return 1; returns 1
+theBag.add(776) should return 2; returns 2
+theBag.add(2222) should return 3; returns 3
+theBag.add(7676) should return 4; returns 4
+theBag.add(-5) should return 5; returns 5
+theBag.add(7) should return 6; returns 6
+theBag.add(66) should return 7; returns 7
+theBag.add(89) should return 8; returns 8
+
+Now let's see what the bag looks like
+
+-----Contents of the bag-----
+At Location 0: 996
+At Location 1: 887
+At Location 2: 776
+At Location 3: 2222
+At Location 4: 7676
+At Location 5: -5
+At Location 6: 7
+At Location 7: 66
+At Location 8: 89
+
+-----Bag Statistics-----
+theBag.getCurrentSize()	9
+theBag.isEmpty()	0
+
+Now we'll get crazy
+
+-----Craziness-----
+theBag.remove(0) should return 996; returns 996
+theBag.remove(2) should return 776; returns 776
+theBag.remove(5) should return -5; returns -5
+theBag.add(1) should return 0; returns 0
+theBag.add(2) should return 2; returns 2
+theBag.add(3) should return 5; returns 5
+theBag.add(4) should return 9; returns 9
+theBag.add(5) should return 10; returns 10
+theBag.add(6) should return 11; returns 11
+theBag.remove(5) should return 3; returns 3
+theBag.add(3333) should return 5; returns 5
+
+Behold the turmoil
+-----Contents of the bag-----
+At Location 0: 1
+At Location 1: 887
+At Location 2: 2
+At Location 3: 2222
+At Location 4: 7676
+At Location 5: 3333
+At Location 6: 7
+At Location 7: 66
+At Location 8: 89
+At Location 9: 4
+At Location 10: 5
+At Location 11: 6
+
+-----Bag Statistics-----
+theBag.getCurrentSize()	12
+theBag.isEmpty()	0
+
+Now let's try an ArrayBagReceipt of type <std::string>
+named stringBag
+
+-----Adding Strings (Skullface Speech)-----
+
+stringBag.add('I was born') should return 0;
+returns 0
+stringBag.add('in a') should return 1;
+returns 1
+stringBag.add('small village') should return 2;
+returns 2
+stringBag.add('I was still') should return 3;
+returns 3
+stringBag.add('a child when') should return 4;
+returns 4
+stringBag.add('we were raided') should return 5;
+returns 5
+stringBag.add('by soldiers') should return 6;
+returns 6
+
+-----Contents of the string bag-----
+
+At Location 0: I was born
+At Location 1: in a
+At Location 2: small village
+At Location 3: I was still
+At Location 4: a child when
+At Location 5: we were raided
+At Location 6: by soldiers
+
+-----String Bag Statistics-----
+stringBag.getCurrentSize()	7
+stringBag.getFrequencyOf('I was born')	1
+stringBag.getFrequencyOf('words')	0
+stringBag.isEmpty()	0
+
+-----String Craziness (Samsara)-----
+
+stringBag.add('words') should return 7;
+returns 7
+stringBag.add('like samsara') should return 8;
+returns 8
+stringBag.add('mean death and rebirth') should return 9;
+returns 9
+stringBag.remove(3) should return 'I was still';
+returns I was still
+stringBag.add('I was born') should return 3;
+returns 3
+
+-----Contents of the string bag-----
+
+At Location 0: I was born
+At Location 1: in a
+At Location 2: small village
+At Location 3: I was born
+At Location 4: a child when
+At Location 5: we were raided
+At Location 6: by soldiers
+At Location 7: words
+At Location 8: like samsara
+At Location 9: mean death and rebirth
+
+-----String Bag Statistics-----
+stringBag.getCurrentSize()	10
+stringBag.getFrequencyOf('I was born')	2
+stringBag.getFrequencyOf('words')	1
+stringBag.isEmpty()	0
+
+And at the end of fear...(clearing the string bag)
+
+
+-----Contents of the string bag-----
+
+
+-----String Bag Statistics-----
+stringBag.getCurrentSize()	0
+stringBag.getFrequencyOf('I was born')	0
+stringBag.getFrequencyOf('words')	0
+stringBag.isEmpty()	1
+[4makka[24m:[1m~/cs1521/projects/project2/src/build[0m% exit
+exit
+
+Script done on Sat 16 Feb 2019 03:24:48 PM CST

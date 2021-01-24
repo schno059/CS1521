@@ -1,0 +1,1 @@
+/usr/bin/c++    -Wall -std=c++14   CMakeFiles/statistic.dir/main.cpp.o CMakeFiles/statistic.dir/stat.cpp.o  -o statistic -rdynamic 

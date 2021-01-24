@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/csugrads/schno059/cs1521/projects/project2/src/ArrayBagReceipt.cpp
+vector
+-
+
+/home/csugrads/schno059/cs1521/projects/project2/src/ArrayBagReceipt.h
+vector
+-
+BagReceiptInterface.h
+/home/csugrads/schno059/cs1521/projects/project2/src/BagReceiptInterface.h
+ArrayBagReceipt.cpp
+/home/csugrads/schno059/cs1521/projects/project2/src/ArrayBagReceipt.cpp
+
+/home/csugrads/schno059/cs1521/projects/project2/src/BagReceiptInterface.h
+vector
+-
+
+/home/csugrads/schno059/cs1521/projects/project2/src/ReceiptMain.cpp
+iostream
+-
+ArrayBagReceipt.h
+/home/csugrads/schno059/cs1521/projects/project2/src/ArrayBagReceipt.h
+

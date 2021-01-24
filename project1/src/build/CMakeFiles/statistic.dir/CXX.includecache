@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/csugrads/schno059/cs1521/projects/project1/src/main.cpp
+iostream
+-
+stat.h
+/home/csugrads/schno059/cs1521/projects/project1/src/stat.h
+
+/home/csugrads/schno059/cs1521/projects/project1/src/stat.cpp
+iostream
+-
+stat.h
+/home/csugrads/schno059/cs1521/projects/project1/src/stat.h
+
+/home/csugrads/schno059/cs1521/projects/project1/src/stat.h
+

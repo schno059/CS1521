@@ -1,0 +1,53 @@
+/** @file
+ *
+ *@author Jacob R Schnoor*/
+
+/** @class Stat*/
+class Stat
+{
+  private:
+   /** The amount of data entered so far*/
+   int N;
+
+   /** The most recent number entered*/
+   double lastNum;
+
+   /** The total of all numbers entered so far*/
+   double sum;
+
+   /** The mean or average of all numbers entered so far*/
+   double mean;
+
+   /** The lowest value of all numbers entered so far*/
+   double min;
+
+   /** The greatest value of all numbers entered so far*/
+   double max;
+  public:
+   /** Default Constructor*/
+   Stat();
+
+   /*Add a data point to the sequence
+    *
+    *@pre input is a valid double
+    *
+    *@post the double is introduced to the sequence
+    *
+    *@return if the number was successfully added
+    * */
+   bool add(double input);
+
+   int getNumVals();
+
+   double getLast();
+
+   double getSum();
+
+   double getMean();
+
+   double getMin();
+
+   double getMax();
+
+   void clear();
+};

@@ -1,0 +1,117 @@
+Script started on Mon 15 Apr 2019 04:12:49 PM CDT
+[4makka[24m:[1m~/cs1521/labs/lab6/src[0m% pwd
+
+/home/csugrads/schno059/cs1521/labs/lab6/src
+[4makka[24m:[1m~/cs1521/labs/lab6/src[0m% ls -l
+
+total 76
+drwx------ 3 schno059 student 4096 Apr 15 16:07 build
+-rw------- 1 schno059 student  149 Apr 10 17:52 CMakeLists.txt
+-rw------- 1 schno059 student  107 Apr  9 17:16 CMakeLists.txt~
+-rw------- 1 schno059 student 8782 Dec 20 14:31 lab6.cpp
+-rw------- 1 schno059 student 7721 Mar 29 11:15 LinkedList.cpp
+-rw------- 1 schno059 student 3397 Mar 29 11:17 LinkedList.h
+-rw------- 1 schno059 student 3162 Mar 29 11:20 ListInterface.h
+-rw------- 1 schno059 student  883 Mar 29 11:18 ListNode.cpp
+-rw------- 1 schno059 student 1169 Mar 29 11:19 ListNode.h
+-rw------- 1 schno059 student  507 Mar 29 11:21 PrecondViolatedExcep.cpp
+-rw------- 1 schno059 student  782 Mar 29 11:21 PrecondViolatedExcep.h
+-rw------- 1 schno059 student 5235 Apr 10 17:51 Rational.cpp
+-rw------- 1 schno059 student 5292 Apr  9 17:20 Rational.cpp~
+-rw------- 1 schno059 student 2401 Dec 20 14:31 Rational.h
+-rw------- 1 schno059 student    0 Apr 15 16:12 typescript
+[4makka[24m:[1m~/cs1521/labs/lab6/src[0m% cat -n Rational.cpp|sed -n 217,222p
+
+   217	std::ostream& operator<<(std::ostream& lhs, const Rational& rhs) {
+   218	   lhs<<rhs.numerator
+   219	      <<"/"
+   220	      <<rhs.denominator;
+   221	   return lhs;
+   222	}
+[4makka[24m:[1m~/cs1521/labs/lab6/src[0m% cd build
+
+[4makka[24m:[1m~/cs1521/labs/lab6/src/build[0m% make
+
+[ 25%] [32mBuilding CXX object CMakeFiles/lab6.dir/PrecondViolatedExcep.cpp.o[0m
+[ 50%] [32mBuilding CXX object CMakeFiles/lab6.dir/Rational.cpp.o[0m
+[ 75%] [32mBuilding CXX object CMakeFiles/lab6.dir/lab6.cpp.o[0m
+[100%] [32m[1mLinking CXX executable lab6[0m
+[100%] Built target lab6
+[4makka[24m:[1m~/cs1521/labs/lab6/src/build[0m% ./lab6
+
+Test Rational methods:
+Default ctor = 0/1
+One-arg ctor = 1/1
+Two-arg ctor = 1/2
+Copy ctor = 1/2
+Prefix Increment = 3/2 oneHalf = 3/2
+Postfix Increment = 3/2 oneHalf = 5/2
+Prefix Decrement = 3/2 oneHalf = 3/2
+Postfix Decrement = 3/2 oneHalf = 1/2
+Is 1/2 Less Than 2/3: OK.
+Is 2/3 Less Than 1/2: OK.
+Is 1/2 Less Than 1/2: OK.
+Is 1/2 Greater Than 2/3: OK.
+Is 2/3 Greater Than 1/2: OK.
+Is 1/2 Greater Than 1/2: OK.
+Is 1/2 Less Than Or Equal To 2/3: OK.
+Is 2/3 Less Than Or Equal To 1/2: OK.
+Is 1/2 Less Than Or Equal To 1/2: OK.
+Is 1/2 Greater Than Or Equal To 2/3: OK.
+Is 2/3 Greater Than Or Equal To 1/2: OK.
+Is 1/2 Greater Than Or Equal To 1/2: OK.
+Is 1/2 Equal To 2/3: OK.
+Is 2/3 Equal To 1/2: OK.
+Is 1/2 Equal To 1/2: OK.
+Is 1/2 Not Equal To 2/3: OK.
+Is 2/3 Not Equal To 1/2: OK.
+Is 1/2 Not Equal To 1/2: OK.
+Addition:
+1/2 + 2/3 = 7/6; should be 7/6
+Subtraction:
+1/2 - 2/3 = -1/6; should be -1/6
+Multiplication:
+1/2 * 2/3 = 1/3; should be 1/3
+Division:
+1/2 / 2/3 = 3/4; should be 3/4
+Add and Assign:
+3/4 += 2/3 = 17/12; should be 17/12
+Subtract and Assign:
+3/4 -= 2/3 = 1/12; should be 1/12
+Multiply and Assign:
+3/4 *= 2/3 = 1/2; should be 1/2
+Divide and Assign:
+3/4 /= 2/3 = 9/8; should be 9/8
+Test of Double Conversion Operator:
+2/3 = 0.666667; should be 0.666667
+Test of Assign an Integer:
+Three = 3/1; should be 3/1
+Test of Assign a Rational:
+anotherTwoThirds = 2/3; should be 2/3
+Test input streaming:
+Enter a rational (zero quits): 4/2
+Enter a rational (zero quits): 5/3
+Enter a rational (zero quits): 6/7
+Enter a rational (zero quits): 21/8
+Enter a rational (zero quits): 0/1
+Here are the rationals you entered:
+1	2/1
+2	5/3
+3	6/7
+4	21/8
+5	0/1
+Enter an int (zero quits): 4
+Enter an int (zero quits): 8
+Enter an int (zero quits): 2
+Enter an int (zero quits): 0
+Here are the integers you entered:
+1	4
+2	8
+3	2
+4	0
+All done!
+[4makka[24m:[1m~/cs1521/labs/lab6/src/build[0m% exit
+
+exit
+
+Script done on Mon 15 Apr 2019 04:15:00 PM CDT

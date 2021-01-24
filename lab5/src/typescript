@@ -1,0 +1,863 @@
+Script started on Fri 29 Mar 2019 01:02:24 PM CDT
+[4makka[24m:[1m~/cs1521/labs/lab5/src[0m% pwd
+/home/csugrads/schno059/cs1521/labs/lab5/src
+[4makka[24m:[1m~/cs1521/labs/lab5/src[0m% ls -l
+total 64
+drwx------ 3 schno059 student 4096 Mar 29 13:02 build
+-rw------- 1 schno059 student  154 Mar 29 09:41 CMakeLists.txt
+-rw------- 1 schno059 student  448 Mar 29 10:01 isPalindrome.cpp
+-rw------- 1 schno059 student  449 Mar 29 09:57 isPalindrome.cpp~
+-rw------- 1 schno059 student  142 Mar 29 09:45 isPalindrome.h
+-rw------- 1 schno059 student 2268 Mar 29 09:33 LinkedQueue.cpp
+-rw------- 1 schno059 student 1047 Mar 29 09:32 LinkedQueue.h
+-rw------- 1 schno059 student 2262 Mar 29 13:00 LinkedStack.cpp
+-rw------- 1 schno059 student 1112 Mar 29 13:01 LinkedStack.h
+-rw------- 1 schno059 student 1250 Mar 28 12:03 main.cpp
+-rw------- 1 schno059 student 1291 Mar 29 09:35 Node.cpp
+-rw------- 1 schno059 student 1851 Mar 28 11:57 Node.h
+-rw------- 1 schno059 student  507 Mar 28 11:55 PrecondViolatedExcep.cpp
+-rw------- 1 schno059 student  783 Mar 28 11:55 PrecondViolatedExcep.h
+-rw------- 1 schno059 student 1634 Mar 29 09:58 QueueInterface.h
+-rw------- 1 schno059 student 1548 Mar 28 11:55 StackInterface.h
+-rw------- 1 schno059 student    0 Mar 29 13:02 typescript
+[4makka[24m:[1m~/cs1521/labs/lab5/src[0m% cat -n CMakeLists.txt
+     1	project(PalindromeDetector)
+     2	
+     3	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14")
+     4	
+     5	add_executable(palindrome
+     6	  PrecondViolatedExcep.cpp
+     7	  main.cpp)
+[4makka[24m:[1m~/cs1521/labs/lab5/src[0m% cat -n main.cpp
+     1	#include <iostream>
+     2	#include <string>
+     3	#include <vector>
+     4	
+     5	#include "isPalindrome.h"
+     6	
+     7	int main() {
+     8	
+     9	   std::vector<std::string> strVec = { "",
+    10	                                       "a",
+    11	                                       "aba",
+    12	                                       "abba",
+    13	                                       "deleveled",
+    14	                                       "a man a plan a canal panama",
+    15	                                       "ab",
+    16	                                       "abbc" };
+    17	
+    18	   for (const std::string& currStr : strVec) {
+    19	      // Initialize a 'clean' string to empty:
+    20	      std::string clean("");
+    21	
+    22	      // Iterate over the string 'currStr' and remove all space
+    23	      // characters:
+    24	      for (char ch : currStr) {
+    25	         if (ch != ' ') {
+    26	            clean += ch;
+    27	         }
+    28	      }
+    29	
+    30	      // Test and report whether the string 'clean' is a palindrome:
+    31	      if (isPalindrome(clean) ) {
+    32	         std::cout << "YES \""
+    33	                   << currStr
+    34	                   << "\" is a palindrome."
+    35	                   << std::endl;
+    36	      }
+    37	      else {
+    38	         std::cout << "NO \""
+    39	                   << currStr
+    40	                   << "\" is not a palindrome."
+    41	                   << std::endl;
+    42	      }
+    43	   }
+    44	
+    45	   return EXIT_SUCCESS;
+    46	}
+[4makka[24m:[1m~/cs1521/labs/lab5/src[0m% cat -n isPalindrome.h
+     1	#ifndef IS_PALINDROME_
+     2	#define IS_PALINDROME_
+     3	
+     4	#include <string>
+     5	
+     6	bool isPalindrome(const std::string&);
+     7	
+     8	#include "isPalindrome.cpp"
+     9	
+    10	#endif
+[4makka[24m:[1m~/cs1521/labs/lab5/src[0m% cat -n isPalindrome.cpp
+     1	#include "LinkedStack.h"
+     2	#include "LinkedQueue.h"
+     3	
+     4	bool isPalindrome(const std::string& str)
+     5	{
+     6	   LinkedStack<char> stack;
+     7	   LinkedQueue<char> queue;
+     8	   bool isPalindrome(true);
+     9	   for(char c: str)
+    10	   {
+    11	      stack.push(c);
+    12	      queue.enqueue(c);
+    13	   }
+    14	   while(!stack.isEmpty()&&!queue.isEmpty())
+    15	   {
+    16	      if(queue.peekFront()!=stack.peek())
+    17	         isPalindrome=false;
+    18	      stack.pop();
+    19	      queue.dequeue();
+    20	   }
+    21	   return isPalindrome;
+    22	}
+[4makka[24m:[1m~/cs1521/labs/lab5/src[0m% cat -n StackInterface.h
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  StackInterface class template definition.
+     8	 *
+     9	 *  Adapted from page 197 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *
+    15	 *  @date 01 Mar 2019
+    16	 *
+    17	 *  @version 7.0 */
+    18	
+    19	#ifndef STACK_INTERFACE_
+    20	#define STACK_INTERFACE_
+    21	
+    22	/** @class StackInterface StackInterface.h "StackInterface.h"
+    23	 *
+    24	 *  Definition of StackInterface class template. */
+    25	template <typename ItemType>
+    26	class StackInterface {
+    27	public:
+    28	   /** Virtual destructor. */
+    29	   virtual ~StackInterface() = default;
+    30	
+    31	   /** Sees whether this stack is empty.
+    32	    *
+    33	    *  @return True if the stack is empty, or false. */
+    34	   virtual bool isEmpty() const = 0;
+    35	
+    36	   /** Adds a new entry to the top of this stack.
+    37	    *
+    38	    *  @post If successful, newEntry is stored at the top of this
+    39	    *        stack.
+    40	    *
+    41	    *  @param newEntry The object to be added as a new entry.
+    42	    *
+    43	    *  @return True if addition was successful, or false. */
+    44	   virtual bool push(const ItemType& newEntry) = 0;
+    45	
+    46	   /** Removes the top of this stack.
+    47	    *
+    48	    *  @post If successful, the top of this stack has been removed.
+    49	    *
+    50	    *  @return True if removal was successful, or false. */
+    51	   virtual bool pop() = 0;
+    52	
+    53	   /** Retrieves the top of this stack.
+    54	    *
+    55	    *  @pre This stack is not empty.
+    56	    *
+    57	    *  @post None.
+    58	    *
+    59	    *  @return The top of this stack.
+    60	    *
+    61	    *  @throws PrecondViolatedExcep If the precondition is violated. */
+    62	   virtual ItemType peek() const = 0;
+    63	};
+    64	
+    65	#endif
+[4makka[24m:[1m~/cs1521/labs/lab5/src[0m% cat -n LinkedStack.h
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Header file for a smart pointer-based implementation of the ADT stack.
+     8	 *
+     9	 *  Adapted from page 246, 250 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *  @modified by Jacob Schnoor
+    15	 *
+    16	 *  @date 08 Mar 2019
+    17	 *
+    18	 *  @version 7.0 */
+    19	
+    20	#ifndef LINKED_STACK_
+    21	#define LINKED_STACK_
+    22	
+    23	#include "StackInterface.h"
+    24	#include "Node.h"
+    25	
+    26	/** @class LinkedStack LinkedStack.h "LinkedStack.h"
+    27	 *
+    28	 *  Specification of a pointer-based ADT stack. */
+    29	template <typename ItemType>
+    30	class LinkedStack : public StackInterface<ItemType> {
+    31	private:
+    32	   using NodePtr = std::shared_ptr<Node<ItemType>>;
+    33	
+    34	   NodePtr topPtr;
+    35	
+    36	public:
+    37	   LinkedStack() = default;
+    38	
+    39	   LinkedStack(const LinkedStack<ItemType>& aStack);
+    40	
+    41	   virtual ~LinkedStack();
+    42	
+    43	   virtual bool isEmpty() const;
+    44	
+    45	   virtual bool push(const ItemType& newEntry);
+    46	
+    47	   virtual bool pop();
+    48	
+    49	   virtual ItemType peek() const; // throw(PrecondViolatedExcep);
+    50	                                  // Delete throw clauses.
+    51	};
+    52	
+    53	#include "LinkedStack.cpp"
+    54	
+    55	#endif
+[4makka[24m:[1m~/cs1521/labs/lab5/src[0m% cat -n LinkedStack.cpp
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Implementation file for a smart pointer-based implementation of the ADT
+     8	 *  stack.
+     9	 *
+    10	 *  Adapted from pages 246-248, 250 in Carrano 7e.
+    11	 *
+    12	 *  @author Frank M. Carrano
+    13	 *  @author Timothy Henry
+    14	 *  @author Steve Holtz
+    15	 *  @modified by Jacob Schnoor
+    16	 *
+    17	 *  @date 29 Mar 2019
+    18	 *
+    19	 *  @version 7.0 */
+    20	
+    21	#include <new>
+    22	#include <string>
+    23	
+    24	#include "PrecondViolatedExcep.h"
+    25	
+    26	template <typename ItemType>
+    27	LinkedStack<ItemType>::LinkedStack(const LinkedStack<ItemType>& aStack) {
+    28	
+    29	   if (!aStack.topPtr) {
+    30	      topPtr = nullptr;
+    31	   }
+    32	   else {
+    33	      NodePtr origStackPtr(std::make_shared<Node<ItemType>>(aStack.topPtr));
+    34	
+    35	      try {
+    36	         topPtr=std::make_shared<Node<ItemType>>(origStackPtr->getItem() );
+    37	
+    38	         NodePtr newChainPtr(std::make_shared<Node<ItemType>>(topPtr));
+    39	
+    40	         origStackPtr = origStackPtr->getNext();
+    41	
+    42	         while (origStackPtr) {
+    43	            newChainPtr->setNext(std::make_shared<Node<ItemType>>(origStackPtr->getItem()));
+    44	
+    45	            newChainPtr = newChainPtr->getNext();
+    46	            origStackPtr = origStackPtr->getNext();
+    47	         }
+    48	      }
+    49	      catch (const std::bad_alloc&) {
+    50	         while (!isEmpty() ) {
+    51	            pop();
+    52	         }
+    53	         throw;
+    54	      }
+    55	   }
+    56	}
+    57	
+    58	template <typename ItemType>
+    59	LinkedStack<ItemType>::~LinkedStack() {
+    60	
+    61	   while (!isEmpty() ) {
+    62	      pop();
+    63	   }
+    64	}
+    65	
+    66	template <typename ItemType>
+    67	bool LinkedStack<ItemType>::isEmpty() const {
+    68	
+    69	   return !topPtr;
+    70	}
+    71	
+    72	template <typename ItemType>
+    73	bool LinkedStack<ItemType>::push(const ItemType& newItem) {
+    74	
+    75	   bool canPush(true);
+    76	
+    77	   try {
+    78	      topPtr=std::make_shared<Node<ItemType>>(newItem, topPtr);
+    79	   }
+    80	   catch (const std::bad_alloc&) {
+    81	      canPush = false;
+    82	   }
+    83	
+    84	   return canPush;
+    85	}
+    86	
+    87	template <typename ItemType>
+    88	bool LinkedStack<ItemType>::pop() {
+    89	
+    90	   bool canPop(!isEmpty() );
+    91	
+    92	   if (canPop) {
+    93	      NodePtr nodeToDeletePtr(topPtr);
+    94	
+    95	      topPtr = topPtr->getNext();
+    96	   }
+    97	
+    98	   return canPop;
+    99	}
+   100	
+   101	template <typename ItemType>
+   102	ItemType LinkedStack<ItemType>::peek() const {
+   103	
+   104	   if (isEmpty() ) {
+   105	      std::string message("LinkedStack::peek() ");
+   106	      message += "called on an empty stack.";
+   107	
+   108	      throw PrecondViolatedExcep(message);
+   109	   }
+   110	
+   111	   return topPtr->getItem();
+   112	}
+[4makka[24m:[1m~/cs1521/labs/lab5/src[0m% cat -n QueueInterface.h
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  QueueInterface class template definition.
+     8	 *
+     9	 *  Adapted from page 396 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *
+    15	 *  @date 25 Mar 2019
+    16	 *
+    17	 *  @version 7.0 */
+    18	
+    19	#ifndef QUEUE_INTERFACE_
+    20	#define QUEUE_INTERFACE_
+    21	
+    22	/** @class QueueInterface QueueInterface.h "QueueInterface.h"
+    23	 *
+    24	 *  Definition of QueueInterface class template. */
+    25	template <typename ItemType>
+    26	class QueueInterface {
+    27	public:
+    28	   /** Virtual destructor. */
+    29	   virtual ~QueueInterface() = default;
+    30	
+    31	   /** Sees whether this queue is empty.
+    32	     *
+    33	     *  @return True if the queue is empty, or false if not. */
+    34	    virtual bool isEmpty() const = 0;
+    35	
+    36	    /** Adds a new entry to the back of this queue.
+    37	     *
+    38	     *  @post If successful, newEntry is stored at the back of this
+    39	     *        queue.
+    40	     *
+    41	     *  @param newEntry The object to be added as a new entry.
+    42	     *
+    43	     *  @return True if addition was successful, or false if not. */
+    44	    virtual bool enqueue(const ItemType& newEntry) = 0;
+    45	
+    46	    /** Removes the front of this queue.
+    47	     *
+    48	     *  @post If successful, the front of this queue has been
+    49	     *        removed.
+    50	     *
+    51	     *  @return True if removal was successful, or false if not. */
+    52	    virtual bool dequeue() = 0;
+    53	
+    54	    /** Retrieves the front of this queue.
+    55	     *
+    56	     *  @pre This queue is not empty.
+    57	     *
+    58	     *  @post None.
+    59	     *
+    60	     *  @throws PrecondViolatedExcep If precondition is violated.
+    61	     *
+    62	     *  @return The front entry in this queue. */
+    63	   virtual ItemType peekFront() const = 0;
+    64	};
+    65	
+    66	#endif
+[4makka[24m:[1m~/cs1521/labs/lab5/src[0m% cat -n LinkedQueue.h
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Header file for a pointer-based implementation of the ADT queue.
+     8	 *
+     9	 *  Adapted from page 421 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *
+    15	 *  @date 28 Mar 2019
+    16	 *
+    17	 *  @version 7.0 */
+    18	
+    19	#ifndef LINKED_QUEUE_
+    20	#define LINKED_QUEUE_
+    21	
+    22	#include <memory>
+    23	
+    24	#include "QueueInterface.h"
+    25	#include "Node.h"
+    26	
+    27	/** @class LinkedQueue LinkedQueue.h "LinkedQueue.h"
+    28	 *
+    29	 *  Specification of a pointer-based ADT queue. */
+    30	template <typename ItemType>
+    31	class LinkedQueue : public QueueInterface<ItemType> {
+    32	private:
+    33	   using NodePtr = std::shared_ptr<Node<ItemType>>;
+    34	
+    35	   NodePtr backPtr;
+    36	   NodePtr frontPtr;
+    37	
+    38	public:
+    39	   LinkedQueue() = default;
+    40	
+    41	   LinkedQueue(const LinkedQueue<ItemType>& aQueue);
+    42	
+    43	   virtual ~LinkedQueue() = default;
+    44	
+    45	   bool isEmpty() const override;
+    46	
+    47	   bool enqueue(const ItemType& newEntry) override;
+    48	
+    49	   bool dequeue() override;
+    50	
+    51	   ItemType peekFront() const override;
+    52	};
+    53	
+    54	#include "LinkedQueue.cpp"
+    55	
+    56	#endif
+    57	
+[4makka[24m:[1m~/cs1521/labs/lab5/src[0m% cat -n LinkedQueue.cpp
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Implementation file for a pointer-based implementation of the ADT
+     8	 *  queue.
+     9	 *
+    10	 *  Adapted from pages 421-424 in Carrano 7e.
+    11	 *
+    12	 *  @author Frank M. Carrano
+    13	 *  @author Timothy Henry
+    14	 *  @author Steve Holtz
+    15	 *
+    16	 *  @date 28 Mar 2019
+    17	 *
+    18	 *  @version 7.0 */
+    19	
+    20	#include <string>
+    21	#include <new>
+    22	#include <memory>
+    23	
+    24	#include "PrecondViolatedExcep.h"
+    25	
+    26	template <typename ItemType>
+    27	LinkedQueue<ItemType>::LinkedQueue(const LinkedQueue<ItemType>& aQueue) {
+    28	
+    29	   if (aQueue.frontPtr) {
+    30	      auto aQueuePtr(aQueue.frontPtr);
+    31	
+    32	      try {
+    33	         frontPtr = std::make_shared<Node<ItemType>>(aQueuePtr->getItem() );
+    34	
+    35	         backPtr = frontPtr;
+    36	
+    37	         aQueuePtr = aQueuePtr->getNext();
+    38	
+    39	         while (aQueuePtr) {
+    40	            backPtr->setNext(std::make_shared<Node<ItemType>>(aQueuePtr->getItem()) );
+    41	
+    42	            backPtr = backPtr->getNext();
+    43	            aQueuePtr = aQueuePtr->getNext();
+    44	         }
+    45	      }
+    46	      catch (const std::bad_alloc&) {
+    47	         frontPtr.reset();
+    48	         backPtr.reset();
+    49	
+    50	         throw;
+    51	      }
+    52	   }
+    53	}
+    54	
+    55	template <typename ItemType>
+    56	bool LinkedQueue<ItemType>::isEmpty() const {
+    57	
+    58	   return !frontPtr;
+    59	}
+    60	
+    61	template <typename ItemType>
+    62	bool LinkedQueue<ItemType>::enqueue(const ItemType& newEntry) {
+    63	
+    64	   bool ableToEnqueue(true);
+    65	
+    66	   try {
+    67	      auto newNodePtr(std::make_shared<Node<ItemType>>(newEntry) );
+    68	
+    69	      if (isEmpty() ) {
+    70	         frontPtr = newNodePtr;
+    71	      }
+    72	      else {
+    73	         backPtr->setNext(newNodePtr);
+    74	      }
+    75	
+    76	      backPtr = newNodePtr;
+    77	   }
+    78	   catch (const std::bad_alloc&) {
+    79	      ableToEnqueue = false;
+    80	   }
+    81	
+    82	   return ableToEnqueue;
+    83	}
+    84	
+    85	template <typename ItemType>
+    86	bool LinkedQueue<ItemType>::dequeue() {
+    87	
+    88	   bool ableToDequeue(!isEmpty() );
+    89	
+    90	   if (ableToDequeue) {
+    91	      if (frontPtr == backPtr) {
+    92	         frontPtr.reset();
+    93	         backPtr.reset();
+    94	      }
+    95	      else {
+    96	         frontPtr = frontPtr->getNext();
+    97	      }
+    98	   }
+    99	
+   100	   return ableToDequeue;
+   101	}
+   102	
+   103	template <typename ItemType>
+   104	ItemType LinkedQueue<ItemType>::peekFront() const {
+   105	
+   106	   if (isEmpty() ) {
+   107	      std::string message("LinkedQueue::peekFront() called ");
+   108	      message += "on an empty queue.";
+   109	
+   110	      throw PrecondViolatedExcep(message);
+   111	   }
+   112	
+   113	   return frontPtr->getItem();
+   114	}[4makka[24m:[1m~/cs1521/labs/lab5/src[0m% cat -n Node.h
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Header file for a node that uses smart pointers.
+     8	 *
+     9	 *  Adapted from page 296 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *
+    15	 *  @date 25 Mar 2019
+    16	 *
+    17	 *  @version 7.0 */
+    18	
+    19	#ifndef NODE_
+    20	#define NODE_
+    21	
+    22	#include <memory>
+    23	
+    24	/** @class Node Node.h "Node.h"
+    25	 *
+    26	 *  Specification of a smart pointer-based ADT node. */
+    27	template <typename ItemType>
+    28	class Node {
+    29	private:
+    30	   ItemType item;
+    31	   std::shared_ptr<Node<ItemType>> next;
+    32	
+    33	public:
+    34	   /** Default constructor. */
+    35	   Node() = default;
+    36	
+    37	   /** One-arg constructor. */
+    38	   Node(const ItemType& anItem);
+    39	
+    40	   /** Two-arg constructor. */
+    41	   Node(const ItemType& anItem,
+    42	        std::shared_ptr<Node<ItemType>> nextNodePtr);
+    43	
+    44	#ifdef DTOR_TEST
+    45	   /** Destructor that outputs meesage when called. */
+    46	   virtual ~Node();
+    47	#else
+    48	   /** Destructor. */
+    49	   virtual ~Node() = default;
+    50	#endif
+    51	
+    52	   /** Sets the item in this node.
+    53	    *
+    54	    * @pre None.
+    55	    *
+    56	    * @post The item in this node has been set to anItem.
+    57	    *
+    58	    * @param anItem The new item to put in this node. */
+    59	   void setItem(const ItemType& anItem);
+    60	
+    61	   /** Sets the next pointer in this node.
+    62	    *
+    63	    * @pre None.
+    64	    *
+    65	    * @post The next pointer in this node has been set to
+    66	    *       nextNodePtr.
+    67	    *
+    68	    * @param nextNodePtr The new pointer that this node should point
+    69	    *        at. */
+    70	   void setNext(std::shared_ptr<Node<ItemType>> nextNodePtr);
+    71	
+    72	   /** Gets the item in this node.
+    73	    *
+    74	    * @pre None.
+    75	    *
+    76	    * @post None.
+    77	    *
+    78	    * @return The item in this node. */
+    79	   ItemType getItem() const;
+    80	
+    81	   /** Gets the next pointer in this node.
+    82	    *
+    83	    * @pre None.
+    84	    *
+    85	    * @post None.
+    86	    *
+    87	    * @return The next pointer in this node. */
+    88	   auto getNext() const;
+    89	};
+    90	
+    91	#include "Node.cpp"
+    92	
+    93	#endif
+[4makka[24m:[1m~/cs1521/labs/lab5/src[0m% cat -n Node.cpp
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Implementation file for a node that uses smart pointers.
+     8	 *
+     9	 *  Adapted from page 297 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *
+    15	 *  @date 25 Mar 2019
+    16	 *
+    17	 *  @version 7.0 */
+    18	
+    19	#include <memory>
+    20	
+    21	template <typename ItemType>
+    22	Node<ItemType>::Node(const ItemType& anItem)
+    23	   : item(anItem) {
+    24	}
+    25	
+    26	template <typename ItemType>
+    27	Node<ItemType>::Node(const ItemType& anItem, std::shared_ptr<Node<ItemType>> nextNodePtr)
+    28	   : item(anItem),
+    29	     next(nextNodePtr) {
+    30	     }
+    31	
+    32	#ifdef DTOR_TEST
+    33	
+    34	#include <iostream>
+    35	
+    36	template <typename ItemType>
+    37	Node<ItemType>::~Node() {
+    38	
+    39	   std::cerr << "Node destructor called. on:"
+    40	             << "\n\titem: "
+    41	             << item
+    42	             << "\n\tnext: "
+    43	             << next
+    44	             << std::endl;
+    45	}
+    46	
+    47	#endif
+    48	
+    49	template <typename ItemType>
+    50	void Node<ItemType>::setItem(const ItemType& anItem) {
+    51	
+    52	   item = anItem;
+    53	}
+    54	
+    55	template <typename ItemType>
+    56	void Node<ItemType>::setNext(std::shared_ptr<Node<ItemType>> nextNodePtr) {
+    57	
+    58	   next = nextNodePtr;
+    59	}
+    60	
+    61	template <typename ItemType>
+    62	ItemType Node<ItemType>::getItem() const {
+    63	
+    64	   return item;
+    65	}
+    66	
+    67	template <typename ItemType>
+    68	auto Node<ItemType>::getNext() const {
+    69	
+    70	   return next;
+    71	}
+[4makka[24m:[1m~/cs1521/labs/lab5/src[0m% cat -n Pre
+PrecondViolatedExcep.cpp  PrecondViolatedExcep.h    
+[4makka[24m:[1m~/cs1521/labs/lab5/src[0m% cat -n PrecondViolatedExcep.h
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Header file for an object thrown on violation of precondition.
+     8	 *
+     9	 *  Adapted from page 250 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *
+    15	 *  @date 08 Mar 2019
+    16	 *
+    17	 *  @version 7.0 */
+    18	
+    19	#ifndef PRECOND_VIOLATED_EXCEP_
+    20	#define PRECOND_VIOLATED_EXCEP_
+    21	
+    22	#include <stdexcept>
+    23	#include <string>
+    24	
+    25	/** @class PrecondViolatedExcep PrecondViolatedExcep.h "PrecondViolatedExcep.h"
+    26	 *
+    27	 *  Specification for an object thrown on violation of precondition. */
+    28	class PrecondViolatedExcep : public std::logic_error {
+    29	public:
+    30	   explicit PrecondViolatedExcep(const std::string& message = "");
+    31	
+    32	   virtual ~PrecondViolatedExcep() noexcept = default; //throw();
+    33	};
+    34	
+    35	#endif
+    36	
+[4makka[24m:[1m~/cs1521/labs/lab5/src[0m% cat -n Pre
+PrecondViolatedExcep.cpp  PrecondViolatedExcep.h    
+[4makka[24m:[1m~/cs1521/labs/lab5/src[0m% cat -n PrecondViolatedExcep.cpp
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Implementation file for an object thrown on violation of
+     8	 *  precondition.
+     9	 *
+    10	 *  Adapted from page 250 in Carrano 7e.
+    11	 *
+    12	 *  @author Frank M. Carrano
+    13	 *  @author Timothy Henry
+    14	 *  @author Steve Holtz
+    15	 *
+    16	 *  @date 08 Mar 2019
+    17	 *
+    18	 *  @version 7.0 */
+    19	
+    20	#include <stdexcept>
+    21	#include <string>
+    22	
+    23	#include "PrecondViolatedExcep.h"
+    24	
+    25	PrecondViolatedExcep::PrecondViolatedExcep(const std::string& message)
+    26	   : std::logic_error(message) {
+    27	}
+[4makka[24m:[1m~/cs1521/labs/lab5/src[0m% git --no-pager log --no-color
+commit 479052600344d1285e3d6795bbc064436cf5bafe
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Fri Mar 29 11:41:09 2019 -0500
+
+    Slightly fewer errors than before
+
+commit aa40191852b4d8e5c3069fee9f75a1e8de95c7b6
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Fri Mar 29 10:32:24 2019 -0500
+
+    Some attempt made to use smart pointers. Won't fully compile yet
+
+commit 8f6ca2399bae9337d2f831df637e314cbcb1b6d4
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Thu Mar 28 12:03:54 2019 -0500
+
+    Two more files
+
+commit e6f930cc0dbefce963214e33fda3b027116110b9
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Thu Mar 28 11:59:49 2019 -0500
+
+    Initial stack files. Waiting for queue files from week 11
+[4makka[24m:[1m~/cs1521/labs/lab5/src[0m% cd build
+[4makka[24m:[1m~/cs1521/labs/lab5/src/build[0m% make
+[ 33%] [32mBuilding CXX object CMakeFiles/palindrome.dir/PrecondViolatedExcep.cpp.o[0m
+[ 66%] [32mBuilding CXX object CMakeFiles/palindrome.dir/main.cpp.o[0m
+[100%] [32m[1mLinking CXX executable palindrome[0m
+[100%] Built target palindrome
+[4makka[24m:[1m~/cs1521/labs/lab5/src/build[0m% ./palindrome
+YES "" is a palindrome.
+YES "a" is a palindrome.
+YES "aba" is a palindrome.
+YES "abba" is a palindrome.
+YES "deleveled" is a palindrome.
+YES "a man a plan a canal panama" is a palindrome.
+NO "ab" is not a palindrome.
+NO "abbc" is not a palindrome.
+[4makka[24m:[1m~/cs1521/labs/lab5/src/build[0m% exit
+exit
+
+Script done on Fri 29 Mar 2019 01:06:30 PM CDT

@@ -1,0 +1,6 @@
+#ifndef LAB2_FUNCTIONS_
+#define LAB2_FUNCTIONS_
+
+void writeLine();
+
+#endif

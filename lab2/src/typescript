@@ -1,0 +1,233 @@
+Script started on Fri 01 Feb 2019 05:12:39 PM CST
+[4makka[24m:[1m~/cs1521/labs/lab2/src[0m% pwd
+/home/csugrads/schno059/cs1521/labs/lab2/src
+[4makka[24m:[1m~/cs1521/labs/lab2/src[0m% ls -l
+total 28
+drwx------ 3 schno059 student 4096 Feb  1 17:00 build
+-rw------- 1 schno059 student  127 Feb  1 15:54 CMakeLists.txt
+-rw------- 1 schno059 student 2235 Feb  1 16:56 lab2.cpp
+-rw------- 1 schno059 student  507 Feb  1 16:59 lab2functions.cpp
+-rw------- 1 schno059 student  155 Feb  1 15:35 lab2functions.cpp~
+-rw------- 1 schno059 student  212 Feb  1 16:59 lab2functions.h
+-rw------- 1 schno059 student   75 Feb  1 15:29 lab2functions.h~
+-rw------- 1 schno059 student    0 Feb  1 17:12 typescript
+[4makka[24m:[1m~/cs1521/labs/lab2/src[0m% cat -n CMakeLists.txt
+     1	project(Lab2)
+     2	
+     3	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14")
+     4	
+     5	add_executable(lab2
+     6	  lab2.cpp
+     7	  lab2functions.cpp)
+[4makka[24m:[1m~/cs1521/labs/lab2/src[0m% cat -n lab2.cpp
+     1	#include "lab2functions.h"
+     2	#include <iostream>
+     3	using namespace std;
+     4	
+     5	int main()//Testing the functions for lab2functions.cpp
+     6	{
+     7	   cout<<"\nTESTING WRITELINE FUNCTION\n";
+     8	   cout<<"\nThe letter 'A' printed 5 times\n";
+     9	   writeLine('A',5);
+    10	   cout<<"\nThe letter 'B' printed 4 times\n";
+    11	   writeLine('B',4);
+    12	   cout<<"\nThe letter 'C' printed 3 times\n";
+    13	   writeLine('C',3);
+    14	   cout<<"\nThe letter 'D' printed 2 times\n";
+    15	   writeLine('D',2);
+    16	   cout<<"\nThe letter 'E' printed 1 time\n";
+    17	   writeLine('E',1);
+    18	   cout<<"\nThe letter 'F' printed 0 times\n";
+    19	   writeLine('F',0);
+    20	   cout<<"\nThe letter 'G' printed -1 times\n";
+    21	   writeLine('G',-1);
+    22	   cout<<"\nThe letter 'H' printed -2 times\n";
+    23	   writeLine('H',-2);
+    24	   cout<<"\nThe letter 'I' printed 7 times\n";
+    25	   writeLine('I',7);
+    26	   cout<<"\n10 stars\n";
+    27	   writeLine('*',10);
+    28	   cout<<"\n5 questions\n";
+    29	   writeLine('?',5);
+    30	   cout<<"\n3 roots of all evil\n";
+    31	   writeLine('$',3);
+    32	   cout<<"\n1 world made equal\n";
+    33	   writeLine('=',1);
+    34	   cout<<"\n\n";
+    35	   cout<<"\nTESTING WRITEBLOCK FUNCTION\n";
+    36	   cout<<"\nThe letter 'A' with -3 lines with length of -3\n";
+    37	   writeBlock('A',-3,-3);
+    38	   cout<<"The letter 'B' with -3 lines with length of 0\n";
+    39	   writeBlock('B',-3,0);
+    40	   cout<<"The letter 'C' with -3 lines with length of 1\n";
+    41	   writeBlock('C',-3,1);
+    42	   cout<<"The letter 'D' with -3 lines with length of 3\n";
+    43	   writeBlock('D',-3,3);
+    44	   cout<<"The letter 'E' with 0 lines with length of -3\n";
+    45	   writeBlock('E',0,-3);
+    46	   cout<<"The letter 'F' with 0 lines with length of 0\n";
+    47	   writeBlock('F',0,0);
+    48	   cout<<"The letter 'G' with 0 lines with length of 1\n";
+    49	   writeBlock('G',0,1);
+    50	   cout<<"The letter 'H' with 0 lines with length of 3\n";
+    51	   writeBlock('H',0,3);
+    52	   cout<<"The letter 'I' with 5 lines with length of -3\n";
+    53	   writeBlock('I',5,-3);
+    54	   cout<<"The letter 'J' with 4 lines with length of 0\n";
+    55	   writeBlock('J',4,0);
+    56	   cout<<"The letter 'Q' with 3 lines with length of 1\n";
+    57	   writeBlock('Q',3,1);
+    58	   cout<<"The letter 'L' with 2 lines with length of 3\n";
+    59	   writeBlock('L',2,3);
+    60	   cout<<"The letter 'M' with 7 lines with length of 5\n";
+    61	   writeBlock('M',7,5);
+    62	   cout<<"The letter 'N' with 3 lines with length of 4\n";
+    63	   writeBlock('N',3,4);
+    64	}
+[4makka[24m:[1m~/cs1521/labs/lab2/src[0m% cat -n lab2functions.h
+     1	#ifndef LAB2_FUNCTIONS_
+     2	#define LAB2_FUNCTIONS_
+     3	
+     4	//function declarations. These are defined in lab2functions.cpp
+     5	void writeLine(char kaer, int amount);
+     6	void writeBlock(char morn, int height, int length);
+     7	
+     8	#endif
+[4makka[24m:[1m~/cs1521/labs/lab2/src[0m% cat -n lab2functions.cpp
+     1	#include "lab2functions.h"
+     2	#include <iostream>
+     3	using namespace std;
+     4	
+     5	void writeLine(char kaer, int amount)//writes [amount] number of
+     6	//[kaer]s to the screen
+     7	{
+     8	   if(amount>0)
+     9	   {
+    10	      cout<<kaer;
+    11	      writeLine(kaer,amount-1);
+    12	   }
+    13	}
+    14	//uses writeLine to create a block of [morn] characters that is
+    15	//[height] tall and [length] long
+    16	void writeBlock(char morn, int height, int length)
+    17	{
+    18	   if(height>0)
+    19	   {
+    20	      writeLine(morn,length);
+    21	      cout<<endl;
+    22	      writeBlock(morn, height-1, length);
+    23	   }
+    24	}
+[4makka[24m:[1m~/cs1521/labs/lab2/src[0m% git --no-pager log --no-color
+commit f27f7f7feefdee1c2e6ca21b2b45df51dc590c41
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Fri Feb 1 17:01:16 2019 -0600
+
+    Finalized lab and added comments
+
+commit 71d769c76084b76d531f34bc1d2494aa6578b5a1
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Fri Feb 1 16:55:26 2019 -0600
+
+    Removed build from git
+
+commit 4a1544f76bfa4ec511c3e7291410cca5ea9550ba
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Fri Feb 1 16:54:16 2019 -0600
+
+    Finished test file for writeblock
+
+commit 27406a59285017784236b3216676aba0ecdbcf11
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Fri Feb 1 16:21:27 2019 -0600
+
+    Fixed the test file
+
+commit 5dae920e40979083b457fbd7090e04c7075bcb80
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Fri Feb 1 15:58:45 2019 -0600
+
+    Lab 2 initial files
+[4makka[24m:[1m~/cs1521/labs/lab2/src[0m% cd build/
+[4makka[24m:[1m~/cs1521/labs/lab2/src/build[0m% make
+[35m[1mScanning dependencies of target lab2[0m
+[ 33%] [32mBuilding CXX object CMakeFiles/lab2.dir/lab2.cpp.o[0m
+[ 66%] [32mBuilding CXX object CMakeFiles/lab2.dir/lab2functions.cpp.o[0m
+[100%] [32m[1mLinking CXX executable lab2[0m
+[100%] Built target lab2
+[4makka[24m:[1m~/cs1521/labs/lab2/src/build[0m% ./lab2
+
+TESTING WRITELINE FUNCTION
+
+The letter 'A' printed 5 times
+AAAAA
+The letter 'B' printed 4 times
+BBBB
+The letter 'C' printed 3 times
+CCC
+The letter 'D' printed 2 times
+DD
+The letter 'E' printed 1 time
+E
+The letter 'F' printed 0 times
+
+The letter 'G' printed -1 times
+
+The letter 'H' printed -2 times
+
+The letter 'I' printed 7 times
+IIIIIII
+10 stars
+**********
+5 questions
+?????
+3 roots of all evil
+$$$
+1 world made equal
+=
+
+
+TESTING WRITEBLOCK FUNCTION
+
+The letter 'A' with -3 lines with length of -3
+The letter 'B' with -3 lines with length of 0
+The letter 'C' with -3 lines with length of 1
+The letter 'D' with -3 lines with length of 3
+The letter 'E' with 0 lines with length of -3
+The letter 'F' with 0 lines with length of 0
+The letter 'G' with 0 lines with length of 1
+The letter 'H' with 0 lines with length of 3
+The letter 'I' with 5 lines with length of -3
+
+
+
+
+
+The letter 'J' with 4 lines with length of 0
+
+
+
+
+The letter 'Q' with 3 lines with length of 1
+Q
+Q
+Q
+The letter 'L' with 2 lines with length of 3
+LLL
+LLL
+The letter 'M' with 7 lines with length of 5
+MMMMM
+MMMMM
+MMMMM
+MMMMM
+MMMMM
+MMMMM
+MMMMM
+The letter 'N' with 3 lines with length of 4
+NNNN
+NNNN
+NNNN
+[4makka[24m:[1m~/cs1521/labs/lab2/src/build[0m% exit
+exit
+
+Script done on Fri 01 Feb 2019 05:15:44 PM CST

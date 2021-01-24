@@ -1,0 +1,9 @@
+#include "lab2functions.h"
+#include <iostream>
+using namespace std;
+
+void writeLine(char kaer, int amount)
+{
+   cout<<kaer;
+   writeLine(kaer,amount-1);
+}

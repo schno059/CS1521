@@ -1,0 +1,691 @@
+Script started on Sat 02 Mar 2019 03:19:58 PM CST
+[4makka[24m:[1m~/cs1521/projects/project3/src[0m% pwd
+/home/csugrads/schno059/cs1521/projects/project3/src
+[4makka[24m:[1m~/cs1521/projects/project3/src[0m% ls -l
+total 52
+drwx------ 3 schno059 student 4096 Mar  2 15:13 build
+-rw------- 1 schno059 student  120 Feb 22 17:23 CMakeLists.txt
+-rw------- 1 schno059 student  115 Feb 22 17:22 CMakeLists.txt~
+-rw------- 1 schno059 student 4919 Mar  2 14:59 LinkedSet.cpp
+-rw------- 1 schno059 student 3911 Feb 22 17:42 LinkedSet.cpp~
+-rw------- 1 schno059 student 1845 Mar  2 14:56 LinkedSet.h
+-rw------- 1 schno059 student 1704 Feb 22 17:26 LinkedSet.h~
+-rw------- 1 schno059 student  914 Feb 22 17:47 Node.cpp
+-rw------- 1 schno059 student  790 Feb 22 17:45 Node.h
+-rw------- 1 schno059 student 2098 Mar  2 14:56 project3.cpp
+-rw------- 1 schno059 student 2862 Feb 22 17:43 project3.cpp~
+-rw------- 1 schno059 student 2571 Feb 22 17:21 SetInterface.h
+-rw------- 1 schno059 student    0 Mar  2 15:19 typescript
+[4makka[24m:[1m~/cs1521/projects/project3/src[0m% cat -n CMakeLists.txt
+     1	project(Project3)
+     2	
+     3	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14")
+     4	
+     5	add_executable(linkedset
+     6	  project3.cpp)
+[4makka[24m:[1m~/cs1521/projects/project3/src[0m% cat -n project3.cpp
+     1	#include "LinkedSet.h"
+     2	#include <iostream>
+     3	#include <string>
+     4	#include <cstdlib>
+     5	#include <fstream>
+     6	using namespace std;
+     7	
+     8	LinkedSet<std::string> firstSet, secondSet, thirdSet;
+     9	std::vector<std::string> displayVector;
+    10	
+    11	int main()
+    12	{
+    13	   std::ifstream inFile;
+    14	   std::string filename;
+    15	   cout<<"\nWelcome to the spellchecker program. Compare a dictionary"
+    16	       <<"\nto another textfile and I will display what words are misspelled\n";
+    17	   do{
+    18	      cout<<"\nProvide the filename of a dictionary: ";
+    19	      cin>>filename;
+    20	      inFile.open(filename.c_str());
+    21	      cout<<"\n";
+    22	      if(!inFile && filename!="quit")
+    23	         cout<<"File unable to open. Try again or type 'quit' to exit\n";
+    24	      else
+    25	         cout<<"File opened\n";
+    26	   }while(!inFile && filename!="quit");
+    27	   if(filename!="quit")
+    28	   {
+    29	      cout<<"Loading strings into linkedset...\n";
+    30	      std::string nextWord;
+    31	      while(inFile>>nextWord)
+    32	      {
+    33	         firstSet.add(nextWord);
+    34	      }
+    35	      inFile.close();
+    36	      std::string response("y");
+    37	      while(response=="y"||response=="Y")
+    38	      {
+    39	         cout<<"Enter filename to spellcheck: ";
+    40	         cin>>filename;
+    41	         inFile.open(filename.c_str());
+    42	         if(inFile)
+    43	         {
+    44	            while(inFile>>nextWord)
+    45	            {
+    46	               secondSet.add(nextWord);
+    47	            }
+    48	            inFile.close();
+    49	            displayVector=thirdSet.difference(secondSet,firstSet).toVector();
+    50	            for(int i(0); i<thirdSet.difference(secondSet,firstSet).getCurrentSize(); ++i)
+    51	               thirdSet.add(displayVector[i]);
+    52	            cout<<"\nCurrent size of third vector: "<<thirdSet.getCurrentSize();
+    53	            for(int i(0); i<thirdSet.getCurrentSize(); ++i)
+    54	               cout<<"\n["<<i<<"]:\t"<<displayVector[i];
+    55	         }
+    56	         else
+    57	         {
+    58	            cout<<"Sorry. That file was unable to open\n";
+    59	         }
+    60	         firstSet.clear();
+    61	         secondSet.clear();
+    62	         thirdSet.clear();
+    63	         cout<<"\n\nWould you like to spellcheck another file (y/n)?\n";
+    64	         cin>>response;
+    65	      }
+    66	      cout<<"\nThank you for using our service\n";
+    67	   }
+    68	}
+[4makka[24m:[1m~/cs1521/projects/project3/src[0m% cat -n SetInterface.h 
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  BagInterface class template definition.
+     8	 *
+     9	 *  Adapted from page 24-25 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *
+    15	 *  @date 08 Feb 2019
+    16	 *
+    17	 *  @version 7.0 */
+    18	
+    19	#ifndef SET_INTERFACE_
+    20	#define SET_INTERFACE_
+    21	
+    22	#include <vector>
+    23	
+    24	/** @class SetInterface SetInterface.h "SetInterface.h"
+    25	 *
+    26	 *  SetInterface abstract base class template. */
+    27	template <typename ItemType>
+    28	class SetInterface {
+    29	public:
+    30	   /** Virtual destructor. (See C++ Interlude 2.) */
+    31	   virtual ~SetInterface() {}
+    32	
+    33	   /** Gets the current number of entries in this set.
+    34	    *
+    35	    *  @return The integer number of entries currently in the set. */
+    36	   virtual int getCurrentSize() const = 0;
+    37	
+    38	   /** Sees whether this set is empty.
+    39	    *
+    40	    *  @return True if the set is empty, or false if not. */
+    41	   virtual bool isEmpty() const = 0;
+    42	
+    43	   /** Adds a new entry to this set.
+    44	    *
+    45	    *  @post If successful, newEntry is stored in the set and the
+    46	    *        count of items in the set has increased by 1.
+    47	    *
+    48	    *  @param newEntry The object to be added as a new entry.
+    49	    *
+    50	    *  @return True if addition was successful, or false if not. */
+    51	   virtual bool add(const ItemType& newEntry) = 0;
+    52	
+    53	   /** Removes one occurrence of a given entry from this set, if
+    54	    *  possible.
+    55	    *
+    56	    *  @post If successful, anEntry has been removed from the set and
+    57	    *        the count of items in the set has decreased by 1.
+    58	    *
+    59	    *  @param anEntry The value of the entry to be removed.
+    60	    *
+    61	    *  @return True if removal was successful, or false if not. */
+    62	   virtual bool remove(const ItemType& anEntry) = 0;
+    63	
+    64	   /** Removes all entries from this set.
+    65	    *
+    66	    *  @post This set contains no items (thus the count is 0). */
+    67	   virtual void clear() = 0;
+    68	
+    69	
+    70	   /** Counts the number of times a given entry appears in set.
+    71	    *
+    72	    *  @param anEntry The value of the entry to be counted.
+    73	    *
+    74	    *  @return The number of times anEntry appears in this set. */
+    75	   virtual int getFrequencyOf(const ItemType& anEntry) const = 0;
+    76	
+    77	   /** Tests whether this set contains a given entry.
+    78	    *
+    79	    *  @param anEntry The value of the entry to locate.
+    80	    *
+    81	    *  @return True if this set contains anEntry, or false
+    82	    *          otherwise. */
+    83	   virtual bool contains(const ItemType& anEntry) const = 0;
+    84	
+    85	   /** Converts this set into a vector.
+    86	    *
+    87	    *  @return A vector containing all the entries in this set. */
+    88	   virtual std::vector<ItemType> toVector() const = 0;
+    89	};
+    90	
+    91	#endif
+[4makka[24m:[1m~/cs1521/projects/project3/src[0m% cat -n LinkedSet.h
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Header file for a linked implementation of the ADT set.
+     8	 *
+     9	 *  Adapted from page 139 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *  @modified by Jacob Schnoor
+    15	 *
+    16	 *  @date 15 Feb 2019
+    17	 *
+    18	 *  @version 7.0 */
+    19	
+    20	#ifndef LINKED_SET_
+    21	#define LINKED_SET_
+    22	
+    23	#include <vector>
+    24	
+    25	#include "SetInterface.h"
+    26	#include "Node.h"
+    27	
+    28	/** @class LinkedSet LinkedSet.h "LinkedSet.h"
+    29	 *
+    30	 *  Specification of a pointer-based ADT set. */
+    31	template <typename ItemType>
+    32	class LinkedSet : public SetInterface<ItemType> {
+    33	private:
+    34	   using NodePtr = Node<ItemType>*;
+    35	
+    36	   /** Pointer to first node. */
+    37	   NodePtr headPtr = nullptr;
+    38	
+    39	   /** Number of items in this set. */
+    40	   int itemCount = 0;
+    41	
+    42	   /** Gets a pointer to the node containing the target in this set.
+    43	    *
+    44	    * @pre None.
+    45	    *
+    46	    * @post None.
+    47	    *
+    48	    * @param target The ItemType value to find.
+    49	    *
+    50	    * @return A pointer to the node that contains the given target or
+    51	    *         nullptr if the set does not contain the target. */
+    52	   NodePtr getPointerTo(const ItemType& target) const;
+    53	
+    54	public:
+    55	   /** Default constructor. */
+    56	   LinkedSet() = default;
+    57	
+    58	   /** Copy constructor. */
+    59	   LinkedSet(const LinkedSet<ItemType>& aSet);
+    60	
+    61	   virtual ~LinkedSet();
+    62	
+    63	   virtual int getCurrentSize() const;
+    64	
+    65	   virtual bool isEmpty() const;
+    66	
+    67	   virtual bool add(const ItemType& newEntry);
+    68	
+    69	   virtual bool remove(const ItemType& anEntry);
+    70	
+    71	   virtual void clear();
+    72	
+    73	   virtual int getFrequencyOf(const ItemType& anEntry) const;
+    74	
+    75	   virtual bool contains(const ItemType& anEntry) const;
+    76	
+    77	   virtual std::vector<ItemType> toVector() const;
+    78	
+    79	   virtual LinkedSet<ItemType> difference(const LinkedSet<ItemType>& set1, const LinkedSet<ItemType>& set2);
+    80	};
+    81	
+    82	#include "LinkedSet.cpp"
+    83	
+    84	#endif
+[4makka[24m:[1m~/cs1521/projects/project3/src[0m% cat -n LinkedSet.cpp
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Implementation file for the class LinkedSet.
+     8	 *
+     9	 *  Adapted from pages 139-148 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *  @modified by Jacob Schnoor
+    15	 *
+    16	 *  @date 22 Feb 2019
+    17	 *
+    18	 *  @version 7.0 */
+    19	#include <string>
+    20	std::string clean(std::string unclean);
+    21	std::string toLower(std::string yep);
+    22	
+    23	#include <vector>
+    24	#include <cctype>
+    25	
+    26	template <typename ItemType>
+    27	LinkedSet<ItemType>::LinkedSet(const LinkedSet<ItemType>& aSet) {
+    28	
+    29	   itemCount = aSet.itemCount;
+    30	
+    31	   if (!aSet.headPtr) { // if (aSet.headPtr == nullptr) {
+    32	      headPtr = nullptr;
+    33	   }
+    34	   else {
+    35	      NodePtr origChainPtr(aSet.headPtr);
+    36	
+    37	      headPtr = new Node<ItemType>(origChainPtr->getItem() );
+    38	
+    39	      NodePtr newChainPtr(headPtr);
+    40	
+    41	      origChainPtr = origChainPtr->getNext();
+    42	
+    43	      while (origChainPtr) { // while (origChainPtr != nullptr) {
+    44	         newChainPtr->setNext(new Node<ItemType>(origChainPtr->getItem()) );
+    45	
+    46	         newChainPtr = newChainPtr->getNext();
+    47	         origChainPtr = origChainPtr->getNext();
+    48	      }
+    49	   }
+    50	}
+    51	
+    52	template <typename ItemType>
+    53	LinkedSet<ItemType>::~LinkedSet() {
+    54	
+    55	   clear();
+    56	}
+    57	
+    58	template <typename ItemType>
+    59	int LinkedSet<ItemType>::getCurrentSize() const {
+    60	
+    61	   return itemCount;
+    62	}
+    63	
+    64	template <typename ItemType>
+    65	bool LinkedSet<ItemType>::isEmpty() const {
+    66	
+    67	   return itemCount == 0;
+    68	}
+    69	
+    70	template <typename ItemType>
+    71	bool LinkedSet<ItemType>::add(const ItemType& newEntry) {
+    72	   if(newEntry!="" && !contains(newEntry))
+    73	   {
+    74	      headPtr = new Node<ItemType>(newEntry,headPtr);
+    75	      ++itemCount;
+    76	      return true;
+    77	   }
+    78	   return false;
+    79	}
+    80	
+    81	template <typename ItemType>
+    82	bool LinkedSet<ItemType>::remove(const ItemType& anEntry) {
+    83	
+    84	   NodePtr entryNodePtr(getPointerTo(anEntry) );
+    85	
+    86	   bool canRemoveEntry(entryNodePtr); // bool canRemoveEntry(entryNodePtr != nullptr);
+    87	
+    88	   if (canRemoveEntry) {
+    89	      entryNodePtr->setItem(headPtr->getItem() );
+    90	
+    91	      NodePtr nodeToDeletePtr(headPtr);
+    92	
+    93	      headPtr = headPtr->getNext();
+    94	
+    95	      delete nodeToDeletePtr;
+    96	
+    97	      --itemCount;
+    98	   }
+    99	
+   100	   return canRemoveEntry;
+   101	}
+   102	
+   103	template <typename ItemType>
+   104	Node<ItemType>* LinkedSet<ItemType>::getPointerTo(const ItemType& target) const {
+   105	
+   106	   bool isFound(false);
+   107	
+   108	   NodePtr curPtr(headPtr);
+   109	
+   110	   while (!isFound && curPtr) { // ... && curPtr != nullptr) {
+   111	      isFound = clean(curPtr->getItem()) == target;//should work?
+   112	
+   113	      if (!isFound) { // Must protect curPtr as it is returned
+   114	         curPtr = curPtr->getNext();
+   115	      }
+   116	   }
+   117	
+   118	   return curPtr;
+   119	}
+   120	
+   121	template <typename ItemType>
+   122	void LinkedSet<ItemType>::clear() {
+   123	
+   124	   NodePtr nodeToDeletePtr(headPtr);
+   125	
+   126	   while (headPtr) { // while (headPtr != nullptr) {
+   127	      headPtr = headPtr->getNext();
+   128	
+   129	      delete nodeToDeletePtr;
+   130	
+   131	      nodeToDeletePtr = headPtr;
+   132	   }
+   133	   // Note that headPtr == nodeToDeletePtr == nullptr
+   134	   itemCount = 0;
+   135	}
+   136	
+   137	template <typename ItemType>
+   138	bool LinkedSet<ItemType>::contains(const ItemType& anEntry) const {
+   139	
+   140	   return getPointerTo(anEntry); // ... != nullptr;
+   141	}
+   142	
+   143	template <typename ItemType>
+   144	int LinkedSet<ItemType>::getFrequencyOf(const ItemType& anEntry) const {
+   145	
+   146	   int frequency(0);
+   147	
+   148	   NodePtr curPtr(headPtr);
+   149	
+   150	   while (curPtr) { // ... != nullptr) {
+   151	      if (curPtr->getItem() == anEntry) {
+   152	         ++frequency;
+   153	      }
+   154	
+   155	      curPtr = curPtr->getNext();
+   156	   }
+   157	
+   158	   return frequency;
+   159	}
+   160	
+   161	template <typename ItemType>
+   162	std::vector<ItemType> LinkedSet<ItemType>::toVector() const {
+   163	
+   164	   std::vector<ItemType> setContents;
+   165	
+   166	   NodePtr curPtr(headPtr);
+   167	
+   168	   while (curPtr) { // ... != nullptr) {
+   169	      setContents.push_back(curPtr->getItem() );
+   170	
+   171	      curPtr = curPtr->getNext();
+   172	   }
+   173	   return setContents;
+   174	}
+   175	
+   176	template <typename ItemType>
+   177	LinkedSet<ItemType> LinkedSet<ItemType>::difference(const LinkedSet<ItemType>& set1, const LinkedSet<ItemType>& set2) {
+   178	   LinkedSet<ItemType> returnSet;
+   179	   std::vector<ItemType> myVect=set1.toVector();
+   180	   for(int i(0); i<set1.getCurrentSize(); ++i)
+   181	      returnSet.add(clean(myVect[i]));
+   182	   myVect=set2.toVector();
+   183	   for(int i(0); i<set2.getCurrentSize(); ++i)
+   184	      returnSet.remove(myVect[i]);
+   185	   return returnSet;
+   186	}
+   187	
+   188	std::string clean(std::string unclean)
+   189	{
+   190	   //std::string capitals="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+   191	   // if(unclean.find_first_of(capitals)>-1)
+   192	   unclean=toLower(unclean);
+   193	   std::string grime="!@#$%^&*()_-+={}[]:;\"\'`<>,.?/|\\";
+   194	   int start,end;
+   195	   do{
+   196	      start=unclean.find_first_of(grime);
+   197	      if(start==0)
+   198	      {
+   199	         unclean=unclean.substr(1);
+   200	      }
+   201	      end=unclean.find_last_of(grime);
+   202	      if(end==(int)unclean.length()-1)
+   203	      {
+   204	         unclean=unclean.substr(0,(int)unclean.length()-1);
+   205	      }
+   206	   }while(start==0 || end==(int)unclean.length()-1);
+   207	   return unclean;
+   208	}
+   209	std::string toLower(std::string yep)
+   210	{
+   211	   std::string nope="";
+   212	   for(int i(0); i<(int)yep.length(); ++i)
+   213	      nope+=std::tolower(yep[i]);
+   214	   return nope;
+   215	}
+[4makka[24m:[1m~/cs1521/projects/project3/src[0m% cat -n Node.h
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Header file for a node in the linked implementation of the ADT
+     8	 *  bag.
+     9	 *
+    10	 *  Adapted from pages 136-137 in Carrano 7e.
+    11	 *
+    12	 *  @author Frank M. Carrano
+    13	 *  @author Timothy Henry
+    14	 *  @author Steve Holtz
+    15	 *
+    16	 *  @date 15 Feb 2019
+    17	 *
+    18	 *  @version 7.0 */
+    19	
+    20	#ifndef NODE_
+    21	#define NODE_
+    22	
+    23	template <typename ItemType>
+    24	class Node {
+    25	private:
+    26	   ItemType item;
+    27	   Node<ItemType>* next = nullptr;
+    28	
+    29	public:
+    30	   Node() = default;
+    31	
+    32	   Node(const ItemType& anItem,
+    33	        Node<ItemType>* nextNodePtr = nullptr);
+    34	
+    35	   virtual ~Node() = default;
+    36	
+    37	   void setItem(const ItemType& anItem);
+    38	   void setNext(Node<ItemType>* nextNodePtr);
+    39	
+    40	   ItemType getItem() const;
+    41	   Node<ItemType>* getNext() const;
+    42	};
+    43	
+    44	#include "Node.cpp"
+    45	
+    46	#endif
+    47	
+[4makka[24m:[1m~/cs1521/projects/project3/src[0m% cat -n Node.cpp
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Implementation file for a node in the linked implementation of the
+     8	 *  ADT bag.
+     9	 *
+    10	 *  Adapted from page 137 in Carrano 7e.
+    11	 *
+    12	 *  @author Frank M. Carrano
+    13	 *  @author Timothy Henry
+    14	 *  @author Steve Holtz
+    15	 *
+    16	 *  @date 15 Feb 2019
+    17	 *
+    18	 *  @version 7.0 */
+    19	
+    20	template <typename ItemType>
+    21	Node<ItemType>::Node(const ItemType& anItem,
+    22	                     Node<ItemType>* nextNodePtr)
+    23	   : item(anItem),
+    24	     next(nextNodePtr) {
+    25	}
+    26	
+    27	template <typename ItemType>
+    28	void Node<ItemType>::setItem(const ItemType& anItem) {
+    29	
+    30	   item = anItem;
+    31	}
+    32	
+    33	template <typename ItemType>
+    34	void Node<ItemType>::setNext(Node<ItemType>* nextNodePtr) {
+    35	
+    36	   next = nextNodePtr;
+    37	}
+    38	
+    39	template <typename ItemType>
+    40	ItemType Node<ItemType>::getItem() const {
+    41	
+    42	   return item;
+    43	}
+    44	
+    45	template <typename ItemType>
+    46	Node<ItemType>* Node<ItemType>::getNext() const {
+    47	
+    48	   return next;
+    49	}
+[4makka[24m:[1m~/cs1521/projects/project3/src[0m% git --no-pager log --no-color
+commit 0794367cbc2c50e49dd52c1cac72a653de6faa4d
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Sat Mar 2 15:19:14 2019 -0600
+
+    Finished clean function. Program ready for submission
+
+commit 49fc20d76776fcaf6723bf2d8f8af8052563a15a
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Sat Mar 2 12:30:14 2019 -0600
+
+    Very frustrated but LinkedSet no longer gives seg fault
+
+commit f84de2321c51335418af86ca0f978d1f1c0d3e97
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Wed Feb 27 17:02:07 2019 -0600
+
+    Mostly functional. Seg fault during display and clean function has not been made yet
+
+commit ba111a242d8f55e74d7f73b81e0393128d97be49
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Wed Feb 27 13:16:58 2019 -0600
+
+    More tester files. Figuring out I/O capabilities
+
+commit b42dea65576a774e1c38137f1ba34eca534210ee
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Fri Feb 22 17:55:40 2019 -0600
+
+    Initial files. LinkedSet ADT confirmed working
+[4makka[24m:[1m~/cs1521/projects/project3/src[0m% cd build
+[4makka[24m:[1m~/cs1521/projects/project3/src/build[0m% make
+[ 50%] [32mBuilding CXX object CMakeFiles/linkedset.dir/project3.cpp.o[0m
+[100%] [32m[1mLinking CXX executable linkedset[0m
+[100%] Built target linkedset
+[4makka[24m:[1m~/cs1521/projects/project3/src/build[0m% ./linkedset
+
+Welcome to the spellchecker program. Compare a dictionary
+to another textfile and I will display what words are misspelled
+
+Provide the filename of a dictionary: small.dat
+
+File opened
+Loading strings into linkedset...
+Enter filename to spellcheck: small.txt
+
+Current size of third vector: 46
+[0]:	pegs
+[1]:	millennium
+[2]:	jar
+[3]:	hurried
+[4]:	daisy-chain
+[5]:	shelves
+[6]:	3.0
+[7]:	labelled
+[8]:	orange
+[9]:	marmalade"
+[10]:	rabbit
+[11]:	disappointment
+[12]:	remarkable
+[13]:	hedge
+[14]:	pleasure
+[15]:	cupboards
+[16]:	carroll
+[17]:	rabbit-hole
+[18]:	pink
+[19]:	waistcoat-pocket
+[20]:	tired
+[21]:	alice
+[22]:	sleepy
+[23]:	peeped
+[24]:	afterwards
+[25]:	wonderland
+[26]:	conversations
+[27]:	tumbling
+[28]:	stairs
+[29]:	maps
+[30]:	brave
+[31]:	they'll
+[32]:	waistcoat
+[33]:	book-shelves
+[34]:	lewis
+[35]:	wouldn't
+[36]:	fulcrum
+[37]:	tunnel
+[38]:	dipped
+[39]:	i
+[40]:	sister
+[41]:	daisies
+[42]:	alice's
+[43]:	adventures
+[44]:	burning
+[45]:	curiosity
+
+Would you like to spellcheck another file (y/n)?
+n
+
+Thank you for using our service
+[4makka[24m:[1m~/cs1521/projects/project3/src/build[0m% quit
+quit: Command not found.
+[4makka[24m:[1m~/cs1521/projects/project3/src/build[0m% stop
+stop: Too few arguments.
+[4makka[24m:[1m~/cs1521/projects/project3/src/build[0m% exity[K
+exit
+
+Script done on Sat 02 Mar 2019 03:23:22 PM CST

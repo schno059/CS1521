@@ -1,0 +1,1 @@
+/usr/bin/c++    -Wall -std=c++14   CMakeFiles/linkedset.dir/project3.cpp.o  -o linkedset -rdynamic 

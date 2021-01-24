@@ -1,0 +1,88 @@
+Script started on Thu 25 Apr 2019 11:56:02 AM CDT
+[4makka[24m:[1m~/cs1521/labs/lab7/src[0m% pwd
+/home/csugrads/schno059/cs1521/labs/lab7/src
+[4makka[24m:[1m~/cs1521/labs/lab7/src[0m% ls -l
+total 16
+drwx------ 3 schno059 student 4096 Apr 25 11:55 build
+-rw------- 1 schno059 student  107 Apr 25 10:59 CMakeLists.txt
+-rw------- 1 schno059 student  880 Apr 25 11:45 main.cpp
+-rw------- 1 schno059 student 1013 Apr 25 11:43 main.cpp~
+-rw------- 1 schno059 student    0 Apr 25 11:56 typescript
+[4makka[24m:[1m~/cs1521/labs/lab7/src[0m% cat -n CMakeLists.txt
+     1	project(lab7)
+     2	
+     3	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14")
+     4	
+     5	add_executable(lab7
+     6	  main.cpp)
+[4makka[24m:[1m~/cs1521/labs/lab7/src[0m% cat -n main.cpp
+     1	#include <iostream>
+     2	#include <string>
+     3	
+     4	char cipher(char input);
+     5	
+     6	int main()
+     7	{
+     8	   std::string message("sdfsdfs");
+     9	   while(message!="")
+    10	   {
+    11	      std::cout<<"\n\nEnter a message (typing nothing will terminate program)\n";
+    12	      std::getline(std::cin,message);
+    13	      if(message!=""){
+    14	         std::cout<<"\nYour Message : "<<message;
+    15	         std::cout<<"\nRotation yields : ";
+    16	         for(char& c : message)
+    17	            std::cout<<cipher(c);
+    18	      }
+    19	      else
+    20	         std::cout<<"\nGoodbye\n";
+    21	   }
+    22	}
+    23	char cipher(char input)
+    24	{
+    25	   char returnChar=' ';
+    26	   if((int)input>=48&&(int)input<=57)
+    27	      returnChar=(char)((((int)input-3)%10)+48);
+    28	   else if((int)input>=65&&(int)input<=90)
+    29	      returnChar=(char)((((int)input)%26)+65);
+    30	   else if((int)input>=97&&(int)input<=122)
+    31	      returnChar=(char)((((int)input-6)%26)+97);
+    32	   else
+    33	      returnChar=input;
+    34	   return returnChar;
+    35	}
+[4makka[24m:[1m~/cs1521/labs/lab7/src[0m% cd build
+[4makka[24m:[1m~/cs1521/labs/lab7/src/build[0m% make
+[ 50%] [32mBuilding CXX object CMakeFiles/lab7.dir/main.cpp.o[0m
+[100%] [32m[1mLinking CXX executable lab7[0m
+[100%] Built target lab7
+[4makka[24m:[1m~/cs1521/labs/lab7/src/build[0m% ./lab7<input.dat
+
+
+Enter a message (typing nothing will terminate program)
+
+Your Message : Uv zl anzr vf Wnpbo Fpuabbe naq gbqnl jr'yy or qbvat fbzr pnrfne pvcuref
+Rotation yields : Hi my name is Jacob Schnoor and today we'll be doing some caesar ciphers
+
+Enter a message (typing nothing will terminate program)
+
+Your Message : Gur pvgl'f prageny pbzchgre gbyq lbh? E7Q7, lbh xabj orggre guna gb gehfg n fgenatr pbzchgre! --P8CB
+Rotation yields : The city's central computer told you? R2D2, you know better than to trust a strange computer! --C3PO
+
+Enter a message (typing nothing will terminate program)
+
+Your Message : Qrohttvat vf gjvpr nf uneq nf jevgvat gur pbqr va gur svefg cynpr. Gurersber, vs lbh jevgr gur pbqr nf pyrireyl nf cbffvoyr, lbh ner, ol qrsvavgvba, abg fzneg rabhtu gb qroht vg. --Oevna Xreavtuna
+Rotation yields : Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it. --Brian Kernighan
+
+Enter a message (typing nothing will terminate program)
+
+Your Message : Jvgu 9 cnenzrgref V pna svg na ryrcunag, naq jvgu 0 V pna znxr uvz jvttyr uvf gehax. --Wbua iba Arhznaa
+Rotation yields : With 4 parameters I can fit an elephant, and with 5 I can make him wiggle his trunk. --John von Neumann
+
+Enter a message (typing nothing will terminate program)
+
+Goodbye
+[4makka[24m:[1m~/cs1521/labs/lab7/src/build[0m% exit
+exit
+
+Script done on Thu 25 Apr 2019 11:57:04 AM CDT

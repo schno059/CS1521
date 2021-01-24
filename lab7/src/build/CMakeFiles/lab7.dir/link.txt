@@ -1,0 +1,1 @@
+/usr/bin/c++    -Wall -std=c++14   CMakeFiles/lab7.dir/main.cpp.o  -o lab7 -rdynamic 

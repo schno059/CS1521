@@ -1,0 +1,14 @@
+#include "LinkedStack.h"
+
+class Infix
+{
+  private:
+   method();
+  public:
+   Infix()=default;
+   ~Infix();
+   bool setExpression(string anExpression);
+   string getExpression();
+   int solveExpression();
+}
+#include "infix.cpp"

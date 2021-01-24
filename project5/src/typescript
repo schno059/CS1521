@@ -1,0 +1,1339 @@
+Script started on Mon 08 Apr 2019 05:10:44 PM CDT
+[4makka[24m:[1m~/cs1521/projects/project5/src[0m% pwd
+
+/home/csugrads/schno059/cs1521/projects/project5/src
+[4makka[24m:[1m~/cs1521/projects/project5/src[0m% ls -l
+
+total 72
+drwx------ 3 schno059 student 4096 Apr  8 17:10 build
+-rw------- 1 schno059 student  142 Apr  4 12:56 CMakeLists.txt
+-rw------- 1 schno059 student    8 Mar 31 10:44 CMakeLists.txt~
+-rw------- 1 schno059 student 2509 Apr  8 17:08 Disc.cpp
+-rw------- 1 schno059 student  765 Apr  8 16:48 Disc.h
+-rw------- 1 schno059 student  907 Apr  8 17:08 DiscList.cpp
+-rw------- 1 schno059 student  405 Apr  7 12:18 DiscList.h
+-rw------- 1 schno059 student 4640 Mar 29 13:16 LinkedList.cpp
+-rw------- 1 schno059 student 1681 Mar 29 13:16 LinkedList.h
+-rw------- 1 schno059 student 3161 Apr  2 16:10 ListInterface.h
+-rw------- 1 schno059 student 2503 Apr  8 16:17 main.cpp
+-rw------- 1 schno059 student 1307 Mar 29 13:16 Node.cpp
+-rw------- 1 schno059 student 1850 Mar 29 13:17 Node.h
+-rw------- 1 schno059 student  506 Apr  2 16:11 PrecondViolatedExcep.cpp
+-rw------- 1 schno059 student  781 Apr  2 16:11 PrecondViolatedExcep.h
+-rw------- 1 schno059 student 2129 Apr  8 17:08 Track.cpp
+-rw------- 1 schno059 student  526 Apr  8 16:53 Track.h
+-rw------- 1 schno059 student    0 Apr  8 17:10 typescript
+[4makka[24m:[1m~/cs1521/projects/project5/src[0m% cat -n CMakeLists.txt
+
+     1	project(DiscManager)
+     2	
+     3	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14")
+     4	
+     5	add_executable(disc
+     6	  PrecondViolatedExcep.cpp
+     7	  main.cpp)
+     8	
+[4makka[24m:[1m~/cs1521/projects/project5/src[0m% cat -n main.cpp
+
+     1	#include <iostream>
+     2	#include <memory>
+     3	#include <string>
+     4	#include "LinkedList.h"
+     5	#include "Track.h"
+     6	#include "Disc.h"
+     7	#include "DiscList.h"
+     8	#include "Track.cpp"
+     9	#include "Disc.cpp"
+    10	#include "DiscList.cpp"
+    11	
+    12	int main()
+    13	{
+    14	   DiscList myDiscList;
+    15	   std::cout<<"\nWelcome to the disc library\nType in the letter for whichever operation you wish to perform";
+    16	   std::string response("");
+    17	   int index(-1);
+    18	   while(response!="q"&&response!="Q")
+    19	   {
+    20	      std::cout<<"\n(A)dd a new disc"
+    21	               <<"\n(R)emove a disc"
+    22	               <<"\n(P)rint a disc"
+    23	               <<"\n(L)ist discs"
+    24	               <<"\n(Q)uit\n";
+    25	      std::cin>>response;
+    26	      if(response=="A"||response=="a")//add new disc
+    27	      {
+    28	         myDiscList.insertDisc((new Disc)->getDiscFromUser());
+    29	      }
+    30	      else if(response=="R"||response=="r")//remove disc
+    31	      {
+    32	         int listSize=myDiscList.getNumberOfDiscs();
+    33	         std::cout<<"\nDisc Titles:\n";
+    34	         for(int i(1); i<=listSize; ++i)
+    35	         {
+    36	            std::cout<<"\n["<<i<<"]: "<<myDiscList.retrieveDisc(i)->getTitle();
+    37	         }
+    38	         std::cout<<"\nType a disc number to remove it from the list : ";
+    39	         std::cin>>index;
+    40	         if(index>=1&&index<=listSize)
+    41	            myDiscList.removeDisc(myDiscList.retrieveDisc(index));
+    42	         else
+    43	            std::cout<<"\n--Invalid Entry--\n";
+    44	      }
+    45	      else if(response=="P"||response=="p")//print disc
+    46	      {
+    47	         int listSize=myDiscList.getNumberOfDiscs();
+    48	         std::cout<<"\nDisc Titles:\n";
+    49	         for(int i(1); i<=listSize; ++i)
+    50	         {
+    51	            std::cout<<"\n["<<i<<"]: "<<myDiscList.retrieveDisc(i)->getTitle();
+    52	         }
+    53	         std::cout<<"\nType a disc number for more information : ";
+    54	         std::cin>>index;
+    55	         if(index>=1&&index<=listSize)
+    56	         {
+    57	            myDiscList.retrieveDisc(index)->printDisc();
+    58	            for(int i(1); i<=myDiscList.retrieveDisc(index)->getNumberOfTracks(); ++i)
+    59	            {
+    60	               myDiscList.retrieveDisc(index)->retrieveTrackByNumber(i)->printTrack();
+    61	            }
+    62	         }
+    63	         else
+    64	            std::cout<<"\n--Invalid Entry--\n";
+    65	      }
+    66	      else if(response=="L"||response=="l")//list discs
+    67	      {
+    68	         int listSize=myDiscList.getNumberOfDiscs();
+    69	         for(int i(1); i<=listSize; ++i)
+    70	         {
+    71	            myDiscList.retrieveDisc(i)->printDisc();
+    72	         }
+    73	      }
+    74	      else if(response!="Q"&&response!="q")//invalid
+    75	      {
+    76	         std::cout<<"\n--Invalid Command--\n";
+    77	      }
+    78	   }
+    79	}
+[4makka[24m:[1m~/cs1521/projects/project5/src[0m% cat -n DiscList.h
+
+     1	class DiscList{
+     2	  private:
+     3	   std::shared_ptr<LinkedList<std::shared_ptr<Disc>>> discListPtr;
+     4	  public:
+     5	   DiscList();
+     6	   ~DiscList();
+     7	   bool isEmpty() const;
+     8	   int getNumberOfDiscs() const;
+     9	   bool insertDisc(std::shared_ptr<Disc> discPtr);
+    10	   bool removeDisc(std::shared_ptr<Disc> discPtr);
+    11	   std::shared_ptr<Disc> retrieveDisc(int number);
+    12	   int findDiscPosition(std::shared_ptr<Disc> discPtr);
+    13	};
+[4makka[24m:[1m~/cs1521/projects/project5/src[0m% cat -n DiscList.cpp
+
+     1	DiscList::DiscList()
+     2	{
+     3	   discListPtr=std::make_shared<LinkedList<std::shared_ptr<Disc>>>();
+     4	}
+     5	DiscList::~DiscList()
+     6	{
+     7	   std::cout<<"\nDiscList destructor has been called";
+     8	}
+     9	bool DiscList::isEmpty() const
+    10	{
+    11	   return discListPtr->isEmpty();
+    12	}
+    13	int DiscList::getNumberOfDiscs() const
+    14	{
+    15	   return discListPtr->getLength();
+    16	}
+    17	bool DiscList::insertDisc(std::shared_ptr<Disc> discPtr)
+    18	{
+    19	   return discListPtr->insert(1,discPtr);
+    20	}
+    21	bool DiscList::removeDisc(std::shared_ptr<Disc> discPtr)
+    22	{
+    23	   return discListPtr->remove(findDiscPosition(discPtr));
+    24	}
+    25	std::shared_ptr<Disc> DiscList::retrieveDisc(int number)
+    26	{
+    27	   return discListPtr->getEntry(number);
+    28	}
+    29	int DiscList::findDiscPosition(std::shared_ptr<Disc> discPtr)
+    30	{
+    31	   int listLength=getNumberOfDiscs();
+    32	   int index(0);
+    33	   int i(1);
+    34	   while(i<=listLength&&discPtr!=retrieveDisc(i))
+    35	      i++;
+    36	   if(discPtr==retrieveDisc(i))
+    37	      index=i;
+    38	   return index;
+    39	}
+[4makka[24m:[1m~/cs1521/projects/project5/src[0m% cat -n Disc.h
+
+     1	class Disc
+     2	{
+     3	  private:
+     4	   std::string title;
+     5	   std::string artist;
+     6	   int year;
+     7	   std::string genre;
+     8	   int totalPlayTime;
+     9	   bool multiArtist;
+    10	   std::shared_ptr<LinkedList<std::shared_ptr<Track>>> trackListPtr;
+    11	  public:
+    12	   Disc();
+    13	   ~Disc();
+    14	   bool isEmpty() const;
+    15	   int getNumberOfTracks() const;
+    16	   bool insertTrack(std::shared_ptr<Track> trackPtr);
+    17	   std::shared_ptr<Track> retrieveTrackByNumber(int trackNumber) const;
+    18	   std::string getArtist() const;
+    19	   std::string getTitle() const;
+    20	   bool isMultiArtist() const;
+    21	   void printDisc();
+    22	   void addToTotalPlayTime(int time);
+    23	   bool isLessThan(Disc aDisc) const;
+    24	   bool isLessThanOrEqualTo(Disc aDisc) const;
+    25	   std::shared_ptr<Disc> getDiscFromUser();
+    26	   std::string minSecFormat(int seconds);
+    27	};
+[4makka[24m:[1m~/cs1521/projects/project5/src[0m% cat -n Disc.cpp
+
+     1	Disc::Disc()
+     2	{
+     3	   trackListPtr=std::make_shared<LinkedList<std::shared_ptr<Track>>>();
+     4	}
+     5	Disc::~Disc()
+     6	{
+     7	   std::cout<<"\nDestructor has been called on disc '"<<title<<"'";
+     8	}
+     9	bool Disc::isEmpty() const
+    10	{
+    11	   return trackListPtr->isEmpty();
+    12	}
+    13	int Disc::getNumberOfTracks() const
+    14	{
+    15	   return trackListPtr->getLength();
+    16	}
+    17	bool Disc::insertTrack(std::shared_ptr<Track> trackPtr)
+    18	{
+    19	   return trackListPtr->insert(1,trackPtr);
+    20	}
+    21	std::shared_ptr<Track> Disc::retrieveTrackByNumber(int trackNumber) const
+    22	{
+    23	   return trackListPtr->getEntry(trackNumber);
+    24	}
+    25	std::string Disc::getArtist() const
+    26	{
+    27	   return artist;
+    28	}
+    29	std::string Disc::getTitle() const
+    30	{
+    31	   return title;
+    32	}
+    33	bool Disc::isMultiArtist() const
+    34	{
+    35	   return multiArtist;
+    36	}
+    37	void Disc::printDisc()
+    38	{
+    39	   if(multiArtist)
+    40	   {
+    41	      std::cout<<"\n-"<<title<<"-"
+    42	               <<"\n"<<year
+    43	               <<"\n"<<genre
+    44	               <<"\n"<<totalPlayTime<<" seconds"
+    45	               <<"\n"<<getNumberOfTracks()<<" track(s)";
+    46	   }
+    47	   else
+    48	   {
+    49	      std::cout<<"\n-"<<title<<"- by "<<getArtist()
+    50	               <<"\n"<<year
+    51	               <<"\n"<<genre
+    52	               <<"\n"<<totalPlayTime<<" seconds"
+    53	               <<"\n"<<getNumberOfTracks()<<" track(s)";
+    54	   }
+    55	   std::cout<<"\n";
+    56	}
+    57	void Disc::addToTotalPlayTime(int time)
+    58	{
+    59	   totalPlayTime+=time;
+    60	}
+    61	bool Disc::isLessThan(Disc aDisc) const
+    62	{
+    63	   return title<aDisc.getTitle();
+    64	}
+    65	bool Disc::isLessThanOrEqualTo(Disc aDisc) const
+    66	{
+    67	   return title<=aDisc.getTitle();
+    68	}
+    69	std::shared_ptr<Disc> Disc::getDiscFromUser()
+    70	{
+    71	   std::string yesNo("");
+    72	   multiArtist=false;
+    73	   std::cout<<"\nEnter Title : ";
+    74	   std::cin>>title;
+    75	   std::cout<<"\nIs the disc multi-artist? (y/n) : ";
+    76	   std::cin>>yesNo;
+    77	   if(yesNo=="y"||yesNo=="Y")
+    78	      multiArtist=true;
+    79	   if(!multiArtist)
+    80	   {
+    81	      std::cout<<"\nEnter the artist name : ";
+    82	      std::cin>>artist;
+    83	   }
+    84	   std::cout<<"\nEnter the year : ";
+    85	   std::cin>>year;
+    86	   std::cout<<"\nEnter the genre : ";
+    87	   std::cin>>genre;
+    88	   auto returnDisc=std::shared_ptr<Disc>(this);
+    89	   do{
+    90	      returnDisc->insertTrack((new Track(returnDisc))->getTrackFromUser());
+    91	      std::cout<<"\nEnter another track (y/n)? : ";
+    92	      std::cin>>yesNo;
+    93	   }while(yesNo=="y"||yesNo=="Y");
+    94	   return returnDisc;
+    95	}
+    96	std::string Disc::minSecFormat(int seconds)
+    97	{
+    98	   std::string returnString("");
+    99	   int min(0);
+   100	   int sec(0);
+   101	   if(seconds<=59)
+   102	   {
+   103	      returnString=""+seconds;
+   104	   }
+   105	   else
+   106	   {
+   107	      min=seconds/60;
+   108	      sec=seconds%60;
+   109	      returnString=min+":"+sec;
+   110	   }
+   111	   return returnString;
+   112	}
+[4makka[24m:[1m~/cs1521/projects/project5/src[0m% cat -n Track.h
+
+     1	#include <sstream>
+     2	class Disc;
+     3	
+     4	class Track
+     5	{
+     6	  private:
+     7	   std::string name;
+     8	   std::string artist;
+     9	   int playTime;
+    10	   int number;
+    11	   std::string location;
+    12	   std::weak_ptr<Disc> discPtr;
+    13	   int readPlayTime(std::string colonNumber);
+    14	   std::string minSecFormat(int seconds);
+    15	  public:
+    16	   Track()=delete;
+    17	   Track(std::weak_ptr<Disc> inDiscPtr);
+    18	   ~Track();
+    19	   void printTrack();
+    20	   bool isLessThan(Track aTrack) const;
+    21	   int getNumber() const;
+    22	   int getPlayTime() const;
+    23	   std::shared_ptr<Track> getTrackFromUser();
+    24	};
+[4makka[24m:[1m~/cs1521/projects/project5/src[0m% cat -n Track.cpp
+
+     1	Track::Track(std::weak_ptr<Disc> inDiscPtr)
+     2	{
+     3	   discPtr=inDiscPtr;
+     4	}
+     5	Track::~Track()
+     6	{
+     7	   std::cout<<"\nDestructor called on Track '"<<name<<"'";
+     8	}
+     9	void Track::printTrack()
+    10	{
+    11	   if(discPtr.lock()->isMultiArtist())
+    12	   {
+    13	      std::cout<<"\n'"<<name<<"' by "<<artist
+    14	               <<"\n"<<getPlayTime()<<" seconds"
+    15	               <<"\n"<<location
+    16	               <<"\n";
+    17	   }
+    18	   else
+    19	   {
+    20	      std::cout<<"\n'"<<name<<"'"
+    21	               <<"\n"<<getPlayTime()<<" seconds"
+    22	               <<"\n"<<location
+    23	               <<"\n";
+    24	   }
+    25	}
+    26	bool Track::isLessThan(Track aTrack) const
+    27	{
+    28	   return number<aTrack.getNumber();
+    29	}
+    30	int Track::getNumber() const
+    31	{
+    32	   return number;
+    33	}
+    34	int Track::getPlayTime() const
+    35	{
+    36	   return playTime;
+    37	}
+    38	std::shared_ptr<Track> Track::getTrackFromUser()
+    39	{
+    40	   if(discPtr.lock()->isMultiArtist())
+    41	   {
+    42	      std::cout<<"\nEnter Track Name : ";
+    43	      std::cin>>name;
+    44	      std::cout<<"\nEnter Artist Name : ";
+    45	      std::cin>>artist;
+    46	      std::cout<<"\nEnter Play Time (in seconds) : ";
+    47	      std::cin>>playTime;
+    48	      std::cout<<"\nEnter File Location : ";
+    49	      std::cin>>location;
+    50	   }
+    51	   else
+    52	   {
+    53	      std::cout<<"\nEnter Track Name : ";
+    54	      std::cin>>name;
+    55	      std::cout<<"\nEnter Play Time (in seconds) : ";
+    56	      std::cin>>playTime;
+    57	      std::cout<<"\nEnter File Location : ";
+    58	      std::cin>>location;
+    59	   }
+    60	   discPtr.lock()->addToTotalPlayTime(playTime);
+    61	   return std::shared_ptr<Track>(this);
+    62	}
+    63	int Track::readPlayTime(std::string colonNumber)
+    64	{
+    65	   int returnNumber(0);
+    66	   std::string str2(colonNumber.substr(colonNumber.find(":")+1));
+    67	   std::string str1(colonNumber.substr(0,colonNumber.find(":")));
+    68	   int x,y;
+    69	   std::stringstream converter(str1);
+    70	   std::stringstream converter2(str2);
+    71	   converter>>x;
+    72	   converter2>>y;
+    73	   x*=60;
+    74	   returnNumber+=x+y;
+    75	   return returnNumber;
+    76	}
+    77	std::string Track::minSecFormat(int seconds)
+    78	{
+    79	   std::string returnString("");
+    80	   int min(0);
+    81	   int sec(0);
+    82	   if(seconds<=59)
+    83	   {
+    84	      returnString=""+seconds;
+    85	   }
+    86	   else
+    87	   {
+    88	      min=seconds/60;
+    89	      sec=seconds%60;
+    90	      returnString=min+":"+sec;
+    91	   }
+    92	   return returnString;
+    93	}
+[4makka[24m:[1m~/cs1521/projects/project5/src[0m% cat -n ListInterface.h
+
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  ListInterface class template definition.
+     8	 *
+     9	 *  Adapted from pages 261-2 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *
+    15	 *  @date 08 Mar 2019
+    16	 *
+    17	 *  @version 7.0 */
+    18	
+    19	#ifndef LIST_INTERFACE_
+    20	#define LIST_INTERFACE_
+    21	
+    22	/** @class ListInterface ListInterface.h "ListInterface.h"
+    23	 *
+    24	 *  Definition of ListInterface class template. */
+    25	template <typename ItemType>
+    26	class ListInterface {
+    27	public:
+    28	   /** Destructor. */
+    29	   virtual ~ListInterface() = default;
+    30	
+    31	   /** Sees whether this list is empty.
+    32	    *
+    33	    *  @return True if this list is empty, or false if not. */
+    34	   virtual bool isEmpty() const = 0;
+    35	
+    36	   /** Gets the current number of entries in this list.
+    37	    *
+    38	    *  @return The integer number of entries in this list. */
+    39	   virtual int getLength() const = 0;
+    40	
+    41	   /** Inserts a new entry into this list at a given position.
+    42	    *
+    43	    *  @pre None.
+    44	    *
+    45	    *  @post If 1 <= newPosition <= getLength() + 1 and the insertion
+    46	    *        is successful, newEntry is stored at the given position
+    47	    *        in this list, other entries are renumbered accordingly.
+    48	    *
+    49	    *  @param newPosition The list position at which to insert
+    50	    *         newEntry.
+    51	    *
+    52	    *  @param newEntry The object to be added as a new entry.
+    53	    *
+    54	    *  @return True if insertion was successful, or false if not. */
+    55	   virtual bool insert(int newPosition,
+    56	                       const ItemType& newEntry) = 0;
+    57	
+    58	   /** Removes the entry at the given position from this list.
+    59	    *
+    60	    *  @pre None.
+    61	    *
+    62	    *  @post If 1 <= position <= getLength() and the removal is
+    63	    *        successful, the entry at the given position in this list
+    64	    *        is removed, other entries are renumbered accordingly.
+    65	    *
+    66	    *  @param position The list position of the entry to remove.
+    67	    *
+    68	    *  @return True if removal was successful, or false if not. */
+    69	   virtual bool remove(int position) = 0;
+    70	
+    71	   /** Removes all entries from this list.
+    72	    *
+    73	    *  @post List conntains no entries; getLength() == 0. */
+    74	   virtual void clear() = 0;
+    75	
+    76	   /** Retrieves the entry at the given position in this list.
+    77	    *
+    78	    *  @pre 1 <= position <= getLength().
+    79	    *
+    80	    *  @post None.
+    81	    *
+    82	    *  @param position The position of the desired entry to
+    83	    *         retrieve.
+    84	    *
+    85	    *  @return The entry at the desired position in this list.
+    86	    *
+    87	    *  @throws PrecondViolatedExcep If position < 1 or position >
+    88	    *          getLength(). */
+    89	   virtual ItemType getEntry(int position) const = 0;
+    90	
+    91	   /** Replaces the entry at the given position in this list.
+    92	    *
+    93	    *  @pre 1 <= position <= getLength().
+    94	    *
+    95	    *  @post The entry at the given position is newEntry.
+    96	    *
+    97	    *  @param position The list position of the entry to replace.
+    98	    *
+    99	    *  @param newEntry The replacement entry.
+   100	    *
+   101	    *  @return The entry that has been replaced.
+   102	    *
+   103	    *  @throws PrecondViolatedExcep If position < 1 or position >
+   104	    *          getLength(). */
+   105	   virtual ItemType replace(int position,
+   106	                            const ItemType& newEntry) = 0;
+   107	};
+   108	
+   109	#endif[4makka[24m:[1m~/cs1521/projects/project5/src[0m% cat -n LinkedList.h
+
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Header file for a pointer-based implementation of the ADT list
+     8	 *  that uses smart pointers.
+     9	 *
+    10	 *  Adapted from pages 297-298 in Carrano 7e.
+    11	 *
+    12	 *  @author Frank M. Carrano
+    13	 *  @author Timothy Henry
+    14	 *  @author Steve Holtz
+    15	 *
+    16	 *  @date 25 Mar 2019
+    17	 *
+    18	 *  @version 7.0 */
+    19	
+    20	#ifndef LINKED_LIST_
+    21	#define LINKED_LIST_
+    22	
+    23	#include <memory>
+    24	
+    25	#include "ListInterface.h"
+    26	#include "Node.h"
+    27	
+    28	/** @class LinkedList LinkedList.h "LinkedList.h"
+    29	 *
+    30	 *  Specification of a smart pointer-based ADT list. */
+    31	template <typename ItemType>
+    32	class LinkedList : public ListInterface<ItemType> {
+    33	private:
+    34	   // Note: automatically initialized to nullptr:
+    35	   std::shared_ptr<Node<ItemType>> headPtr;
+    36	
+    37	   int itemCount = 0;
+    38	
+    39	   /** Locates the node at the specified position in this list.
+    40	    *
+    41	    *  @pre 1 <= position <= itemCount
+    42	    *
+    43	    *  @post None.
+    44	    *
+    45	    *  @param position The desired position to locate.
+    46	    *
+    47	    *  @return A smart pointer to the position-th node in this list.
+    48	    */
+    49	   auto getNodeAt(int position) const;
+    50	
+    51	public:
+    52	   LinkedList() = default;
+    53	
+    54	   LinkedList(const LinkedList<ItemType>& aList);
+    55	
+    56	#ifdef DTOR_TEST
+    57	   virtual ~LinkedList();
+    58	#else
+    59	   virtual ~LinkedList() = default;
+    60	#endif
+    61	
+    62	   virtual bool isEmpty() const;
+    63	
+    64	   virtual int getLength() const;
+    65	
+    66	   virtual bool insert(int newPosition,
+    67	                       const ItemType& newEntry);
+    68	
+    69	   virtual bool remove(int position);
+    70	
+    71	   virtual void clear();
+    72	
+    73	   virtual ItemType getEntry(int position) const;
+    74	
+    75	   virtual ItemType replace(int position,
+    76	                            const ItemType& newEntry);
+    77	};
+    78	
+    79	#include "LinkedList.cpp"
+    80	
+    81	#endif[4makka[24m:[1m~/cs1521/projects/project5/src[0m% cat -n LinkedList.cpp
+
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Implementation file for a pointer-based implementation of the ADT
+     8	 *  list that uses smart pointers.
+     9	 *
+    10	 *  Adapted from pages 298-300 in Carrano 7e.
+    11	 *
+    12	 *  @author Frank M. Carrano
+    13	 *  @author Timothy Henry
+    14	 *  @author Steve Holtz
+    15	 *
+    16	 *  @date 25 Mar 2019
+    17	 *
+    18	 *  @version 7.0 */
+    19	
+    20	//#define NDEBUG
+    21	
+    22	#include <string>
+    23	#include <new>
+    24	#include <memory>
+    25	
+    26	#include <cassert>
+    27	
+    28	#include "PrecondViolatedExcep.h"
+    29	
+    30	template <typename ItemType>
+    31	LinkedList<ItemType>::LinkedList(const LinkedList<ItemType>& aList) {
+    32	
+    33	   itemCount = 0; // Empty linked chain
+    34	
+    35	   if (aList.headPtr) {
+    36	      auto aListPtr(aList.headPtr);
+    37	
+    38	      try {
+    39	         headPtr = std::make_shared<Node<ItemType>>(aListPtr->getItem() );
+    40	
+    41	         ++itemCount; // Increment after successful Node allocation
+    42	
+    43	         auto thisListPtr(headPtr);
+    44	
+    45	         aListPtr = aListPtr->getNext();
+    46	
+    47	         while (aListPtr) {
+    48	            thisListPtr->setNext(
+    49	               std::make_shared<Node<ItemType>>(aListPtr->getItem())
+    50	                                 );
+    51	
+    52	            ++itemCount; // Increment after each successful Node allocation
+    53	
+    54	            thisListPtr = thisListPtr->getNext();
+    55	            aListPtr = aListPtr->getNext();
+    56	         }
+    57	      }
+    58	      catch (const std::bad_alloc&) {
+    59	         clear();
+    60	         throw;
+    61	      }
+    62	   }
+    63	}
+    64	
+    65	#ifdef DTOR_TEST
+    66	
+    67	#include <iostream>
+    68	
+    69	template <typename ItemType>
+    70	LinkedList<ItemType>::~LinkedList() {
+    71	
+    72	   std::cerr << "LinkedList destructor called on:\n"
+    73	             << "\theadPtr: "
+    74	             << headPtr
+    75	             << "\n"
+    76	             << "\titemCount: "
+    77	             << itemCount
+    78	             << std::endl;
+    79	}
+    80	
+    81	#endif
+    82	
+    83	template <typename ItemType>
+    84	bool LinkedList<ItemType>::isEmpty() const {
+    85	
+    86	   return !itemCount;
+    87	}
+    88	
+    89	template <typename ItemType>
+    90	int LinkedList<ItemType>::getLength() const {
+    91	
+    92	   return itemCount;
+    93	}
+    94	
+    95	template <typename ItemType>
+    96	bool LinkedList<ItemType>::insert(int newPosition,
+    97	                                  const ItemType& newEntry) {
+    98	
+    99	   bool ableToInsert(newPosition >= 1 &&
+   100	                     newPosition <= itemCount + 1);
+   101	
+   102	   if (ableToInsert) {
+   103	      try {
+   104	         if (newPosition == 1) {
+   105	            headPtr = std::make_shared<Node<ItemType>>(newEntry,
+   106	                                                       headPtr);
+   107	         }
+   108	         else {
+   109	            auto prevPtr(getNodeAt(newPosition - 1) );
+   110	
+   111	            prevPtr->setNext(
+   112	               std::make_shared<Node<ItemType>>(newEntry,
+   113	                                                prevPtr->getNext())
+   114	                             );
+   115	         }
+   116	
+   117	         ++itemCount;
+   118	      }
+   119	      catch (const std::bad_alloc&) {
+   120	         ableToInsert = false;
+   121	      }
+   122	   }
+   123	
+   124	   return ableToInsert;
+   125	}
+   126	
+   127	template <typename ItemType>
+   128	bool LinkedList<ItemType>::remove(int position) {
+   129	
+   130	   bool ableToRemove(position >= 1 &&
+   131	                     position <= itemCount);
+   132	
+   133	   if (ableToRemove) {
+   134	      if (position == 1) {
+   135	         headPtr = headPtr->getNext();
+   136	      }
+   137	      else {
+   138	         auto prevPtr(getNodeAt(position - 1) );
+   139	
+   140	         auto curPtr(prevPtr->getNext() );
+   141	
+   142	         prevPtr->setNext(curPtr->getNext() );
+   143	      }
+   144	
+   145	      --itemCount;
+   146	   }
+   147	
+   148	   return ableToRemove;
+   149	}
+   150	
+   151	template <typename ItemType>
+   152	void LinkedList<ItemType>::clear() {
+   153	
+   154	   headPtr = nullptr; // or headPtr.reset();
+   155	   itemCount = 0;
+   156	}
+   157	
+   158	template <typename ItemType>
+   159	ItemType LinkedList<ItemType>::getEntry(int position) const {
+   160	
+   161	   bool ableToGet(position >= 1 &&
+   162	                  position <= itemCount);
+   163	
+   164	   if (!ableToGet) {
+   165	      std::string message("LinkedList::getEntry() called with an empty ");
+   166	      message += "list or an invalid position.";
+   167	
+   168	      throw PrecondViolatedExcep(message);
+   169	   }
+   170	
+   171	   auto nodePtr(getNodeAt(position) );
+   172	
+   173	   return nodePtr->getItem();
+   174	}
+   175	
+   176	template <typename ItemType>
+   177	ItemType LinkedList<ItemType>::replace(int position,
+   178	                                       const ItemType& newEntry) {
+   179	
+   180	   bool ableToSet(position >= 1 &&
+   181	                  position <= itemCount);
+   182	
+   183	   if (!ableToSet) {
+   184	      std::string message("LinkedList::setEntry() called with an empty ");
+   185	      message += "list or an invalid position.";
+   186	
+   187	      throw PrecondViolatedExcep(message);
+   188	   }
+   189	
+   190	   auto nodePtr(getNodeAt(position) );
+   191	
+   192	   ItemType oldEntry(nodePtr->getItem() );
+   193	
+   194	   nodePtr->setItem(newEntry);
+   195	
+   196	   return oldEntry;
+   197	}
+   198	
+   199	template <typename ItemType>
+   200	auto LinkedList<ItemType>::getNodeAt(int position) const {
+   201	
+   202	   assert(position >= 1 && position <= itemCount);
+   203	
+   204	   auto curPtr(headPtr);
+   205	
+   206	   for (int skip(1); skip < position; ++skip) {
+   207	      curPtr = curPtr->getNext();
+   208	   }
+   209	
+   210	   return curPtr;
+   211	}
+   212	
+[4makka[24m:[1m~/cs1521/projects/project5/src[0m% cat -n Node.h
+
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Header file for a node that uses smart pointers.
+     8	 *
+     9	 *  Adapted from page 296 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *
+    15	 *  @date 25 Mar 2019
+    16	 *
+    17	 *  @version 7.0 */
+    18	
+    19	#ifndef NODE_
+    20	#define NODE_
+    21	
+    22	#include <memory>
+    23	
+    24	/** @class Node Node.h "Node.h"
+    25	 *
+    26	 *  Specification of a smart pointer-based ADT node. */
+    27	template <typename ItemType>
+    28	class Node {
+    29	private:
+    30	   ItemType item;
+    31	   std::shared_ptr<Node<ItemType>> next;
+    32	
+    33	public:
+    34	   /** Default constructor. */
+    35	   Node() = default;
+    36	
+    37	   /** One-arg constructor. */
+    38	   Node(const ItemType& anItem);
+    39	
+    40	   /** Two-arg constructor. */
+    41	   Node(const ItemType& anItem,
+    42	        std::shared_ptr<Node<ItemType>> nextNodePtr);
+    43	
+    44	#ifdef DTOR_TEST
+    45	   /** Destructor that outputs meesage when called. */
+    46	   virtual ~Node();
+    47	#else
+    48	   /** Destructor. */
+    49	   virtual ~Node() = default;
+    50	#endif
+    51	
+    52	   /** Sets the item in this node.
+    53	    *
+    54	    * @pre None.
+    55	    *
+    56	    * @post The item in this node has been set to anItem.
+    57	    *
+    58	    * @param anItem The new item to put in this node. */
+    59	   void setItem(const ItemType& anItem);
+    60	
+    61	   /** Sets the next pointer in this node.
+    62	    *
+    63	    * @pre None.
+    64	    *
+    65	    * @post The next pointer in this node has been set to
+    66	    *       nextNodePtr.
+    67	    *
+    68	    * @param nextNodePtr The new pointer that this node should point
+    69	    *        at. */
+    70	   void setNext(std::shared_ptr<Node<ItemType>> nextNodePtr);
+    71	
+    72	   /** Gets the item in this node.
+    73	    *
+    74	    * @pre None.
+    75	    *
+    76	    * @post None.
+    77	    *
+    78	    * @return The item in this node. */
+    79	   ItemType getItem() const;
+    80	
+    81	   /** Gets the next pointer in this node.
+    82	    *
+    83	    * @pre None.
+    84	    *
+    85	    * @post None.
+    86	    *
+    87	    * @return The next pointer in this node. */
+    88	   auto getNext() const;
+    89	};
+    90	
+    91	#include "Node.cpp"
+    92	
+    93	#endif[4makka[24m:[1m~/cs1521/projects/project5/src[0m% cat -n Node.cpp
+
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Implementation file for a node that uses smart pointers.
+     8	 *
+     9	 *  Adapted from page 297 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *
+    15	 *  @date 25 Mar 2019
+    16	 *
+    17	 *  @version 7.0 */
+    18	
+    19	#include <memory>
+    20	
+    21	template <typename ItemType>
+    22	Node<ItemType>::Node(const ItemType& anItem)
+    23	   : item(anItem) {
+    24	}
+    25	
+    26	template <typename ItemType>
+    27	Node<ItemType>::Node(const ItemType& anItem,
+    28	                     std::shared_ptr<Node<ItemType>> nextNodePtr)
+    29	   : item(anItem),
+    30	     next(nextNodePtr) {
+    31	}
+    32	
+    33	#ifdef DTOR_TEST
+    34	
+    35	#include <iostream>
+    36	
+    37	template <typename ItemType>
+    38	Node<ItemType>::~Node() {
+    39	
+    40	   std::cerr << "Node destructor called. on:"
+    41	             << "\n\titem: "
+    42	             << item
+    43	             << "\n\tnext: "
+    44	             << next
+    45	             << std::endl;
+    46	}
+    47	
+    48	#endif
+    49	
+    50	template <typename ItemType>
+    51	void Node<ItemType>::setItem(const ItemType& anItem) {
+    52	
+    53	   item = anItem;
+    54	}
+    55	
+    56	template <typename ItemType>
+    57	void Node<ItemType>::setNext(std::shared_ptr<Node<ItemType>> nextNodePtr) {
+    58	
+    59	   next = nextNodePtr;
+    60	}
+    61	
+    62	template <typename ItemType>
+    63	ItemType Node<ItemType>::getItem() const {
+    64	
+    65	   return item;
+    66	}
+    67	
+    68	template <typename ItemType>
+    69	auto Node<ItemType>::getNext() const {
+    70	
+    71	   return next;
+    72	}
+[4makka[24m:[1m~/cs1521/projects/project5/src[0m% cat -n PrecondViolatedExcep.h
+
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Header file for an object thrown on violation of precondition.
+     8	 *
+     9	 *  Adapted from page 250 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *
+    15	 *  @date 08 Mar 2019
+    16	 *
+    17	 *  @version 7.0 */
+    18	
+    19	#ifndef PRECOND_VIOLATED_EXCEP_
+    20	#define PRECOND_VIOLATED_EXCEP_
+    21	
+    22	#include <stdexcept>
+    23	#include <string>
+    24	
+    25	/** @class PrecondViolatedExcep PrecondViolatedExcep.h "PrecondViolatedExcep.h"
+    26	 *
+    27	 *  Specification for an object thrown on violation of precondition. */
+    28	class PrecondViolatedExcep : public std::logic_error {
+    29	public:
+    30	   explicit PrecondViolatedExcep(const std::string& message = "");
+    31	
+    32	   virtual ~PrecondViolatedExcep() noexcept = default; //throw();
+    33	};
+    34	
+    35	#endif[4makka[24m:[1m~/cs1521/projects/project5/src[0m% cat -n PrecondViolatedExcep.cpp
+
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Implementation file for an object thrown on violation of
+     8	 *  precondition.
+     9	 *
+    10	 *  Adapted from page 250 in Carrano 7e.
+    11	 *
+    12	 *  @author Frank M. Carrano
+    13	 *  @author Timothy Henry
+    14	 *  @author Steve Holtz
+    15	 *
+    16	 *  @date 08 Mar 2019
+    17	 *
+    18	 *  @version 7.0 */
+    19	
+    20	#include <stdexcept>
+    21	#include <string>
+    22	
+    23	#include "PrecondViolatedExcep.h"
+    24	
+    25	PrecondViolatedExcep::PrecondViolatedExcep(const std::string& message)
+    26	   : std::logic_error(message) {
+    27	}[4makka[24m:[1m~/cs1521/projects/project5/src[0m% git --no-pager log --no-color
+
+commit 58dd8cb5a2ff3663f41aebcb7c11d08b00ccde86
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Mon Apr 8 17:09:14 2019 -0500
+
+    Project 5 complete
+
+commit a765495262734932c5c59faa0ec2ce0f5a1331fc
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Sun Apr 7 21:00:46 2019 -0500
+
+    Cyclic dependency issues. Weak_ptrs don't seem to solve it
+
+commit d0994d85131bca8001ac816656ccc35f9e5bb6f9
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Sun Apr 7 18:28:33 2019 -0500
+
+    Premature destruction of disc and track after one track insertion
+
+commit c9f1bd0f7642405002f7b69f3699bf9f80827c83
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Fri Apr 5 16:05:11 2019 -0500
+
+    Made some untested progress on Track.h and Track.cpp
+
+commit 0e3cda402d6a6fded92acd61edc151071753c4aa
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Thu Apr 4 13:14:11 2019 -0500
+
+    Most getters and setters functional
+
+commit 7bcd2338d9b70eccf17be543248da1dea1590883
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Tue Apr 2 16:19:27 2019 -0500
+
+    Intermediate solution complete
+
+commit 2d7f2683efc7198568f343c321dc6af12009e4f4
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Tue Apr 2 14:48:37 2019 -0500
+
+    approaching intermediate completion. Need to fill in a few files
+
+commit b3e7b25606a39cc7dbd6e6fe60abd27371ca5000
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Mon Apr 1 10:52:20 2019 -0500
+
+    Made class stubs. No comments or include statements yet. Uncompilable
+
+commit a5a1fd1614eed28735d3aef0e42d889826c1c5bf
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Sun Mar 31 10:43:43 2019 -0500
+
+    I think I have all files. Nothing typed yet
+[4makka[24m:[1m~/cs1521/projects/project5/src[0m% cd build/
+
+[4makka[24m:[1m~/cs1521/projects/project5/src/build[0m% make
+
+[ 33%] [32mBuilding CXX object CMakeFiles/disc.dir/PrecondViolatedExcep.cpp.o[0m
+[ 66%] [32mBuilding CXX object CMakeFiles/disc.dir/main.cpp.o[0m
+[100%] [32m[1mLinking CXX executable disc[0m
+[100%] Built target disc
+[4makka[24m:[1m~/cs1521/projects/project5/src/build[0m% ./disc
+
+
+Welcome to the disc library
+Type in the letter for whichever operation you wish to perform
+(A)dd a new disc
+(R)emove a disc
+(P)rint a disc
+(L)ist discs
+(Q)uit
+a
+
+Enter Title : andJusticeForAll
+
+Is the disc multi-artist? (y/n) : n
+
+Enter the artist name : Metallica
+
+Enter the year : 1988
+
+Enter the genre : Metal
+
+Enter Track Name : toLiveIsToDie
+
+Enter Play Time (in seconds) : 50
+
+Enter File Location : /music
+
+Enter another track (y/n)? : y
+
+Enter Track Name : one
+
+Enter Play Time (in seconds) : 45
+
+Enter File Location : /files/musicFiles
+
+Enter another track (y/n)? : y
+
+Enter Track Name : harvestero OfSorrow
+
+Enter Play Time (in seconds) : 32
+
+Enter File Location : /myMusicFolder
+
+Enter another track (y/n)? : n
+
+(A)dd a new disc
+(R)emove a disc
+(P)rint a disc
+(L)ist discs
+(Q)uit
+a
+
+Enter Title : allHopeIsGone
+
+Is the disc multi-artist? (y/n) : y
+
+Enter the year : 2008
+
+Enter the genre : C folkPunk
+
+Enter Track Name : Psychosocial
+
+Enter Artist Name : Slipknot
+
+Enter Play Time (in seconds) : 23
+
+Enter File Location : /shame
+
+Enter another track (y/n)? : y
+
+Enter Track Name : rocketMan
+
+Enter Artist Name : eltonJohn
+
+Enter Play Time (in seconds) : 12
+
+Enter File Location : /great
+
+Enter another track (y/n)? : n
+
+(A)dd a new disc
+(R)emove a disc
+(P)rint a disc
+(L)ist discs
+(Q)uit
+l
+
+-allHopeIsGone-
+2008
+folkPunk
+35 seconds
+2 track(s)
+
+-andJusticeForAll- by Metallica
+1988
+Metal
+127 seconds
+3 track(s)
+
+(A)dd a new disc
+(R)emove a disc
+(P)rint a disc
+(L)ist discs
+(Q)uit
+p
+
+Disc Titles:
+
+[1]: allHopeIsGone
+[2]: andJusticeForAll
+Type a disc number for more information : 2
+
+-andJusticeForAll- by Metallica
+1988
+Metal
+127 seconds
+3 track(s)
+
+'harvesterOfSorrow'
+32 seconds
+/myMusicFolder
+
+'one'
+45 seconds
+/files/musicFiles
+
+'toLiveIsToDie'
+50 seconds
+/music
+
+(A)dd a new disc
+(R)emove a disc
+(P)rint a disc
+(L)ist discs
+(Q)uit
+r
+
+Disc Titles:
+
+[1]: allHopeIsGone
+[2]: andJusticeForAll
+Type a disc number to remove it from the list : 2
+
+Destructor has been called on disc 'andJusticeForAll'
+Destructor called on Track 'toLiveIsToDie'
+Destructor called on Track 'one'
+Destructor called on Track 'harvesterOfSorrow'
+(A)dd a new disc
+(R)emove a disc
+(P)rint a disc
+(L)ist discs
+(Q)uit
+l
+
+-allHopeIsGone-
+2008
+folkPunk
+35 seconds
+2 track(s)
+
+(A)dd a new disc
+(R)emove a disc
+(P)rint a disc
+(L)ist discs
+(Q)uit
+p
+
+Disc Titles:
+
+[1]: allHopeIsGone
+Type a disc number for more information : 1
+
+-allHopeIsGone-
+2008
+folkPunk
+35 seconds
+2 track(s)
+
+'rocketMan' by eltonJohn
+12 seconds
+/great
+
+'Psychosocial' by Slipknot
+23 seconds
+/shame
+
+(A)dd a new disc
+(R)emove a disc
+(P)rint a disc
+(L)ist discs
+(Q)uit
+q
+
+DiscList destructor has been called
+Destructor has been called on disc 'allHopeIsGone'
+Destructor called on Track 'Psychosocial'
+Destructor called on Track 'rocketMan'[4makka[24m:[1m~/cs1521/projects/project5/src/build[0m% exit
+
+exit
+
+Script done on Mon 08 Apr 2019 05:19:34 PM CDT

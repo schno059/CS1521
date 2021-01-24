@@ -1,0 +1,810 @@
+Script started on Sat 23 Mar 2019 12:11:34 PM CDT
+[4makka[24m:[1m~/cs1521/projects/project4/src[0m% pwd
+/home/csugrads/schno059/cs1521/projects/project4/src
+[4makka[24m:[1m~/cs1521/projects/project4/src[0m% ls -l
+total 76
+drwx------ 3 schno059 student 4096 Mar 23 12:11 build
+-rw------- 1 schno059 student  140 Mar 21 13:10 CMakeLists.txt
+-rw------- 1 schno059 student  501 Mar 18 16:42 DivideByZeroExcep.cpp
+-rw------- 1 schno059 student  498 Mar 18 16:39 DivideByZeroExcep.cpp~
+-rw------- 1 schno059 student  744 Mar 18 16:42 DivideByZeroExcep.h
+-rw------- 1 schno059 student  741 Mar 18 16:41 DivideByZeroExcep.h~
+-rw------- 1 schno059 student 3188 Mar 22 15:36 infix.cpp
+-rw------- 1 schno059 student   10 Mar 19 11:05 infix.cpp~
+-rw------- 1 schno059 student  529 Mar 21 13:22 infix.h
+-rw------- 1 schno059 student  227 Mar 19 11:13 infix.h~
+-rw------- 1 schno059 student 2020 Mar 18 16:31 LinkedStack.cpp
+-rw------- 1 schno059 student  973 Mar 18 16:31 LinkedStack.h
+-rw------- 1 schno059 student  914 Mar 18 16:33 Node.cpp
+-rw------- 1 schno059 student  788 Mar 18 16:33 Node.h
+-rw------- 1 schno059 student 1037 Mar 22 15:14 project4.cpp
+-rw------- 1 schno059 student 2099 Mar 19 10:57 project4.cpp~
+-rw------- 1 schno059 student 1548 Mar 18 16:33 StackInterface.h
+-rw------- 1 schno059 student  730 Mar 18 16:45 test.dat
+-rw------- 1 schno059 student   84 Mar 18 16:45 testDivByZero.dat
+-rw------- 1 schno059 student    0 Mar 23 12:11 typescript
+[4makka[24m:[1m~/cs1521/projects/project4/src[0m% cat -n CMakeLists.txt
+     1	project(Project4)
+     2	
+     3	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14")
+     4	
+     5	add_executable(infix
+     6	  DivideByZeroExcep.cpp
+     7	  project4.cpp)
+[4makka[24m:[1m~/cs1521/projects/project4/src[0m% cat -n project4.cpp
+     1	#include "infix.h"
+     2	#include <iostream>
+     3	#include <string>
+     4	#include <cstdlib>
+     5	#include <fstream>
+     6	using namespace std;
+     7	
+     8	Infix inf;
+     9	
+    10	int main()
+    11	{
+    12	   std::string response("");
+    13	   std::string nextLine("");
+    14	   std::ifstream inFile;
+    15	   std::string filename;
+    16	   cout<<"\nWelcome to the infix calculator";
+    17	   do{
+    18	      cout<<"\nProvide the filename to read from : ";
+    19	      cin>>filename;
+    20	      inFile.open(filename.c_str());
+    21	      cout<<"\n";
+    22	      if(!inFile && filename!="quit")
+    23	         cout<<"File unable to open. Try again or type 'quit' to exit\n";
+    24	      else if(filename!="quit")
+    25	         cout<<"File opened\n";
+    26	   }while(!inFile && filename!="quit");
+    27	   if(filename!="quit")
+    28	   {
+    29	      while(getline(inFile,nextLine))
+    30	      {
+    31	         inf.setExpression(nextLine);
+    32	         cout<<inf.getExpression()<<endl;
+    33	         cout<<inf.getExpression()<<" = ";
+    34	         try
+    35	         {
+    36	            cout<<inf.solveExpression()<<endl;
+    37	         }
+    38	         catch(DivideByZeroExcep& d)
+    39	         {
+    40	            cerr<<d.what()<<endl;
+    41	         }
+    42	      }
+    43	   }
+    44	}
+[4makka[24m:[1m~/cs1521/projects/project4/src[0m% cat -n infix.h
+     1	#include "LinkedStack.h"
+     2	#include "DivideByZeroExcep.h"
+     3	#include <string>
+     4	
+     5	class Infix
+     6	{
+     7	  private:
+     8	   std::string expression;
+     9	   LinkedStack<char> operatorStack;
+    10	   LinkedStack<int> valueStack;
+    11	   void isADigit(int a);
+    12	   void isLeftParenth();
+    13	   void isRightParenth();
+    14	   void isOperator(char a);
+    15	   void performOperation();
+    16	   int precedence(char a, char b);
+    17	  public:
+    18	   Infix();
+    19	   ~Infix();
+    20	   bool setExpression(std::string anExpression);
+    21	   std::string getExpression();
+    22	   int solveExpression();
+    23	};
+    24	
+    25	#include "infix.cpp"
+[4makka[24m:[1m~/cs1521/projects/project4/src[0m% cat -n infix.cpp
+     1	#include <iostream>//remove after testing
+     2	Infix::Infix()
+     3	{
+     4	   expression="";
+     5	}
+     6	Infix::~Infix()
+     7	{
+     8	   expression="";
+     9	   while(!operatorStack.isEmpty())
+    10	      operatorStack.pop();
+    11	   while(!valueStack.isEmpty())
+    12	      valueStack.pop();
+    13	}
+    14	bool Infix::setExpression(std::string anExpression)
+    15	{
+    16	   expression=anExpression;
+    17	   return true;
+    18	}
+    19	std::string Infix::getExpression()
+    20	{
+    21	   return expression;
+    22	}
+    23	int Infix::solveExpression()
+    24	{
+    25	   //problem within here
+    26	   for(char c:expression)
+    27	   {
+    28	      switch(c)
+    29	      {
+    30	          case '0':isADigit(0);break;
+    31	          case '1':isADigit(1);break;
+    32	          case '2':isADigit(2);break;
+    33	          case '3':isADigit(3);break;
+    34	          case '4':isADigit(4);break;
+    35	          case '5':isADigit(5);break;
+    36	          case '6':isADigit(6);break;
+    37	          case '7':isADigit(7);break;
+    38	          case '8':isADigit(8);break;
+    39	          case '9':isADigit(9);break;
+    40	          case '(':isLeftParenth();break;
+    41	          case ')':isRightParenth();break;
+    42	          case '+':isOperator('+');break;
+    43	          case '-':isOperator('-');break;
+    44	          case '*':isOperator('*');break;
+    45	          case '/':isOperator('/');break;
+    46	      }
+    47	   }
+    48	   while(!operatorStack.isEmpty())
+    49	      performOperation();
+    50	   //ending here
+    51	   int returnNum(-999);
+    52	   if(!valueStack.isEmpty())
+    53	      returnNum=valueStack.peek();
+    54	   return returnNum;
+    55	}
+    56	void Infix::isADigit(int a)
+    57	{
+    58	   valueStack.push(a);
+    59	}
+    60	void Infix::isLeftParenth()
+    61	{
+    62	   operatorStack.push('(');
+    63	}
+    64	void Infix::isRightParenth()
+    65	{
+    66	   if(!operatorStack.isEmpty())
+    67	   {
+    68	      while(!operatorStack.isEmpty()&&operatorStack.peek()!='(')
+    69	      {
+    70	         performOperation();
+    71	      }
+    72	      operatorStack.pop();
+    73	   }
+    74	}
+    75	void Infix::isOperator(char a)
+    76	{
+    77	   if(operatorStack.isEmpty()||precedence(a,operatorStack.peek())>0)
+    78	   {
+    79	      operatorStack.push(a);
+    80	   }
+    81	   else
+    82	   {
+    83	      while(!operatorStack.isEmpty()&&precedence(a,operatorStack.peek())<=0)
+    84	         performOperation();
+    85	      operatorStack.push(a);
+    86	   }
+    87	}
+    88	int Infix::precedence(char a, char b)
+    89	{
+    90	   int prec(0);
+    91	   if((a=='*'||a=='/')&&(b=='+'||b=='-'))
+    92	      prec=1;
+    93	   else if((a=='+'||a=='-')&&(b=='*'||b=='/'))
+    94	      prec=-1;
+    95	   else if((a=='(')&&(b=='+'||b=='-'||b=='*'||b=='/'))
+    96	      prec=-1;
+    97	   else if((b=='(')&&(a=='+'||a=='-'||a=='*'||a=='/'))
+    98	      prec=1;
+    99	   return prec;
+   100	}
+   101	void Infix::performOperation()
+   102	{
+   103	   if(!operatorStack.isEmpty()&&operatorStack.peek()!='('&&operatorStack.peek()!=')')
+   104	   {
+   105	      int rhs(0),lhs(0);
+   106	      if(!valueStack.isEmpty())
+   107	      {
+   108	         lhs=valueStack.peek();
+   109	         valueStack.pop();
+   110	      }
+   111	      if(!valueStack.isEmpty())
+   112	      {
+   113	         rhs=valueStack.peek();
+   114	         valueStack.pop();
+   115	      }
+   116	      int result(-666);
+   117	      char oper(operatorStack.peek());
+   118	      operatorStack.pop();
+   119	      switch(oper)
+   120	      {
+   121	          case '+':result=lhs+rhs;break;
+   122	          case '-':result=rhs-lhs;break;
+   123	          case '/':
+   124	             if(lhs==0)
+   125	                throw DivideByZeroExcep("Infinite result - Cannot handle division-by-zero.");
+   126	             else
+   127	                result=rhs/lhs;
+   128	             break;
+   129	          case '*':result=lhs*rhs;break;
+   130	      }
+   131	      valueStack.push(result);
+   132	   }
+   133	   else
+   134	      operatorStack.pop();
+   135	}
+[4makka[24m:[1m~/cs1521/projects/project4/src[0m% cat -n DivideByZeroExcep.h
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Header file for an object thrown on violation of precondition.
+     8	 *
+     9	 *  Adapted from page 250 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *
+    15	 *  @date 08 Mar 2019
+    16	 *
+    17	 *  @version 7.0 */
+    18	
+    19	#ifndef ZERO_EXCEP_
+    20	#define ZERO_EXCEP_
+    21	
+    22	#include <stdexcept>
+    23	#include <string>
+    24	
+    25	/** @class DivideByZeroExcep DivideByZeroExcep.h "DivideByZeroExcep.h"
+    26	 *
+    27	 *  Specification for an object thrown on violation of precondition. */
+    28	class DivideByZeroExcep : public std::overflow_error {
+    29	public:
+    30	   explicit DivideByZeroExcep(const std::string& message = "");
+    31	
+    32	   virtual ~DivideByZeroExcep() noexcept = default; //throw();
+    33	};
+    34	
+    35	#endif
+    36	
+[4makka[24m:[1m~/cs1521/projects/project4/src[0m% cat -n DivideByZeroExcep.cpp
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Implementation file for an object thrown on violation of
+     8	 *  precondition.
+     9	 *
+    10	 *  Adapted from page 250 in Carrano 7e.
+    11	 *
+    12	 *  @author Frank M. Carrano
+    13	 *  @author Timothy Henry
+    14	 *  @author Steve Holtz
+    15	 *
+    16	 *  @date 08 Mar 2019
+    17	 *
+    18	 *  @version 7.0 */
+    19	
+    20	#include <stdexcept>
+    21	#include <string>
+    22	
+    23	#include "DivideByZeroExcep.h"
+    24	
+    25	DivideByZeroExcep::DivideByZeroExcep(const std::string& message)
+    26	   : std::overflow_error(message) {
+    27	}
+[4makka[24m:[1m~/cs1521/projects/project4/src[0m% cat -n StackInterface.h 
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  StackInterface class template definition.
+     8	 *
+     9	 *  Adapted from page 197 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *
+    15	 *  @date 01 Mar 2019
+    16	 *
+    17	 *  @version 7.0 */
+    18	
+    19	#ifndef STACK_INTERFACE_
+    20	#define STACK_INTERFACE_
+    21	
+    22	/** @class StackInterface StackInterface.h "StackInterface.h"
+    23	 *
+    24	 *  Definition of StackInterface class template. */
+    25	template <typename ItemType>
+    26	class StackInterface {
+    27	public:
+    28	   /** Virtual destructor. */
+    29	   virtual ~StackInterface() = default;
+    30	
+    31	   /** Sees whether this stack is empty.
+    32	    *
+    33	    *  @return True if the stack is empty, or false. */
+    34	   virtual bool isEmpty() const = 0;
+    35	
+    36	   /** Adds a new entry to the top of this stack.
+    37	    *
+    38	    *  @post If successful, newEntry is stored at the top of this
+    39	    *        stack.
+    40	    *
+    41	    *  @param newEntry The object to be added as a new entry.
+    42	    *
+    43	    *  @return True if addition was successful, or false. */
+    44	   virtual bool push(const ItemType& newEntry) = 0;
+    45	
+    46	   /** Removes the top of this stack.
+    47	    *
+    48	    *  @post If successful, the top of this stack has been removed.
+    49	    *
+    50	    *  @return True if removal was successful, or false. */
+    51	   virtual bool pop() = 0;
+    52	
+    53	   /** Retrieves the top of this stack.
+    54	    *
+    55	    *  @pre This stack is not empty.
+    56	    *
+    57	    *  @post None.
+    58	    *
+    59	    *  @return The top of this stack.
+    60	    *
+    61	    *  @throws PrecondViolatedExcep If the precondition is violated. */
+    62	   virtual ItemType peek() const = 0;
+    63	};
+    64	
+    65	#endif
+[4makka[24m:[1m~/cs1521/projects/project4/src[0m% cat -n LinkedStack.h
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Header file for a pointer-based implementation of the ADT stack.
+     8	 *
+     9	 *  Adapted from page 246 in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *
+    15	 *  @date 08 Mar 2019
+    16	 *
+    17	 *  @version 7.0 */
+    18	
+    19	#ifndef LINKED_STACK_
+    20	#define LINKED_STACK_
+    21	
+    22	#include "StackInterface.h"
+    23	#include "Node.h"
+    24	
+    25	/** @class LinkedStack LinkedStack.h "LinkedStack.h"
+    26	 *
+    27	 *  Specification of a pointer-based ADT stack. */
+    28	template <typename ItemType>
+    29	class LinkedStack : public StackInterface<ItemType> {
+    30	private:
+    31	   using NodePtr = Node<ItemType>*;
+    32	
+    33	   NodePtr topPtr = nullptr;
+    34	
+    35	public:
+    36	   LinkedStack() = default;
+    37	
+    38	   LinkedStack(const LinkedStack<ItemType>& aStack);
+    39	
+    40	   virtual ~LinkedStack();
+    41	
+    42	   virtual bool isEmpty() const;
+    43	
+    44	   virtual bool push(const ItemType& newEntry);
+    45	
+    46	   virtual bool pop();
+    47	
+    48	   virtual ItemType peek() const;
+    49	};
+    50	
+    51	#include "LinkedStack.cpp"
+    52	
+    53	#endif
+[4makka[24m:[1m~/cs1521/projects/project4/src[0m% cat -n LinkedStack.cpp
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Implementation file for a pointer-based implementation of the ADT
+     8	 *  stack.
+     9	 *
+    10	 *  Adapted from pages 246-8 in Carrano 7e.
+    11	 *
+    12	 *  @author Frank M. Carrano
+    13	 *  @author Timothy Henry
+    14	 *  @author Steve Holtz
+    15	 *
+    16	 *  @date 08 Mar 2019
+    17	 *
+    18	 *  @version 7.0 */
+    19	
+    20	//#define NDEBUG
+    21	
+    22	#include <new>
+    23	
+    24	#include <cassert>
+    25	
+    26	template <typename ItemType>
+    27	LinkedStack<ItemType>::LinkedStack(const LinkedStack<ItemType>& aStack) {
+    28	
+    29	   if (!aStack.topPtr) {
+    30	      topPtr = nullptr;
+    31	   }
+    32	   else {
+    33	      NodePtr origChainPtr(aStack.topPtr);
+    34	
+    35	      try {
+    36	         topPtr = new Node<ItemType>(origChainPtr->getItem() );
+    37	
+    38	         NodePtr newChainPtr(topPtr);
+    39	
+    40	         origChainPtr = origChainPtr->getNext();
+    41	
+    42	         while (origChainPtr) {
+    43	            newChainPtr->setNext(new Node<ItemType>(origChainPtr->getItem()) );
+    44	
+    45	            newChainPtr = newChainPtr->getNext();
+    46	            origChainPtr = origChainPtr->getNext();
+    47	         }
+    48	      }
+    49	      catch (const std::bad_alloc&) {
+    50	         while (!isEmpty() ) {
+    51	            pop();
+    52	         }
+    53	         throw;
+    54	      }
+    55	   }
+    56	}
+    57	
+    58	template <typename ItemType>
+    59	LinkedStack<ItemType>::~LinkedStack() {
+    60	
+    61	   while (!isEmpty() ) {
+    62	      pop();
+    63	   }
+    64	}
+    65	
+    66	template <typename ItemType>
+    67	bool LinkedStack<ItemType>::isEmpty() const {
+    68	
+    69	   return !topPtr;
+    70	}
+    71	
+    72	template <typename ItemType>
+    73	bool LinkedStack<ItemType>::push(const ItemType& newItem) {
+    74	
+    75	   bool canPush(true);
+    76	
+    77	   try {
+    78	      topPtr = new Node<ItemType>(newItem,
+    79	                                  topPtr);
+    80	   }
+    81	   catch (const std::bad_alloc&) {
+    82	      canPush = false;
+    83	   }
+    84	
+    85	   return canPush;
+    86	}
+    87	
+    88	template <typename ItemType>
+    89	bool LinkedStack<ItemType>::pop() {
+    90	
+    91	   bool canPop(!isEmpty() );
+    92	
+    93	   if (canPop) {
+    94	      NodePtr nodeToDeletePtr(topPtr);
+    95	
+    96	      topPtr = topPtr->getNext();
+    97	
+    98	      delete nodeToDeletePtr;
+    99	   }
+   100	
+   101	   return canPop;
+   102	}
+   103	
+   104	template <typename ItemType>
+   105	ItemType LinkedStack<ItemType>::peek() const {
+   106	
+   107	   assert(!isEmpty() );
+   108	
+   109	   return topPtr->getItem();
+   110	}
+[4makka[24m:[1m~/cs1521/projects/project4/src[0m% cat -n Node.h
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Header file for a node in the linked implementation of the ADT
+     8	 *  bag.
+     9	 *
+    10	 *  Adapted from pages 136-137 in Carrano 7e.
+    11	 *
+    12	 *  @author Frank M. Carrano
+    13	 *  @author Timothy Henry
+    14	 *  @author Steve Holtz
+    15	 *
+    16	 *  @date 15 Feb 2019
+    17	 *
+    18	 *  @version 7.0 */
+    19	
+    20	#ifndef NODE_
+    21	#define NODE_
+    22	
+    23	template <typename ItemType>
+    24	class Node {
+    25	private:
+    26	   ItemType item;
+    27	   Node<ItemType>* next = nullptr;
+    28	
+    29	public:
+    30	   Node() = default;
+    31	
+    32	   Node(const ItemType& anItem,
+    33	        Node<ItemType>* nextNodePtr = nullptr);
+    34	
+    35	   virtual ~Node() = default;
+    36	
+    37	   void setItem(const ItemType& anItem);
+    38	   void setNext(Node<ItemType>* nextNodePtr);
+    39	
+    40	   ItemType getItem() const;
+    41	   Node<ItemType>* getNext() const;
+    42	};
+    43	
+    44	#include "Node.cpp"
+    45	
+    46	#endif[4makka[24m:[1m~/cs1521/projects/project4/src[0m% cat -n Node.cpp
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Implementation file for a node in the linked implementation of the
+     8	 *  ADT bag.
+     9	 *
+    10	 *  Adapted from page 137 in Carrano 7e.
+    11	 *
+    12	 *  @author Frank M. Carrano
+    13	 *  @author Timothy Henry
+    14	 *  @author Steve Holtz
+    15	 *
+    16	 *  @date 15 Feb 2019
+    17	 *
+    18	 *  @version 7.0 */
+    19	
+    20	template <typename ItemType>
+    21	Node<ItemType>::Node(const ItemType& anItem,
+    22	                     Node<ItemType>* nextNodePtr)
+    23	   : item(anItem),
+    24	     next(nextNodePtr) {
+    25	}
+    26	
+    27	template <typename ItemType>
+    28	void Node<ItemType>::setItem(const ItemType& anItem) {
+    29	
+    30	   item = anItem;
+    31	}
+    32	
+    33	template <typename ItemType>
+    34	void Node<ItemType>::setNext(Node<ItemType>* nextNodePtr) {
+    35	
+    36	   next = nextNodePtr;
+    37	}
+    38	
+    39	template <typename ItemType>
+    40	ItemType Node<ItemType>::getItem() const {
+    41	
+    42	   return item;
+    43	}
+    44	
+    45	template <typename ItemType>
+    46	Node<ItemType>* Node<ItemType>::getNext() const {
+    47	
+    48	   return next;
+    49	}
+[4makka[24m:[1m~/cs1521/projects/project4/src[0m% git --no-pager log --no-color
+commit e8207a4e2b5a8deae5dc381e395bb62185fb9e49
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Fri Mar 22 15:40:50 2019 -0500
+
+    Probably correct. Verified a few answers with my calculator
+
+commit 0f3f6fff607bb018f378f00484107481db52aa3e
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Fri Mar 22 13:40:47 2019 -0500
+
+    approaching completion
+
+commit 6a00155c9d4692da9ff9f5d912b3d061d069e196
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Thu Mar 21 13:42:15 2019 -0500
+
+    Parentheses and operations work. Testing input and main function
+
+commit 973577563756c71d6521e1e6d93570c9d00c37f3
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Wed Mar 20 18:12:52 2019 -0500
+
+    Compilable state. All stubs. Minimal functionality
+
+commit 5f7acbfcc9a6bbdc14bc1cdb245f20070b816414
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Tue Mar 19 11:23:47 2019 -0500
+
+    Few more files. Still a bit unsure about what I'm doing
+
+commit f4e601acbe865e38465cf3748381b8f1a902a273
+Author: Jacob R Schnoor <schno059@d.umn.edu>
+Date:   Mon Mar 18 18:03:57 2019 -0500
+
+    Initial files copied over. No functionality or compilation
+[4makka[24m:[1m~/cs1521/projects/project4/src[0m% cd build/
+[4makka[24m:[1m~/cs1521/projects/project4/src/build[0m% make
+[ 33%] [32mBuilding CXX object CMakeFiles/infix.dir/DivideByZeroExcep.cpp.o[0m
+[ 66%] [32mBuilding CXX object CMakeFiles/infix.dir/project4.cpp.o[0m
+[100%] [32m[1mLinking CXX executable infix[0m
+[100%] Built target infix
+[4makka[24m:[1m~/cs1521/projects/project4/src/build[0m% ./infix 
+
+Welcome to the infix calculator
+Provide the filename to read from : test.dat
+
+File opened
+6 + 7
+6 + 7 = 13
+6 - 7
+6 - 7 = -1
+6 * 7
+6 * 7 = 42
+6 / 7
+6 / 7 = 0
+6 + 7 + 2
+6 + 7 + 2 = 15
+6 + 7 - 2
+6 + 7 - 2 = 11
+6 + 7 * 2
+6 + 7 * 2 = 20
+6 + 7 / 2
+6 + 7 / 2 = 9
+6 - 7 + 2
+6 - 7 + 2 = 1
+6 - 7 - 2
+6 - 7 - 2 = -3
+6 - 7 * 2
+6 - 7 * 2 = -8
+6 - 7 / 2
+6 - 7 / 2 = 3
+6 * 7 + 2
+6 * 7 + 2 = 44
+6 * 7 - 2
+6 * 7 - 2 = 40
+6 * 7 * 2
+6 * 7 * 2 = 84
+6 * 7 / 2
+6 * 7 / 2 = 21
+6 / 7 + 2
+6 / 7 + 2 = 2
+6 / 7 - 2
+6 / 7 - 2 = -2
+6 / 7 * 2
+6 / 7 * 2 = 0
+6 / 7 / 2
+6 / 7 / 2 = 0
+6 + (7 + 2)
+6 + (7 + 2) = 15
+6 + (7 - 2)
+6 + (7 - 2) = 11
+6 + (7 * 2)
+6 + (7 * 2) = 20
+6 + (7 / 2)
+6 + (7 / 2) = 9
+6 - (7 + 2)
+6 - (7 + 2) = -3
+6 - (7 - 2)
+6 - (7 - 2) = 1
+6 - (7 * 2)
+6 - (7 * 2) = -8
+6 - (7 / 2)
+6 - (7 / 2) = 3
+6 * (7 + 2)
+6 * (7 + 2) = 54
+6 * (7 - 2)
+6 * (7 - 2) = 30
+6 * (7 * 2)
+6 * (7 * 2) = 84
+6 * (7 / 2)
+6 * (7 / 2) = 18
+6 / (7 + 2)
+6 / (7 + 2) = 0
+6 / (7 - 2)
+6 / (7 - 2) = 1
+6 / (7 * 2)
+6 / (7 * 2) = 0
+6 / (7 / 2)
+6 / (7 / 2) = 2
+(6 + 7) + 2
+(6 + 7) + 2 = 15
+(6 + 7) - 2
+(6 + 7) - 2 = 11
+(6 + 7) * 2
+(6 + 7) * 2 = 26
+(6 + 7) / 2
+(6 + 7) / 2 = 6
+(6 - 7) + 2
+(6 - 7) + 2 = 1
+(6 - 7) - 2
+(6 - 7) - 2 = -3
+(6 - 7) * 2
+(6 - 7) * 2 = -2
+(6 - 7) / 2
+(6 - 7) / 2 = 0
+(6 * 7) + 2
+(6 * 7) + 2 = 44
+(6 * 7) - 2
+(6 * 7) - 2 = 40
+(6 * 7) * 2
+(6 * 7) * 2 = 84
+(6 * 7) / 2
+(6 * 7) / 2 = 21
+(6 / 7) + 2
+(6 / 7) + 2 = 2
+(6 / 7) - 2
+(6 / 7) - 2 = -2
+(6 / 7) * 2
+(6 / 7) * 2 = 0
+(6 / 7) / 2
+(6 / 7) / 2 = 0
+(6) + ((4) - 6)
+(6) + ((4) - 6) = 4
+7 + 4 * (5 + 6 * (2 - 1) / 3 + (9 + 8 * (6 - 5)) / 6) + 6
+7 + 4 * (5 + 6 * (2 - 1) / 3 + (9 + 8 * (6 - 5)) / 6) + 6 = 49
+(((6 - 2) * (((9 - 3) * 7) / 6) * 3) / 6) + 5
+(((6 - 2) * (((9 - 3) * 7) / 6) * 3) / 6) + 5 = 19
+6 - (2 * (9 - (3 * (7 / 6) * 3 / 6 + 5)))
+6 - (2 * (9 - (3 * (7 / 6) * 3 / 6 + 5))) = 0
+[4makka[24m:[1m~/cs1521/projects/project4/src/build[0m% ./infix
+
+Welcome to the infix calculator
+Provide the filename to read from : testDivByZero.dat
+
+File opened
+5 / 0
+5 / 0 = Infinite result - Cannot handle division-by-zero.
+5 / (7 - 7)
+5 / (7 - 7) = Infinite result - Cannot handle division-by-zero.
+(5 + 7) / 0
+(5 + 7) / 0 = Infinite result - Cannot handle division-by-zero.
+7 + 4 * (5 / 6 * (2 - 1) / (9 - 8 + (5 - 6)) - 6) + 6
+7 + 4 * (5 / 6 * (2 - 1) / (9 - 8 + (5 - 6)) - 6) + 6 = Infinite result - Cannot handle division-by-zero.
+[4makka[24m:[1m~/cs1521/projects/project4/src/build[0m% exit
+exit
+
+Script done on Sat 23 Mar 2019 12:15:39 PM CDT

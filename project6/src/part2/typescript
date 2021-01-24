@@ -1,0 +1,808 @@
+Script started on Mon 22 Apr 2019 10:28:39 AM CDT
+[4makka[24m:[1m~/cs1521/projects/project6/src/part2[0m% pwd
+/home/csugrads/schno059/cs1521/projects/project6/src/part2
+[4makka[24m:[1m~/cs1521/projects/project6/src/part2[0m% ls -l
+total 120
+drwx------ 3 schno059 student 4096 Apr 18 17:18 build
+-rw------- 1 schno059 student  147 Apr 16 12:00 CMakeLists.txt
+-rw------- 1 schno059 student  924 Apr 18 16:06 EventBuilder.cpp
+-rw------- 1 schno059 student 1500 Apr 17 13:08 EventBuilder.h
+-rw------- 1 schno059 student 1169 Apr 18 16:26 Event.cpp
+-rw------- 1 schno059 student  784 Apr 18 16:04 Event.h
+-rw------- 1 schno059 student   54 Apr 17 10:56 EventType.h
+-rw------- 1 schno059 student 2472 Apr 18 17:10 LinkedQueue.cpp
+-rw------- 1 schno059 student 1076 Apr 18 17:09 LinkedQueue.h
+-rw------- 1 schno059 student 4409 Apr 16 11:04 LinkedSortedList.cpp
+-rw------- 1 schno059 student 2210 Apr 16 11:08 LinkedSortedList.h
+-rw------- 1 schno059 student 1307 Apr 17 11:08 Node.cpp
+-rw------- 1 schno059 student 1850 Apr 17 11:07 Node.h
+-rw------- 1 schno059 student  506 Apr 16 10:57 PrecondViolatedExcep.cpp
+-rw------- 1 schno059 student  783 Apr 16 10:57 PrecondViolatedExcep.h
+-rw------- 1 schno059 student 1204 Apr 16 11:03 PriorityQueue.cpp
+-rw------- 1 schno059 student 1075 Apr 16 11:03 PriorityQueue.h
+-rw------- 1 schno059 student 1933 Apr 16 11:07 PriorityQueueInterface.h
+-rw------- 1 schno059 student  163 Apr 18 17:11 project6.cpp
+-rw------- 1 schno059 student 1633 Apr 16 11:06 QueueInterface.h
+-rw------- 1 schno059 student 6032 Dec 20 14:31 README
+-rw------- 1 schno059 student 2574 Apr 18 17:06 Simulation.cpp
+-rw------- 1 schno059 student  503 Apr 18 13:41 Simulation.h
+-rw------- 1 schno059 student 3601 Apr 17 10:49 SortedListInterface.h
+-rw------- 1 schno059 student 4542 Apr 18 16:32 Statistics.cpp
+-rw------- 1 schno059 student 1320 Apr 18 17:13 Statistics.h
+-rw------- 1 schno059 student   18 Apr 17 10:57 Time.h
+-rw------- 1 schno059 student    0 Apr 22 10:28 typescript
+[4makka[24m:[1m~/cs1521/projects/project6/src/part2[0m% cat -n CMakeLists.txt
+     1	project(project6)
+     2	
+     3	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14")
+     4	
+     5	add_executable(project6
+     6	  PrecondViolatedExcep.cpp
+     7	  project6.cpp)
+     8	
+[4makka[24m:[1m~/cs1521/projects/project6/src/part2[0m% cat -n project6.cpp
+     1	#include <cstdlib>
+     2	#include <iostream>
+     3	#include <fstream>
+     4	#include "Simulation.h"
+     5	
+     6	int main() {
+     7	
+     8	   Simulation sim;
+     9	
+    10	   sim.simulate();
+    11	
+    12	   return EXIT_SUCCESS;
+    13	}
+[4makka[24m:[1m~/cs1521/projects/project6/src/part2[0m% cat -n EventBuilder.h
+     1	#ifndef EVENT_BUILDER_
+     2	#define EVENT_BUILDER_
+     3	
+     4	#include <fstream>
+     5	
+     6	//#include "Event.h"
+     7	
+     8	class EventBuilder {
+     9	private:
+    10	   std::ifstream inputFile;
+    11	
+    12	public:
+    13	   /** Three things must happen to create an EventBuilder:
+    14	    *  1) Prompt the user for the name of an input file
+    15	    *  2) Attempt to open this file on the 'inputFile' data member
+    16	    *  3) If the file doesn't open, repeat steps 1 and 2 */
+    17	   EventBuilder();
+    18	
+    19	   /** Create and return an event with members:
+    20	    *  type == EventType::ARRIVAL
+    21	    *  number == input argument 'number'
+    22	    *  line == input argument 'lineNumber'
+    23	    *  time == time read from 'inputFile'
+    24	    *  duration == transaction length read from 'inputFile'
+    25	    *
+    26	    *  If 'inputFile' has been completely read (EOF has been reached),
+    27	    *  then set the return event.type field to EventType::NONE.  This
+    28	    *  can then be used to tell when the external file is either empty
+    29	    *  or EOF has been reached. */
+    30	   Event createArrivalEvent(int number,
+    31	                            int lineNumber);
+    32	
+    33	   /** Create and return an event with members:
+    34	    *  type == EventType::DEPATURE
+    35	    *  number == input argument 'number'
+    36	    *  line == input argument 'lineNumber'
+    37	    *  time == 'currentEventTime' + 'transactionLength' */
+    38	   Event createDepartureEvent(const Time& currentEventTime,
+    39	                              const Time& transactionLength,
+    40	                              int number,
+    41	                              int lineNumber);
+    42	};
+    43	
+    44	#include "EventBuilder.cpp"
+    45	#endif
+[4makka[24m:[1m~/cs1521/projects/project6/src/part2[0m% cat -n EventBuilder.cpp
+     1	EventBuilder::EventBuilder()
+     2	{
+     3	   std::string filename("");
+     4	   do{
+     5	      std::cout<<"\nInput filename : ";
+     6	      std::cin>>filename;
+     7	      inputFile.open(filename.c_str());
+     8	   }while(!inputFile);
+     9	   std::cout<<"\n\nSimulation of 1 Queue Begins\n";
+    10	}
+    11	Event EventBuilder::createArrivalEvent(int innumber,int linenumber)
+    12	{
+    13	   Event myEvent;
+    14	   myEvent.setNumber(innumber);
+    15	   int time(0);
+    16	   int dur(0);
+    17	   if(inputFile>>time&&inputFile>>dur)
+    18	   {
+    19	      myEvent.setType(ARRIVAL);
+    20	      myEvent.setLine(linenumber);
+    21	      myEvent.setTime(time);
+    22	      myEvent.setDuration(dur);
+    23	   }
+    24	   return myEvent;
+    25	}
+    26	Event EventBuilder::createDepartureEvent(const Time& curEventTime, const Time& transLength, int innumber, int linenumber)
+    27	{
+    28	   Event myEvent;
+    29	   myEvent.setType(DEPARTURE);
+    30	   myEvent.setNumber(innumber);
+    31	   Time total=curEventTime+transLength;
+    32	   myEvent.setTime(total);
+    33	   myEvent.setLine(linenumber);
+    34	   return myEvent;
+    35	}
+[4makka[24m:[1m~/cs1521/projects/project6/src/part2[0m% cat -n Event.h
+     1	#include "Time.h"
+     2	#include "EventType.h"
+     3	
+     4	class Event
+     5	{
+     6	  private:
+     7	   EventType type;
+     8	   Time time;
+     9	   Time duration;
+    10	   int number;
+    11	   int line;
+    12	  public:
+    13	   Event();
+    14	   ~Event();
+    15	   bool setType(const EventType& intype);
+    16	   bool setTime(const Time& intime);
+    17	   bool setDuration(const Time& intime);
+    18	   bool setNumber(int innum);
+    19	   bool setLine(int linenumber);
+    20	   EventType getType() const;
+    21	   Time getTime() const;
+    22	   int getNumber() const;
+    23	   int getDuration() const;
+    24	   int getLine() const;
+    25	   bool operator<(const Event& rhs) const;
+    26	   bool operator>(const Event& rhs) const;
+    27	   bool operator<=(const Event& rhs) const;
+    28	   bool operator>=(const Event& rhs) const;
+    29	   bool operator==(const Event& rhs) const;
+    30	   bool operator!=(const Event& rhs) const;
+    31	};
+    32	
+    33	#include "Event.cpp"
+[4makka[24m:[1m~/cs1521/projects/project6/src/part2[0m% cat -n Event.cpp
+     1	Event::Event()
+     2	{
+     3	   type=NONE;
+     4	   time=0;
+     5	   duration=0;
+     6	   number=-1;
+     7	   line=-1;
+     8	}
+     9	Event::~Event()
+    10	{
+    11	}
+    12	bool Event::setType(const EventType& intype)
+    13	{
+    14	   return (type=intype);
+    15	}
+    16	bool Event::setTime(const Time& intime)
+    17	{
+    18	   return (time=intime);
+    19	}
+    20	bool Event::setDuration(const Time& intime)
+    21	{
+    22	   return (duration=intime);
+    23	}
+    24	bool Event::setNumber(int innum)
+    25	{
+    26	   return (number=innum);
+    27	}
+    28	bool Event::setLine(int linenumber)
+    29	{
+    30	   return (line=linenumber);
+    31	}
+    32	EventType Event::getType() const
+    33	{
+    34	   return type;
+    35	}
+    36	Time Event::getTime() const
+    37	{
+    38	   return time;
+    39	}
+    40	int Event::getNumber() const
+    41	{
+    42	   return number;
+    43	}
+    44	int Event::getDuration() const
+    45	{
+    46	   return duration;
+    47	}
+    48	int Event::getLine() const
+    49	{
+    50	   return line;
+    51	}
+    52	bool Event::operator<(const Event& rhs) const
+    53	{
+    54	   return time>rhs.time;
+    55	}
+    56	bool Event::operator>(const Event& rhs) const
+    57	{
+    58	   return time<rhs.time;
+    59	}
+    60	bool Event::operator<=(const Event& rhs) const
+    61	{
+    62	   return time>=rhs.time;
+    63	}
+    64	bool Event::operator>=(const Event& rhs) const
+    65	{
+    66	   return time<=rhs.time;
+    67	}
+    68	bool Event::operator==(const Event& rhs) const
+    69	{
+    70	   return time==rhs.time;
+    71	}
+    72	bool Event::operator!=(const Event& rhs) const
+    73	{
+    74	   return time!=rhs.time;
+    75	}
+[4makka[24m:[1m~/cs1521/projects/project6/src/part2[0m% cat -n PriorityQueueInterface.h
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  PriorityQueueInterface class template definition.
+     8	 *
+     9	 *  Not in Carrano 7e.
+    10	 *
+    11	 *  @author Frank M. Carrano
+    12	 *  @author Timothy Henry
+    13	 *  @author Steve Holtz
+    14	 *
+    15	 *  @date 25 Mar 2019
+    16	 *
+    17	 *  @version 7.0 */
+    18	
+    19	#ifndef PRIORITY_QUEUE_INTERFACE_
+    20	#define PRIORITY_QUEUE_INTERFACE_
+    21	
+    22	/** @class PriorityQueueInterface PriorityQueueInterface.h "PriorityQueueInterface.h"
+    23	 *
+    24	 *  Definition of PriorityQueueInterface class template. */
+    25	template <typename ItemType>
+    26	class PriorityQueueInterface {
+    27	public:
+    28	   /** Virtual destructor . */
+    29	   virtual ~PriorityQueueInterface() = default;
+    30	
+    31	   /** Sees whether this queue is empty.
+    32	     *
+    33	     *  @return True if the queue is empty, or false if not. */
+    34	    virtual bool isEmpty() const = 0;
+    35	
+    36	    /** Adds a new entry to this priority queue.
+    37	     *
+    38	     *  @pre The template parameter type, ItemType, *must* implement a
+    39	     *       full range of relational operator overloads: <, >, <=,
+    40	     *       >=, ==, and !=.
+    41	     *
+    42	     *  @post If successful, newEntry is stored at its correct
+    43	     *        position in this priority queue.
+    44	     *
+    45	     *  @param newEntry The object to be added as a new entry.
+    46	     *
+    47	     *  @return True if addition was successful, or false if not. */
+    48	    virtual bool enqueue(const ItemType& newEntry) = 0;
+    49	
+    50	    /** Removes the front of this priority queue.
+    51	     *
+    52	     *  @post If successful, the front of this priority queue has been
+    53	     *        removed.
+    54	     *
+    55	     *  @return True if removal was successful, or false if not. */
+    56	    virtual bool dequeue() = 0;
+    57	
+    58	    /** Retrieves the front of this priority queue.
+    59	     *
+    60	     *  @pre This priority queue is not empty.
+    61	     *
+    62	     *  @post None.
+    63	     *
+    64	     *  @throws PrecondViolatedExcep If the precondition is violated.
+    65	     *
+    66	     *  @return The front entry in this priority queue. */
+    67	   virtual ItemType peekFront() const = 0;
+    68	};
+    69	
+    70	#endif
+[4makka[24m:[1m~/cs1521/projects/project6/src/part2[0m% cat -n PriorityQueue.h
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Header file for a sorted list-based implementation of the ADT
+     8	 *  priority queue.
+     9	 *
+    10	 *  Adapted from page 431 in Carrano 7e.
+    11	 *
+    12	 *  @author Frank M. Carrano
+    13	 *  @author Timothy Henry
+    14	 *  @author Steve Holtz
+    15	 *
+    16	 *  @date 03 Apr 2019
+    17	 *
+    18	 *  @version 7.0 */
+    19	
+    20	#ifndef PRIORITY_QUEUE_
+    21	#define PRIORITY_QUEUE_
+    22	
+    23	#include <memory>
+    24	
+    25	#include "PriorityQueueInterface.h"
+    26	#include "LinkedSortedList.h"
+    27	
+    28	/** @class PriorityQueue PriorityQueue.h "PriorityQueue.h"
+    29	 *
+    30	 *  Specification of a sorted list-based ADT priority queue. */
+    31	template <typename ItemType>
+    32	class PriorityQueue : public PriorityQueueInterface<ItemType> {
+    33	private:
+    34	   std::unique_ptr<LinkedSortedList<ItemType>> sListPtr;
+    35	
+    36	public:
+    37	   PriorityQueue();
+    38	
+    39	   PriorityQueue(const PriorityQueue<ItemType>& pq);
+    40	
+    41	   virtual ~PriorityQueue() = default;
+    42	
+    43	   bool isEmpty() const override;
+    44	
+    45	   bool enqueue(const ItemType& newEntry) override;
+    46	
+    47	   bool dequeue() override;
+    48	
+    49	   ItemType peekFront() const override;
+    50	};
+    51	
+    52	#include "PriorityQueue.cpp"
+    53	
+    54	#endif
+[4makka[24m:[1m~/cs1521/projects/project6/src/part2[0m% cat -n PriorityQueue.cpp
+     1	/** @file
+     2	 *
+     3	 *  @course CS1521
+     4	 *  @section 1
+     5	 *  @term Spring 2019
+     6	 *
+     7	 *  Implementation file for a sorted list-based implementation of the
+     8	 *  ADT priority queue.
+     9	 *
+    10	 *  Adapted from page 432 in Carrano 7e.
+    11	 *
+    12	 *  @author Frank M. Carrano
+    13	 *  @author Timothy Henry
+    14	 *  @author Steve Holtz
+    15	 *
+    16	 *  @date 03 Apr 2019
+    17	 *
+    18	 *  @version 7.0 */
+    19	
+    20	#include <memory>
+    21	
+    22	template <typename ItemType>
+    23	PriorityQueue<ItemType>::PriorityQueue()
+    24	   : sListPtr(std::make_unique<LinkedSortedList<ItemType>>() ) {
+    25	}
+    26	
+    27	template <typename ItemType>
+    28	PriorityQueue<ItemType>::PriorityQueue(const PriorityQueue<ItemType>& pq)
+    29	   : sListPtr(std::make_unique<LinkedSortedList<ItemType>>(*(pq.sListPtr)) ) {
+    30	}
+    31	
+    32	template <typename ItemType>
+    33	bool PriorityQueue<ItemType>::isEmpty() const {
+    34	
+    35	   return sListPtr->isEmpty();
+    36	}
+    37	
+    38	template <typename ItemType>
+    39	bool PriorityQueue<ItemType>::enqueue(const ItemType& newEntry) {
+    40	
+    41	   return sListPtr->insertSorted(newEntry);
+    42	}
+    43	
+    44	template <typename ItemType>
+    45	bool PriorityQueue<ItemType>::dequeue() {
+    46	
+    47	   return sListPtr->remove(sListPtr->getLength() );
+    48	}
+    49	
+    50	template <typename ItemType>
+    51	ItemType PriorityQueue<ItemType>::peekFront() const {
+    52	
+    53	   return sListPtr->getEntry(sListPtr->getLength() );
+    54	}[4makka[24m:[1m~/cs1521/projects/project6/src/part2[0m% cat -n Simulation.h
+     1	#ifndef SIMULATION_
+     2	#define SIMULATION_
+     3	
+     4	#include "Event.h"
+     5	#include "EventBuilder.h"
+     6	#include "LinkedQueue.h"
+     7	#include "PriorityQueue.h"
+     8	#include "Statistics.h"
+     9	
+    10	class Simulation {
+    11	private:
+    12	   Event currentEvent;
+    13	   EventBuilder eventBuilder;
+    14	   LinkedQueue<Event> line1;
+    15	   LinkedQueue<Event> line2;
+    16	   LinkedQueue<Event> line3;
+    17	   PriorityQueue<Event> events;
+    18	   Statistics stats;
+    19	public:
+    20	   Simulation();
+    21	   virtual ~Simulation() = default;
+    22	
+    23	   void simulate();
+    24	};
+    25	
+    26	#include "Simulation.cpp"
+    27	#endif
+[4makka[24m:[1m~/cs1521/projects/project6/src/part2[0m% cat -n Simulation.cpp
+     1	Simulation::Simulation()
+     2	{
+     3	}
+     4	void Simulation::simulate()
+     5	{
+     6	   int i(1);
+     7	   Time totalTime1(0);
+     8	   Time totalTime2(0);
+     9	   Time totalTime3(0);
+    10	   auto eventToAdd (eventBuilder.createArrivalEvent(i,1));
+    11	   while(eventToAdd.getType()!=NONE)
+    12	   {
+    13	      if(eventToAdd.getType()==ARRIVAL)
+    14	      {
+    15	         if(eventToAdd.getLine()==1)
+    16	            line1.enqueue(eventToAdd);
+    17	         else if(eventToAdd.getLine()==2)
+    18	            line2.enqueue(eventToAdd);
+    19	         else if(eventToAdd.getLine()==3)
+    20	            line3.enqueue(eventToAdd);
+    21	         ++i;
+    22	         if(line1.getLength()<line2.getLength()&&line1.getLength()<=line3.getLength())
+    23	            eventToAdd=(eventBuilder.createArrivalEvent(i,1));
+    24	         else if(line2.getLength()<=line3.getLength())
+    25	            eventToAdd=(eventBuilder.createArrivalEvent(i,2));
+    26	         else
+    27	            eventToAdd=(eventBuilder.createArrivalEvent(i,3));
+    28	      }
+    29	   }
+    30	   while(!line1.isEmpty()||!line2.isEmpty()||!line3.isEmpty())
+    31	   {
+    32	      if(!line1.isEmpty())
+    33	      {
+    34	         eventToAdd=line1.peekFront();
+    35	         if(totalTime1<eventToAdd.getTime())
+    36	            totalTime1=eventToAdd.getTime()+eventToAdd.getDuration();
+    37	         else
+    38	            totalTime1+=eventToAdd.getDuration();
+    39	         events.enqueue(eventToAdd);
+    40	         events.enqueue(eventBuilder.createDepartureEvent(eventToAdd.getTime(),totalTime1-eventToAdd.getTime(),eventToAdd.getNumber(),1));
+    41	         line1.dequeue();
+    42	      }
+    43	      else if(!line2.isEmpty())
+    44	      {
+    45	         eventToAdd=line2.peekFront();
+    46	         if(totalTime2<eventToAdd.getTime())
+    47	            totalTime2=eventToAdd.getTime()+eventToAdd.getDuration();
+    48	         else
+    49	            totalTime2+=eventToAdd.getDuration();
+    50	         events.enqueue(eventToAdd);
+    51	         events.enqueue(eventBuilder.createDepartureEvent(eventToAdd.getTime(),totalTime2-eventToAdd.getTime(),eventToAdd.getNumber(),2));
+    52	         line2.dequeue();
+    53	      }
+    54	      else
+    55	      {
+    56	         eventToAdd=line3.peekFront();
+    57	         if(totalTime3<eventToAdd.getTime())
+    58	            totalTime3=eventToAdd.getTime()+eventToAdd.getDuration();
+    59	         else
+    60	            totalTime3+=eventToAdd.getDuration();
+    61	         events.enqueue(eventToAdd);
+    62	         events.enqueue(eventBuilder.createDepartureEvent(eventToAdd.getTime(),totalTime3-eventToAdd.getTime(),eventToAdd.getNumber(),3));
+    63	         line3.dequeue();
+    64	      }
+    65	   }
+    66	   auto curEvent=eventToAdd;
+    67	   while(!events.isEmpty())
+    68	   {
+    69	      curEvent=events.peekFront();
+    70	      stats.addEvent(curEvent);
+    71	      events.dequeue();
+    72	   }
+    73	   std::cout<<"\nSimulation Ends\n\n";
+    74	   stats.reportStats();
+    75	}
+[4makka[24m:[1m~/cs1521/projects/project6/src/part2[0m% cat -n Statistics.h
+     1	#ifndef STATISTICS_
+     2	#define STATISTICS_
+     3	
+     4	//#define TESTING
+     5	
+     6	//#include "Event.h"
+     7	#include "LinkedQueue.h"
+     8	
+     9	class Statistics {
+    10	private:
+    11	   int countTotal = 0;
+    12	
+    13	   int count1 = 0;
+    14	   int count2 = 0;
+    15	   int count3 = 0;
+    16	
+    17	   Time waitTimeTotal = 0;
+    18	
+    19	   Time waitTime1 = 0;
+    20	   Time waitTime2 = 0;
+    21	   Time waitTime3 = 0;
+    22	
+    23	   /** Arrival events get stored until we encounter the next departure
+    24	    *  event.  This arrival along with the departure are then used to
+    25	    *  generate the wait time of this arrival. */
+    26	   LinkedQueue<Event> arrivalEvents1;
+    27	   LinkedQueue<Event> arrivalEvents2;
+    28	   LinkedQueue<Event> arrivalEvents3;
+    29	
+    30	public:
+    31	   Statistics() = default;
+    32	
+    33	   virtual ~Statistics() = default;
+    34	
+    35	   /** Adds 'event' to the statistics collected so far.
+    36	    *
+    37	    * If 'event' is an arrival event, increment 'countTotal' and the
+    38	    * count associated with the line this customer is in and store it
+    39	    * for use with the next departure event.
+    40	    *
+    41	    * If 'event' is a departure event, calculate the wait time for
+    42	    * this customer and add it onto 'waitTimeTotal' and add it to the
+    43	    * wait time associated with the line this customer was in. */
+    44	   void addEvent(const Event& event);
+    45	
+    46	   /** Output a report of the statistics for this simulation. */
+    47	   void reportStats() const;
+    48	};
+    49	
+    50	#include "Statistics.cpp"
+    51	
+    52	#endif
+[4makka[24m:[1m~/cs1521/projects/project6/src/part2[0m% cat -n Statistics.cpp
+     1	#include <iostream>
+     2	
+     3	//#include "Statistics.h"
+     4	
+     5	void Statistics::addEvent(const Event& event) {
+     6	
+     7	   if (event.getType() == EventType::ARRIVAL) {
+     8	#ifdef TESTING
+     9	      std::cout << "Processing arrival event "
+    10	                << event.getNumber()
+    11	                << " in queue "
+    12	                << event.getLine()
+    13	                << " at time "
+    14	                << event.getTime()
+    15	                << std::endl;
+    16	#endif
+    17	
+    18	#ifndef TESTING
+    19	      std::cout << ".";
+    20	
+    21	      if (event.getNumber() % 72 == 0)
+    22	         std::cout << std::endl;
+    23	#endif
+    24	
+    25	      ++countTotal;
+    26	
+    27	      if (event.getLine() == 1) {
+    28	         arrivalEvents1.enqueue(event);
+    29	         ++count1;
+    30	      }
+    31	      else if (event.getLine() == 2) {
+    32	         arrivalEvents2.enqueue(event);
+    33	         ++count2;
+    34	      }
+    35	      else {
+    36	         arrivalEvents3.enqueue(event);
+    37	         ++count3;
+    38	      }
+    39	   }
+    40	
+    41	   // Use departures to calculate total wait time and cumulative wait
+    42	   // time for each line.
+    43	   else {
+    44	#ifdef TESTING
+    45	      std::cout << "Processing departure event "
+    46	                << event.getNumber()
+    47	                << " at time: "
+    48	                << event.getTime()
+    49	                << " in line number "
+    50	                << event.getLine();
+    51	#endif
+    52	      Event arrivalEvent;
+    53	      bool eventWaiting(false);
+    54	
+    55	      if (event.getLine() == 1 && !arrivalEvents1.isEmpty() ) {
+    56	         arrivalEvent = arrivalEvents1.peekFront();
+    57	         arrivalEvents1.dequeue();
+    58	         waitTime1 += event.getTime() -
+    59	            (arrivalEvent.getTime() + arrivalEvent.getDuration() );
+    60	         eventWaiting = true;
+    61	      }
+    62	      else if (event.getLine() == 2 && !arrivalEvents2.isEmpty() ) {
+    63	         arrivalEvent = arrivalEvents2.peekFront();
+    64	         arrivalEvents2.dequeue();
+    65	         waitTime2 += event.getTime() -
+    66	            (arrivalEvent.getTime() + arrivalEvent.getDuration() );
+    67	         eventWaiting = true;
+    68	      }
+    69	      else if (event.getLine() == 3 && !arrivalEvents3.isEmpty() ) {
+    70	         arrivalEvent = arrivalEvents3.peekFront();
+    71	         arrivalEvents3.dequeue();
+    72	         waitTime3 += event.getTime() -
+    73	            (arrivalEvent.getTime() + arrivalEvent.getDuration() );
+    74	         eventWaiting = true;
+    75	      }
+    76	
+    77	      if (eventWaiting) {
+    78	#ifdef TESTING
+    79	         std::cout << " event "
+    80	                   << arrivalEvent.getNumber()
+    81	                   << " waited: "
+    82	                   << event.getTime() -
+    83	            (arrivalEvent.getTime() + arrivalEvent.getDuration() );
+    84	#endif
+    85	         waitTimeTotal += event.getTime() -
+    86	            (arrivalEvent.getTime() + arrivalEvent.getDuration() );
+    87	      }
+    88	#ifdef TESTING
+    89	      else {
+    90	         std::cout << " no events waiting.";
+    91	      }
+    92	      std::cout << std::endl;
+    93	#endif
+    94	   }
+    95	}
+    96	
+    97	void Statistics::reportStats() const {
+    98	
+    99	   std::cout << "Final Statistics:"
+   100	             << std::endl;
+   101	
+   102	   std::cout << "\tTotal number of people processed: "
+   103	             << countTotal
+   104	             << std::endl;
+   105	
+   106	   std::cout << "\tTotal wait time: "
+   107	             << waitTimeTotal
+   108	             << std::endl;
+   109	
+   110	   std::cout << "\tAverage amount of time spent waiting: ";
+   111	   if (countTotal != 0) {
+   112	      std::cout << (double)waitTimeTotal / (double)countTotal;
+   113	   }
+   114	   else {
+   115	      std::cout << 0.0;
+   116	   }
+   117	   std::cout << std::endl;
+   118	
+   119	   std::cout << "\n\tTotals for Teller 1:"
+   120	             << std::endl;
+   121	
+   122	   std::cout << "\t\tPeople processed: "
+   123	             << count1
+   124	             << std::endl;
+   125	
+   126	   std::cout << "\t\tWait time: "
+   127	             << waitTime1
+   128	             << std::endl;
+   129	
+   130	   std::cout << "\t\tAverage wait time: ";
+   131	   if (count1 != 0) {
+   132	      std::cout << (double)waitTime1 / (double)count1;
+   133	   }
+   134	   else {
+   135	      std::cout << 0.0;
+   136	   }
+   137	   std::cout << std::endl;
+   138	
+   139	   std::cout << "\n\tTotals for Teller 2:"
+   140	             << std::endl;
+   141	
+   142	   std::cout << "\t\tPeople processed: "
+   143	             << count2
+   144	             << std::endl;
+   145	
+   146	   std::cout << "\t\tWait time: "
+   147	             << waitTime2
+   148	             << std::endl;
+   149	
+   150	   std::cout << "\t\tAverage wait time: ";
+   151	   if (count2 != 0) {
+   152	      std::cout << (double)waitTime2 / (double)count2;
+   153	   }
+   154	   else {
+   155	      std::cout << 0.0;
+   156	   }
+   157	   std::cout << std::endl;
+   158	
+   159	   std::cout << "\n\tTotals for Teller 3:"
+   160	             << std::endl;
+   161	
+   162	   std::cout << "\t\tPeople processed: "
+   163	             << count3
+   164	             << std::endl;
+   165	
+   166	   std::cout << "\t\tWait time: "
+   167	             << waitTime3
+   168	             << std::endl;
+   169	
+   170	   std::cout << "\t\tAverage wait time: ";
+   171	   if (count3 != 0) {
+   172	      std::cout << (double)waitTime3 / (double)count3;
+   173	   }
+   174	   else {
+   175	      std::cout << 0.0;
+   176	   }
+   177	   std::cout << std::endl;
+   178	}
+[4makka[24m:[1m~/cs1521/projects/project6/src/part2[0m% cd build/
+[4makka[24m:[1m~/cs1521/projects/project6/src/part2/build[0m% make
+[ 33%] [32mBuilding CXX object CMakeFiles/project6.dir/PrecondViolatedExcep.cpp.o[0m
+[ 66%] [32mBuilding CXX object CMakeFiles/project6.dir/project6.cpp.o[0m
+[100%] [32m[1mLinking CXX executable project6[0m
+[100%] Built target project6
+[4makka[24m:[1m~/cs1521/projects/project6/src/part2/build[0m% ./project6
+
+Input filename : input7.dat
+
+
+Simulation of 1 Queue Begins
+........................................................................
+........................................................................
+.........................................................................
+........................................................................
+.......................................................................
+........................................................................
+....................................................................
+Simulation Ends
+
+Final Statistics:
+	Total number of people processed: 500
+	Total wait time: 121
+	Average amount of time spent waiting: 0.242
+
+	Totals for Teller 1:
+		People processed: 167
+		Wait time: 31
+		Average wait time: 0.185629
+
+	Totals for Teller 2:
+		People processed: 167
+		Wait time: 33
+		Average wait time: 0.197605
+
+	Totals for Teller 3:
+		People processed: 166
+		Wait time: 57
+		Average wait time: 0.343373
+[4makka[24m:[1m~/cs1521/projects/project6/src/part2/build[0m% exit
+exit
+
+Script done on Mon 22 Apr 2019 10:32:46 AM CDT
